@@ -1,0 +1,82 @@
+/* RPG v0.02.24 — Home V3 Classic HUD Visual Reset, Phase 1
+   (ASTRA_HOME_V3_CLASSIC_HUD_HANDOVER_20260912.md).
+
+   This handover retires the parchment direction for Home widgets in
+   favour of a dark "Classic HUD" material — deep navy panels,
+   restrained antique-gold accents, no ornate frames — and explicitly
+   calls for a controlled, phased rollout starting with Character
+   Stats alone, verified before any other widget is touched.
+
+   Scope discipline: every other Home widget (Resources, Movement,
+   Calendar, Side Quests, Today, Main Quest) still reads the existing
+   --parchment- and --ink- prefixed tokens (v0.02.21) via the shared .hw-inset/
+   .hw-row/.hw-header primitives (v0.02.22) and MUST keep looking
+   exactly as it did before this file — that is future-phase work, not
+   Phase 1. So this file declares NEW --hud-* tokens rather than
+   repointing the existing parchment tokens, and every rule below is
+   scoped under .character-stats-module so nothing here can leak into
+   another widget's shared primitives. The outer shell was already
+   frame-free (2026-09-11 "Width + Frame Cleanup" handover retired the
+   ornate character-frame-320-2x.png border-image overlay) — this pass
+   only swaps the surface material and ink colours, no geometry change,
+   per the new handover's own Phase 1 acceptance criteria. */
+
+/* Declared on body[data-theme="home"], not #view: #modalRoot (where
+   every modal, including the Weather Forecast popup, actually renders
+   — see index.html) is a SIBLING of #view, not a descendant, so tokens
+   declared on #view alone never reach modal content. body carries
+   data-theme="home" whenever Home is the current page (render() sets
+   body.dataset.theme=page) and stays "home" while a modal opened from
+   Home is showing, so this reaches both #view and #modalRoot without
+   leaking into other pages' own body[data-theme=...] scopes. Found via
+   a live getComputedStyle check (2026-09-13) after a `var(--hud-*)`
+   override on the Weather Forecast modal silently no-op'd — invalid/
+   undefined var() references don't fall back to a hardcoded initial
+   value, they make the whole declaration drop out of the cascade, so
+   the OLD rule right below it kept winning with no visible error. */
+body[data-theme="home"]{
+  --hud-panel-bg: rgba(5,20,34,.86);
+  --hud-panel-well-bg: rgba(11,36,57,.42);
+  --hud-panel-border: rgba(190,137,49,.30);
+  --hud-panel-radius: 10px;
+  --hud-gold: #d9ac5c;
+  --hud-text-primary: #f1f5f7;
+  --hud-text-secondary: #9fb2c2;
+  --hud-text-muted: #6c8092;
+  --hud-shadow: 0 3px 10px rgba(0,0,0,.28);
+}
+
+/* ---- Outer shell: parchment surface + edge/grain texture layers
+   removed, dark Classic HUD panel with clean rounded corners.
+   v2 (2026-09-12, same-day correction): first pass's panel/well alpha
+   let too much scenery through — it read as icons/text floating over
+   the background rather than a coherent dark HUD surface. Values below
+   are the corrected ~86% panel / ~?% well strength (well opacity is
+   compounded on top of the panel's own, since it sits inside it). ---- */
+#view .character-stats-module{
+  background: var(--hud-panel-bg);
+  background-image: none;
+  border: 1px solid var(--hud-panel-border);
+  border-radius: var(--hud-panel-radius);
+  box-shadow: var(--hud-shadow);
+  overflow: hidden;
+}
+#view .character-stats-module:hover{ filter: brightness(1.05); }
+
+/* ---- Stat wells: dark recessed cell instead of parchment inset.
+   Semantic bar colours (HP red / Stamina light-blue / Focus purple,
+   v0.02.21's --stat-* tokens) are untouched — only the well's own
+   surface and text ink change. ---- */
+#view .character-stats-module .stat-well{
+  background-color: var(--hud-panel-well-bg);
+  background-image: none;
+  border: 1px solid rgba(200,154,70,.10);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.4), inset 0 -1px 0 rgba(255,255,255,.03);
+}
+#view .character-stats-module .stat-well-value{ color: var(--hud-text-primary); }
+#view .character-stats-module .stat-well-label{ color: var(--hud-text-secondary); }
+#view .character-stats-module .stat-well-pct{ color: var(--hud-text-muted); }
+#view .character-stats-module .stat-well-bar{
+  background: rgba(255,255,255,.09);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.45);
+}

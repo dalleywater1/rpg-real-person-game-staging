@@ -1,0 +1,97 @@
+/* RPG v0.02.9 — Quests Hub (Lyra -> Astra Quests Hub handoff, 2026-09-06).
+   Functionality/architecture only, reusing the existing dark-frame /
+   accent-gold visual language already used by Adventure/Character/
+   Training — no new visual theme invented here per the handoff's own
+   "artwork supplied separately, do not redesign the theme" scope. */
+
+/* Adventures Hero hook (handover §2/§22) — not rendered until
+   ADVENTURES_HERO_BG is set in app.js, styled ahead of time so a real
+   asset can drop straight in later. */
+.adventures-hero{position:relative;width:100%;aspect-ratio:16/7;border-radius:8px;overflow:hidden;background-size:cover;background-position:center;margin:10px 0;box-shadow:0 2px 10px #00000066}
+.adventures-hero-compass{position:absolute;left:50%;top:50%;width:20%;transform:translate(-50%,-50%);pointer-events:none}
+
+/* Tracked Adventures — 4-slot 2-column grid (Adventures Hub handover
+   §3/§7), replacing the old 2-slot full-width stacked list. Card root
+   is a plain div (trackedQuestCardHTML) holding two independent
+   controls: the star is its own <button> that untracks without
+   navigating (handover §26), the rest of the card opens the activity
+   directly. */
+.tracked-adventures-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0 20px}
+.tracked-adventures-grid .empty{grid-column:1/-1;text-align:center;color:#8fa8b6;font-size:12px;line-height:1.6}
+.tracked-quest-card{position:relative;display:flex;gap:8px;align-items:flex-start;width:100%;text-align:left;background:linear-gradient(145deg,#0e1824ee,#070c13f5);border:1px solid #584523;border-radius:6px;padding:10px;cursor:pointer;color:inherit}
+.tracked-quest-card:hover{filter:brightness(1.08)}
+.tracked-quest-star{flex:0 0 auto;width:30px;height:30px;display:grid;place-items:center;background:transparent;border:1px solid #8a6728;border-radius:50%;color:#e7c676;font-size:15px;line-height:1;cursor:pointer;padding:0}
+.tracked-quest-star:hover{background:#8a672833}
+.tracked-quest-body{min-width:0;flex:1;padding-top:2px}
+.tracked-quest-body h3{margin:0 0 2px;font-size:13px;color:#f1f5f7;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tracked-quest-body small{display:block;color:#8fa8b6;font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* 580px tier (handover §24): try 4-across. Titles wrap to 2 lines
+   instead of truncating — a narrow column reads worse as "Call to
+   the L…" than as two short lines. */
+@media(min-width:560px){
+  .tracked-adventures-grid{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .tracked-quest-card{flex-direction:column;align-items:stretch}
+  .tracked-quest-star{align-self:flex-end}
+  .tracked-quest-body h3{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+}
+
+/* Divisions — Seraphine asset pass (Adventures Handover Package,
+   2026-09-12), frame overlay AND arrow button both removed per
+   explicit direction: the frame read as too "finished" even on
+   divisions with real content, and the arrow crowded the title/
+   tagline in the narrower 2-column cards. Rows are a plain flex layout
+   (icon / copy) over the background photo with a left-to-right scrim
+   for legibility, not positioned against any frame art. The whole row
+   is already the click target, so no separate arrow affordance is
+   needed. Both PNG families stay on disk, unreferenced. */
+.quest-division-list{display:flex;flex-direction:column;gap:14px;margin:10px 0 20px}
+/* Standard divisions (everything but Campaigns) sit in a fixed
+   2-column grid at every tested width (handover §12/§24 — 320/375/580
+   all keep 2 columns for this tier; only Tracked Adventures above
+   changes column count at 580). */
+.quest-division-grid-2col{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.quest-division-row{position:relative;display:flex;align-items:center;gap:10px;width:100%;aspect-ratio:3/1;border:1px solid #35404a;border-radius:8px;padding:0 14px;cursor:pointer;color:inherit;overflow:hidden;background-size:cover;background-position:center;box-shadow:0 2px 10px #00000066}
+.quest-division-row::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#000000c2,#00000066 55%,#00000033);pointer-events:none}
+.quest-division-row.no-bg{background:linear-gradient(150deg,#1c2a35,#0a1119)}
+.quest-division-row:hover{filter:brightness(1.08)}
+.division-row-icon{position:relative;z-index:1;flex:0 0 auto;width:15%;max-width:52px;min-width:34px;aspect-ratio:1/1;object-fit:contain;pointer-events:none;filter:drop-shadow(0 2px 4px #000a)}
+.division-row-copy{position:relative;z-index:1;flex:1;min-width:0;text-align:left;pointer-events:none}
+.division-row-copy h3{margin:0 0 3px;font-size:14px;color:#f4e2ab;text-transform:uppercase;letter-spacing:.04em;text-shadow:0 1px 3px #000a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.division-row-copy p{margin:0;font-size:10.5px;color:#cddbe3;text-shadow:0 1px 3px #000a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.quest-division-row.feature{aspect-ratio:2.4/1}
+.quest-division-row.feature .division-row-copy h3{font-size:17px;color:#ffe9ad;white-space:normal}
+.quest-division-row.feature .division-row-copy p{font-size:11.5px;white-space:normal}
+@media(max-width:480px){.quest-division-row{aspect-ratio:2.3/1}.quest-division-row.feature{aspect-ratio:2/1}.division-row-copy p{display:none}.quest-division-row.feature .division-row-copy p{display:block}}
+/* Half-width columns run shorter than Campaigns' full-width row, and
+   titles wrap (rather than truncate) since there's no arrow eating
+   into the width any more and the taller aspect ratio has the room. */
+.quest-division-grid-2col .quest-division-row{aspect-ratio:1.9/1;padding:0 10px;gap:8px}
+.quest-division-grid-2col .division-row-copy h3{font-size:11.5px;white-space:normal;line-height:1.15}
+.quest-division-grid-2col .division-row-copy p{font-size:9px}
+.quest-division-grid-2col .division-row-icon{width:22%;max-width:40px;min-width:26px}
+
+.quest-page-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin:6px 0 10px}
+.quest-page-kicker{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#e6c46f;margin-bottom:4px}
+.quest-page-head h2{margin:0;font-family:Georgia,"Times New Roman",serif;font-size:22px;color:#f1f5f7}
+.quest-star-toggle{flex:0 0 auto;background:transparent;border:1px solid #584523;border-radius:6px;color:#8fa8b6;font-size:20px;line-height:1;padding:6px 10px;cursor:pointer}
+.quest-star-toggle.active{color:#e7c676;border-color:#8a6728}
+
+.quest-progress-block{margin:10px 0}
+.quest-progress-label{font-size:12px;color:#dce8ed;margin-bottom:4px}
+.quest-objective{font-size:12px;color:#a8bcc7;margin:4px 0 10px}
+
+.quest-status-board{margin-top:16px}
+.status-board-module{border-top:1px solid #2c414f;padding:10px 0}
+.status-board-module:first-of-type{border-top:0}
+.status-board-module-head{display:flex;justify-content:space-between;align-items:center;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#8fa8b6}
+.status-board-module-head b{color:#e7c676;font-size:13px}
+.status-board-item-list{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.status-board-item{font-size:12px;color:#dce8ed}
+.status-board-item.found{color:#8fd09a}
+.status-board-item.hinted{color:#d4a017}
+.status-board-item.unknown{color:#5c6b75}
+
+.orin-panel{margin-top:14px;border-top:1px solid #2c414f;padding-top:10px}
+.orin-panel h4{margin:0 0 4px;color:#e7c676;font-size:13px}
+.orin-hint-row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;padding:6px 0;font-size:11px;color:#a8bcc7}
+.orin-hint-tiers{display:flex;gap:8px;flex-wrap:wrap}

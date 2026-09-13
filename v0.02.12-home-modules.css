@@ -1,0 +1,23 @@
+/* RPG v0.02.12 — Home v2 module architecture (2026-09-06). Purely
+   structural/support CSS for the new module registry in app.js
+   (renderHome, ensureHomeModules, homeSettingsModal). No new visual
+   language — only what's needed so hide/reorder don't break the
+   already-approved layout. */
+
+/* When only one of Player Status / Weather is visible, let it take the
+   full header width instead of leaving an empty grid track. */
+.home-top-panel.home-top-panel-solo{grid-template-columns:1fr}
+
+/* Always-reachable Home Settings entry point in the footer, so hiding
+   the Today panel (which normally hosts the settings gear) never locks
+   a player out of Home Settings. Small and muted to match .version. */
+.version{position:relative}
+.home-settings-fallback-gear{position:absolute;right:0;top:50%;transform:translateY(-50%);background:none;border:0;color:#536271;font-size:11px;line-height:1;padding:4px 6px;cursor:pointer}
+.home-settings-fallback-gear:hover{color:#8fa8b6}
+
+/* Home Settings modal — module list rows (visibility + reorder),
+   above the existing Today-panel toggle list. */
+.home-module-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.home-module-row-controls{display:flex;align-items:center;gap:6px}
+.home-module-move{font-size:12px;padding:2px 7px;line-height:1}
+.home-module-move:disabled{opacity:.3;cursor:default}

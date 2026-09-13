@@ -1,0 +1,78 @@
+/* RPG v0.02.4.20 — Secondary Panels cleanup
+   (Lyra's Home Upgrade Handoff, Task 2 / 4.1-4.4).
+
+   4.1 Daily Challenge: larger centered title, icon beside it, Tracker
+   split into its own icon/button (separate from the category icon —
+   the combined icon+action was the "graphical errors" the handoff
+   calls out), a divider between challenge text and the action area so
+   the button has a stable position.
+   4.2/4.3 Daily Word / Daily Wisdom: standalone panels again (not
+   merged). Daily Word's icon is now plain/non-interactive; a rotate
+   button cycles the eligible-language set and a separate gear opens the
+   eligibility editor.
+   4.4 Bonus Puzzle: content inline in the box; Archive is a small side
+   action, not an equal-weight tile next to it. */
+
+/* ---- Daily Challenge (item 12 layout rework) ----
+   Identity icon + title on the left, a dedicated Tracker action on the
+   right (never merged with the identity icon again — that merge was the
+   original "graphical errors" complaint). Actions live in a lower-right
+   row: Next Challenge (was an icon-only rotate button, replaced per item
+   12) plus the primary accept/complete action, which stays visually
+   stronger via .rpg-btn.accent. Icon/title sizing now comes from the
+   shared Home standard (v0.02.5-home-baseline.css) rather than being
+   tuned here. */
+#view .challenge-head-v2{display:flex;align-items:center;gap:10px}
+#view .challenge-title-block{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
+#view .challenge-title-block span{display:block;font-weight:700;text-transform:uppercase}
+#view .challenge-title-block small{display:block;font-size:10px;margin-top:2px}
+#view .challenge-tracker-btn{width:44px;height:44px;flex-shrink:0}
+#view .challenge-tracker-btn img{width:100%;height:100%;object-fit:contain}
+/* Category icon moved into the content area's left side, slightly
+   larger than the normal 62px content-icon standard (Astra overnight
+   handoff §1) — the header stays a clean title + Tracker row only. */
+#view .challenge-content-v2{display:flex;align-items:flex-start;gap:14px;text-align:left}
+#view .challenge-category-icon-lg{width:72px;height:72px;object-fit:contain;flex-shrink:0}
+#view .challenge-content-copy{min-width:0;flex:1}
+#view .challenge-content h3{font-size:17px;margin:0}
+#view .challenge-action-area{display:flex;justify-content:flex-end;align-items:center;gap:10px}
+#view .challenge-action-area:empty{display:none}
+#view .rpg-btn.ghost{background:transparent;border-color:#c9a86a;color:#7a6a45;box-shadow:none;text-shadow:none;min-height:38px}
+#view .rpg-btn.ghost:hover{background:rgba(0,0,0,.04)}
+
+@media(max-width:580px){
+  #view .challenge-action-area{flex-wrap:wrap}
+  #view .challenge-category-icon-lg{width:58px;height:58px}
+}
+@media(max-width:390px){
+  #view .challenge-category-icon-lg{width:50px;height:50px}
+}
+
+/* The "blue dot" mystery (same root cause on both Daily Wisdom's icon and
+   the old combined Daily Challenge tracker/category icon): a decorative
+   ::before/::after pair on every .development-icon-action, added by
+   .home-marble-correction .development-icon-action:before/:after in
+   styles.css. It was built for the old horizontal home-today-row layout
+   and reads as two stray dots in these panel headers — neutralized here
+   rather than in styles.css since other rows may still rely on it. */
+#view .home-panel .development-icon-action::before,
+#view .home-panel .development-icon-action::after{content:none!important}
+
+/* ---- Daily Word ---- */
+#view .word-head-v2{display:flex!important;align-items:center;gap:10px}
+#view .word-head-v2>.development-icon-action-static{flex-shrink:0}
+#view .word-head-v2>div{flex:1;min-width:0}
+#view .word-head-v2 .home-settings-gear{flex-shrink:0;margin-left:6px}
+#view .development-icon-action-static{width:58px;height:58px;object-fit:contain;display:block;filter:drop-shadow(0 2px 3px #0008)}
+
+/* ---- Bonus Puzzle ---- */
+#view .puzzle-inline-prompt{color:var(--marble-ink,#0b1728);font-size:14px;line-height:1.5;margin:2px 0 12px}
+#view .puzzle-inline-row{display:flex;gap:8px}
+#view .puzzle-inline-row input{
+  flex:1;min-width:0;padding:9px 12px;border-radius:6px;
+  border:1.5px solid #c9a86a;background:#fff;color:#16233f;font-size:13px;
+}
+#view #puzzleInlineResult{margin-top:10px}
+#view #puzzleInlineResult .trial-error{color:#c0392b;font-size:12px;font-weight:700}
+#view .trial-result{padding:10px 12px;border-radius:8px;background:rgba(63,161,92,.12);border:1px solid #3fa15c60}
+#view .trial-result b{color:#2c7a45;font-size:13px}

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080d16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>RPG: Real Person Game v0.1.2.45</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <!-- Home V3 Hero typography proof (Lyra Workstream A, 2026-09-10):
+       Cinzel = identity/display, Alegreya = primary RPG UI serif,
+       Alegreya Sans = micro/technical text. Alegreya Sans has no 600
+       weight in the actual font family (300/400/500/700/800/900) —
+       requesting 700 instead of the handover's "500/600" for that one
+       face; flagged in the return report rather than silently
+       requesting a weight that doesn't exist. -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Alegreya:wght@500;600&family=Alegreya+Sans:wght@500;700&display=swap">
+  <link rel="stylesheet" href="styles.css?v=0.1.2.14">
+  <link rel="stylesheet" href="v0.02.4.3-player-box.css?v=0.1.2.5">
+  <link rel="stylesheet" href="v0.02.4.4-player-box-cleanup.css?v=0.1.2.5">
+  <link rel="stylesheet" href="v0.02.4.5-player-box-layout.css?v=0.1.2.5">
+  <link rel="stylesheet" href="v0.02.4.6-player-frame-controls.css?v=0.1.2.5">
+  <link rel="stylesheet" href="v0.02.4.11-player-box-progression-fix.css?v=0.1.2.6">
+  <link rel="stylesheet" href="v0.02.4.12-player-box-shared-frame.css?v=0.1.2.6">
+  <link rel="stylesheet" href="v0.02.4.13-today-controls-extension.css?v=0.1.2.7">
+  <link rel="stylesheet" href="v0.02.4.14-home-frames-removed.css?v=0.1.2.7">
+  <link rel="stylesheet" href="v0.02.4.7-weather-panel.css?v=0.1.2.6">
+  <link rel="stylesheet" href="v0.02.4.8-today-panel.css?v=0.1.2.8">
+  <link rel="stylesheet" href="v0.02.4.9-resources-panel.css?v=0.1.2.11">
+  <link rel="stylesheet" href="v0.02.4.10-navigation.css?v=0.1.2.30">
+  <link rel="stylesheet" href="v0.02.4.15-today-panels.css?v=0.1.2.16">
+  <link rel="stylesheet" href="v0.02.4.17-flat-panel-background.css?v=0.1.2.12">
+  <link rel="stylesheet" href="v0.02.4.18-player-panel-cleanup.css?v=0.1.2.18">
+  <link rel="stylesheet" href="v0.02.4.19-weather-forecast-cleanup.css?v=0.1.2.12">
+  <link rel="stylesheet" href="v0.02.4.20-secondary-panels-cleanup.css?v=0.1.2.17">
+  <link rel="stylesheet" href="v0.02.4.21-resources-bar-redesign.css?v=0.1.2.18">
+  <link rel="stylesheet" href="v0.02.5-home-baseline.css?v=0.1.2.20">
+  <link rel="stylesheet" href="v0.02.6-home-final-polish.css?v=0.1.2.22">
+  <link rel="stylesheet" href="v0.02.7-adventure-campaign.css?v=0.1.2.26">
+  <link rel="stylesheet" href="v0.02.8-achievements-page.css?v=0.1.2.28">
+  <link rel="stylesheet" href="v0.02.9-quests-hub.css?v=0.1.2.34">
+  <link rel="stylesheet" href="v0.02.10-training-journal.css?v=0.1.2.34">
+  <link rel="stylesheet" href="v0.02.11-journeys.css?v=0.1.2.31">
+  <link rel="stylesheet" href="v0.02.12-home-modules.css?v=0.1.2.32">
+  <link rel="stylesheet" href="v0.02.13-home-v2-visuals.css?v=0.1.2.38">
+  <link rel="stylesheet" href="v0.02.14-home-widget-shell.css?v=0.1.2.36">
+  <link rel="stylesheet" href="v0.02.15-home-widget-player-status.css?v=0.1.2.114">
+  <link rel="stylesheet" href="v0.02.16-home-parchment-modules.css?v=0.1.2.90">
+  <link rel="stylesheet" href="v0.02.18-home-feature-module.css?v=0.1.2.3">
+  <link rel="stylesheet" href="v0.02.19-home-standard-module.css?v=0.1.2.10">
+  <link rel="stylesheet" href="v0.02.20-home-parchment-material.css?v=0.1.2.6">
+  <link rel="stylesheet" href="v0.02.21-home-parchment-tokens.css?v=0.1.2.7">
+  <link rel="stylesheet" href="v0.02.22-home-component-primitives.css?v=0.1.2.6">
+  <link rel="stylesheet" href="v0.02.23-quests-page-main-quest-surface.css?v=0.1.2.1">
+  <link rel="stylesheet" href="v0.02.24-home-classic-hud-character-stats.css?v=0.1.2.5">
+  <link rel="stylesheet" href="v0.02.25-home-classic-hud-phase-3-6.css?v=0.1.2.14">
+  <link rel="stylesheet" href="v0.02.26-home-player-hud-rebuild.css?v=0.1.2.10">
+  <link rel="stylesheet" href="v0.02.28-quests-hub-tiles.css?v=0.1.2.2">
+</head>
+<body data-theme="home">
+<div id="startupScreen" class="startup-screen" role="status" aria-live="polite">
+  <div class="startup-shell">
+    <div class="startup-corners" aria-hidden="true"></div>
+    <img class="startup-logo" src="assets/Home_Logo.png" alt="RPG: Real Person Game">
+    <div id="startupPlayerName" class="startup-player">GREETINGS, PLAYER</div>
+    <div class="startup-init">INITIALISING PLAYER SYSTEM...</div>
+    <div class="startup-progress" aria-hidden="true"><i></i></div>
+    <div id="startupStatus" class="startup-status">RESTORING PLAYER DATA</div>
+    <div id="startupFinal" class="startup-final">SYSTEM BOOT</div>
+  </div>
+</div>
+<div id="appShell">
+  <main id="view"></main>
+  <nav class="global-radial-nav" aria-label="Main navigation"></nav>
+</div>
+<div id="modalRoot"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="systemRewardHost" class="system-reward-host" aria-live="polite"></div>
+<script src="app.js?v=0.1.2.138"></script>
+<script src="v0.02.17-exercise-library.js?v=0.1.2.2"></script>
+<script src="v0.02.4-integration.js?v=0.1.2.66"></script>
+<script src="v0.02.4.1-frame-hotfix.js?v=0.1.2.5"></script>
+<script src="v0.02.4.2-character.js?v=0.1.2.7"></script>
+<script src="v0.02.4.3-player-box.js?v=0.1.2.56"></script>
+<script src="v0.02.4.4-player-box-cleanup.js?v=0.1.2.5"></script>
+<script src="v0.02.4.5-player-box-layout.js?v=0.1.2.5"></script>
+<script src="v0.02.4.6-player-frame-controls.js?v=0.1.2.5"></script>
+<script src="v0.02.4.11-player-box-progression-fix.js?v=0.1.2.34"></script>
+<script src="v0.02.4.7-weather-panel.js?v=0.1.2.5"></script>
+<script src="v0.02.4.8-today-panel.js?v=0.1.2.9"></script>
+<script src="v0.02.4.9-resources-panel.js?v=0.1.2.6"></script>
+<script src="v0.02.4.10-navigation.js?v=0.1.2.6"></script>
+<script src="v0.02.4.13-today-controls-extension.js?v=0.1.2.34"></script>
+<script src="v0.02.4.16-resources-header-fix.js?v=0.1.2.13"></script>
+<script src="v0.02.15-home-widget-player-status.js?v=0.1.2.107"></script>
+<script src="v0.02.27-health-connect-bridge.js?v=0.1.2.3"></script>
+</body>
+</html>

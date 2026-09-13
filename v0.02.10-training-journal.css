@@ -1,0 +1,124 @@
+/* RPG v0.02.10 — Training internal navigation + Strength Journal
+   (Lyra "Training Internal Pages & Strength Journal" handover,
+   2026-09-06). Reuses the existing navy/near-black + antique-gold
+   Training identity and the shared .rpg-frame/.tabs/.text-btn/.rpg-btn
+   language; the Journal adds a warm parchment surface only for its own
+   exercise/set logging rows, per the handover's "book-like" direction. */
+
+.training-tabs{grid-template-columns:repeat(5,1fr);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.training-tabs button{white-space:nowrap;font-size:8.5px;letter-spacing:.04em}
+@media(max-width:480px){.training-tabs{grid-template-columns:repeat(5,minmax(64px,1fr))}}
+
+.training-categories .training-category-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.training-category-chip{display:flex;align-items:center;gap:6px;background:#0c1723;border:1px solid #334b5b;border-radius:5px;padding:5px 8px;font-size:10px;color:#a8bcc7}
+.training-category-chip img{width:22px;height:22px;object-fit:contain}
+.training-category-chip b{color:#e7c676}
+
+/* Favourite Activities (Training Phase 2 Overview, revised 2026-09-11) —
+   large shield icon with its title underneath, like a day-card rather
+   than the earlier horizontal chip. Configuration itself moved out to
+   Training Settings (the gear icon / Profile & Setup's Training tab), so
+   a tile here is purely one clickable action: start (filled) or open
+   settings (empty) — never a nested button-in-button.
+   Frame removed 2026-09-11 ("if we remove the frames around favorite
+   activities it would save a lot of space") — a filled tile is just the
+   shield art + label sitting directly on the panel's own background, no
+   boxed border/padding of its own. An empty slot keeps a light dashed
+   outline since it has no art to give it shape otherwise — without any
+   boundary at all, "+ Choose Favourite" would just be floating text with
+   nothing marking it as a tappable slot. */
+/* 4 slots (bumped from 2, 2026-09-11) — a plain 4-across flex row gets
+   tight on real 320px devices with a 52px icon per tile, so it wraps to
+   2x2 under 380px instead of squeezing all four into one row. */
+.training-favourites-row{display:flex;flex-wrap:wrap;gap:16px;margin-top:8px}
+.training-favourite-tile{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:4px;background:transparent;border:0;padding:2px;font-size:10px;color:#e7c676;cursor:pointer;min-width:0}
+.training-favourite-tile:hover img{filter:drop-shadow(0 4px 6px #000b) drop-shadow(0 0 6px #4bbcff88)}
+.training-favourite-tile img{width:52px;height:52px;object-fit:contain}
+.training-favourite-tile span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.training-favourite-tile.empty{color:#6f8695;border:1px dashed #334b5b;border-radius:6px;justify-content:center;min-height:64px}
+.training-favourite-tile.empty:hover{color:#a8bcc7;border-color:#4bbcff}
+@media(max-width:380px){
+  .training-favourites-row{gap:10px}
+  .training-favourite-tile{flex:1 1 calc(50% - 5px)}
+}
+
+.training-favourite-preview-empty{color:#5c7280;font-size:16px}
+
+.training-history-page .form-row{margin-bottom:10px}
+
+.training-journal-empty{text-align:center}
+
+.journal-session-header{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.journal-session-name{flex:1 1 auto;min-width:0;background:transparent;border:0;border-bottom:1px solid #584523;color:#f1f5f7;font-family:Georgia,"Times New Roman",serif;font-size:18px;padding:4px 2px}
+.journal-session-name:focus{outline:none;border-bottom-color:#e7c676}
+.journal-session-meta{display:flex;align-items:center;gap:8px;font-size:11px;color:#8fa8b6}
+.journal-session-actions{display:flex;gap:10px;margin-bottom:12px;flex-wrap:wrap}
+
+.journal-exercise{background:linear-gradient(160deg,#efe3c2,#e4d4a8);color:#241c0f;border:1px solid #9a7839;border-radius:6px;padding:10px;margin:0 0 12px}
+.journal-exercise-head{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.journal-exercise-shield{width:30px;height:30px;object-fit:contain;flex:0 0 auto}
+.journal-exercise-name{flex:1 1 auto;min-width:0;background:transparent;border:0;border-bottom:1px solid #9a7839;color:#241c0f;font-weight:700;font-size:14px;padding:3px 2px}
+.journal-exercise-name:focus{outline:none}
+.journal-exercise-head .text-btn.danger{flex:0 0 auto;font-size:9px;color:#7a2b23}
+.journal-previous{font-size:11px;color:#5c4a26;margin-bottom:8px;font-style:italic}
+
+.journal-set-list{display:flex;flex-direction:column;gap:4px}
+.journal-set-row{display:grid;grid-template-columns:22px minmax(0,1fr) minmax(0,1fr) 52px 28px 24px;gap:6px;align-items:center}
+.journal-set-row.journal-set-header{font-size:8px;letter-spacing:.06em;color:#6b5a34;text-transform:uppercase}
+.journal-set-row input{width:100%;min-width:0;background:#fbf6e8;border:1px solid #b89a5c;border-radius:4px;color:#241c0f;font-size:12px;padding:5px 4px;text-align:center}
+.journal-set-row input:focus{outline:none;border-color:#7a5a1f}
+.journal-set-num{font-size:11px;font-weight:700;color:#5c4a26;text-align:center}
+.journal-set-row.completed .journal-set-num{color:#2f6b3f}
+.journal-set-complete{width:26px;height:26px;border-radius:50%;border:1px solid #7a9a7f;background:#fbf6e8;color:#7a9a7f;font-size:12px;line-height:1;cursor:pointer}
+.journal-set-complete.active{background:#3fa15c;border-color:#2f6b3f;color:#fff}
+.journal-set-delete{width:24px;height:24px;border:0;background:transparent;color:#8a4c40;font-size:16px;line-height:1;cursor:pointer}
+.journal-pb-tag{grid-column:1/-1;justify-self:start;background:#d4a017;color:#241c0f;font-size:9px;font-weight:700;letter-spacing:.06em;padding:1px 6px;border-radius:3px;margin-top:2px}
+
+/* Exercise Library picker (Astra Strength Library handover, 2026-09-11) —
+   reuses the modal/.form-row/.three-col language already established
+   elsewhere rather than inventing new form chrome; only the results list
+   itself is bespoke, since nothing else in the app is an instant-filter
+   scrolling list. */
+.exercise-library-results{max-height:46vh;overflow-y:auto;margin:8px 0;border:1px solid #2b3946;border-radius:4px}
+.exercise-result-group{border-bottom:1px solid #23303c}
+.exercise-result-group:last-child{border-bottom:0}
+.exercise-result-group>small{display:block;padding:6px 10px 2px;font-size:7.5px;letter-spacing:.1em;color:#7f95a3;font-weight:900}
+.exercise-result-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:8px 10px;border-top:1px solid #1c2731;cursor:pointer}
+.exercise-result-group>small+.exercise-result-row{border-top:0}
+.exercise-result-row:hover{background:#0f1c28}
+.exercise-result-row strong{display:block;color:#e7edf1;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.exercise-result-row span{display:block;color:#8697a4;font-size:8px;margin-top:2px}
+.exercise-fav-btn{background:transparent;border:0;color:#3d4a56;font-size:15px;cursor:pointer;padding:2px}
+.exercise-fav-btn.active{color:#e7c676}
+.exercise-add-btn{width:26px;height:26px;border-radius:50%;border:1px solid #4a7a5a;background:transparent;color:#6fc98a;font-size:14px;line-height:1;cursor:pointer}
+.exercise-add-btn:hover{background:#123420}
+
+/* Workout Builder */
+.wb-exercise-row{border:1px solid #2b3946;border-radius:5px;padding:8px;margin-bottom:8px;background:#0a1219}
+.wb-exercise-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.wb-exercise-head strong{color:#e7c676;font-size:11px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wb-exercise-move{display:flex;gap:4px;flex:0 0 auto}
+.wb-exercise-move .text-btn{padding:4px 7px;font-size:10px}
+.wb-exercise-move .text-btn.danger{color:#c46a5e}
+
+/* Workout Library cards (My Workouts / Recent) */
+.wl-card-shield{font-size:28px;line-height:1;margin-bottom:2px}
+.wl-card-meta{display:block;color:#8697a4;font-size:7.5px;margin:2px 0 6px}
+.wl-card-actions{display:flex;gap:5px;width:100%}
+.wl-card-actions .text-btn{flex:1 1 0;font-size:7.5px;padding:5px 3px}
+
+@media(max-width:390px){.exercise-library-results{max-height:38vh}}
+
+.journal-exercise-actions{display:flex;gap:10px;margin-top:8px;flex-wrap:wrap}
+.journal-exercise-actions .text-btn{font-size:10px}
+.journal-exercise-notes{width:100%;box-sizing:border-box;background:#fbf6e8;border:1px solid #b89a5c;border-radius:4px;color:#241c0f;font-size:11px;padding:6px;margin-top:8px;resize:vertical}
+
+.journal-session-notes-field{margin:6px 0 14px}
+.journal-session-notes-field textarea{width:100%;box-sizing:border-box}
+.journal-finish-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+
+@media(max-width:390px){
+  .journal-set-row{grid-template-columns:18px minmax(0,1fr) minmax(0,1fr) 44px 26px 20px;gap:4px}
+  .journal-session-name{font-size:15px}
+  .journal-finish-row{grid-template-columns:1fr}
+}

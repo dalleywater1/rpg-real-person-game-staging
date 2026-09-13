@@ -1,0 +1,974 @@
+/* RPG v0.02.15 — Home Widget Family: Player Status + Character Stats
+   layout (Phase D, revised under the "Home UI Fidelity Correction"
+   pass). Pairs with v0.02.15-home-widget-player-status.js.
+
+   Player Status is now an OPEN SCENE, not a boxed card: no background,
+   border, or shadow of its own — it sits directly on the page's own
+   already-live scenic background (BG_HOME_DAY/SUNSET/NIGHT/RAIN, wired
+   in the Home v2 Fidelity Rebuild pass), matching the five original
+   Home concept mockups Lyra supplied. Portrait, level badge, identity
+   text and help/settings float on that scenery; only the streak/today/
+   next-reward strip below keeps its own bordered "card" treatment
+   (matching the concept's single unified stats-strip asset). */
+
+/* ---------- Reset legacy .player-status-panel bleed-through ----------
+   Many earlier layers (base styles.css, the "HOME VARIANT 2" block,
+   .home-visual-marble/.home-all-variants/.home-marble-correction
+   ancestor classes still added to #view regardless of which Player
+   Status implementation is live) style .player-status-panel generically
+   with !important — cream/marble backgrounds, fixed padding, borders.
+   Variant 8 escaped this by also carrying its OWN more specific
+   .v8-player-box class + matching !important rules; this does the same
+   for .widget-player-status. */
+#view .player-status-panel.widget-player-status{
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: block !important;
+  min-height: 0 !important;
+  position: relative;
+}
+
+/* Hero local navy surface (background-tuning pass, 2026-09-11,
+   Aurelia-directed): the Hero was an "open scene" with zero fill of its
+   own (see file header) -- fine against a plain scenic background, but
+   measured contrast against the actual day photo showed several text
+   rows failing WCAG AA (Title as low as 1.05:1 raw). Tested 45/50/55%
+   navy fill at 320/Day with real contrast-ratio sampling (photo pixel x
+   fill alpha x navy, checked against each text color's luminance) --
+   45% left Class value just under AA (4.16:1), 55% darkened the scenery
+   more than the data justified; 50% is the lightest level where the
+   sampled text (Name 7.37:1, Class 4.66:1, Gold 8.31:1, XP 5.81:1) all
+   clear AA. A soft radial gradient (not a flat fill) centered on the
+   Name/Class/Title/Gold/XP text column -- measured at 41%/50% of the
+   Hero box, not guessed -- goes slightly darker at that center (58%)
+   tapering to the base 50% toward the frame edge, so the surface reads
+   as constructed depth rather than a flat translucent rectangle, with
+   no vignette ring visible at any of the tested opacities. Weather
+   keeps its own separate, stronger local surface (.hero-weather-card,
+   62% -- deliberately NOT lowered to match Hero: the Location line's
+   contrast drops under AA below ~60%, checked the same way). No global
+   #appShell dimmer -- this is a local HUD surface only, the scenic
+   background itself is untouched.
+
+   Selector/specificity note: the legacy reset above
+   (#view .player-status-panel.widget-player-status) forces
+   `background:transparent !important` on this SAME element (Player
+   Status carries both class sets). A plain `.home-hero-scene` rule
+   loses to that regardless of source order, so this rule matches its
+   specificity (#view + 2 classes) and carries its own !important to
+   win the cascade -- confirmed via getComputedStyle before trusting any
+   screenshot, not assumed. */
+#view .player-status-panel.home-hero-scene{
+  position: relative;
+  width: 100%;
+  padding: 14px 16px 16px;
+  box-sizing: border-box;
+  background: radial-gradient(ellipse at 41% 50%, rgba(8,20,32,.58) 0%, rgba(8,20,32,.50) 70%) !important;
+  /* Home V3 Classic HUD Visual Reset (2026-09-13), Phase 2 — frame
+     removal only, per the handover's explicit "that is all": the
+     ornate HERO_PERIMETER_V2.png border-image overlay (previously a
+     sibling <div class="home-hero-frame">, see JS file for why it had
+     to be a sibling rather than a child) is gone, replaced with a
+     plain rounded corner on this surface. Nothing else here changed —
+     same padding, same radial-gradient fill, same everything else the
+     handover's "keep exactly as-is" list requires. Asset stays on
+     disk, unreferenced. */
+  border-radius: 12px !important; /* beats the legacy-reset rule above (border-radius:0 !important on the same element via .widget-player-status) — same reason `background` on this rule needs !important too. */
+}
+
+/* Help/Settings used to live here (absolutely positioned top-right of
+   this scene) — moved out to their own independent .home-tools-bar
+   (app.js's homeToolsHTML(), styled in v0.02.16) so they stay reachable
+   even when the Player Status module itself is hidden. See that file
+   for the full reasoning. */
+
+/* Identity row — Player zone (portrait+badge+identity) LEFT, Weather
+   RIGHT (Aurelia's V3 Hero correction, 2026-09-07): "I do not want
+   Weather to drop to its own row below 420px... that recreates the
+   stacked-dashboard problem we were trying to escape. Player LEFT |
+   Weather RIGHT... explicit paired geometry for each responsive state,"
+   replacing the prior "Player flexible remainder + Weather clamp()"
+   model (which used to let Weather wrap to its own line under 420px —
+   see git history). Grid columns are explicit fr-unit PAIRS per
+   breakpoint tier (not a single continuous clamp/%), so the Player/
+   Weather ratio is a deliberate, named choice at each tier rather than
+   an emergent side-effect: ~70/30 at the "wider" default (matches
+   Aurelia's suggested 68-72%/28-32% desktop range), ~64/36 at the
+   ~375px tier, ~62/38 at the ~320px tier (her own suggested starting
+   values — not treated as sacred, just as the starting point she gave).
+   When Weather is hidden (.no-weather, set by playerStatusHTML() from
+   isHomeModuleVisible('weather')) the Player zone reclaims the full
+   row — !important since it must win over every tier below. */
+.home-hero-identity-row{
+  display: grid;
+  grid-template-columns: 70fr 30fr;
+  align-items: flex-start;
+  gap: 12px;
+}
+.home-hero-identity-row.no-weather{ grid-template-columns: 1fr !important; }
+.home-hero-player-zone{
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+.home-hero-portrait{
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(64px, 20vw, 92px);
+  aspect-ratio: 1 / 1;
+}
+.home-hero-portrait .rpg-widget-portrait{ position: relative; width: 100%; height: 100%; }
+.home-hero-level-badge{
+  position: absolute;
+  left: 50%;
+  bottom: -27%;
+  transform: translateX(-50%);
+  width: 42%;
+  aspect-ratio: 1 / 1;
+  /* Home V3 Level badge (Aurelia — Astra live handoff, 2026-09-09).
+     One canonical 2x export (78px, 580's 2x tier) scales down via
+     background-size:contain, same approach as the portrait ring.
+     Position correction (2026-09-09, follow-up): the handoff's own text
+     said "bottom-centred", but the pre-existing right:-6%/bottom:-6%
+     (bottom-RIGHT corner, ~14% of the badge's own height overlapping
+     the ring) was left untouched during the original integration —
+     an oversight, not a deliberate choice. Fixed to horizontally
+     centered (left:50% + translateX(-50%)) with bottom:-27%, tuned
+     against the approved reference proof so roughly two-thirds of the
+     badge hangs below the ring and a third overlaps into it, matching
+     the proof's proportions rather than guessing. */
+  background-image: url('./assets/Home/V3/Portrait/badge-frame-78px.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  /* Level badge local readability fix (2026-09-11, Aurelia-directed):
+     badge-frame-78px.png's own interior is fully transparent (alpha 0,
+     checked pixel-by-pixel, not assumed) -- the level number previously
+     sat directly on whatever the portrait photo showed underneath, with
+     no backing at all. Scoped fix, not a Hero-wide opacity change:
+     background-color paints beneath the ring PNG automatically (CSS
+     background-color is always the bottom-most layer under any
+     background-image), so the gold ring stays untouched at full
+     opacity and only the interior gains a navy fill. border-radius:50%
+     clips that fill to the badge's own round shape instead of bleeding
+     into the square canvas's transparent corners. A subtle inset
+     shadow adds the "recessed badge" depth Aurelia asked for; no glow,
+     since 80% navy already gives near-opaque contrast, not a marginal
+     case that needs one. */
+  border-radius: 50%;
+  background-color: rgba(8,20,32,.80);
+  box-shadow: inset 0 2px 4px rgba(0,0,0,.35);
+}
+/* Level badge XP arc (Aurelia's approved architecture change,
+   2026-09-11) -- replaces the linear XP trough entirely; markup from
+   heroLevelXpArcHTML() in the JS file. inset:-22% extends the SVG
+   outward from the badge's own box by roughly the same margin the
+   live-sandbox test used (arc radius = badge radius + ~4.5px at the
+   320 tier, checked live before this number was chosen) -- expressed
+   as a percentage of the badge's own box so it scales automatically
+   with the badge's clamp()'d responsive size, no per-breakpoint
+   override needed. z-index:-1 paints it behind the badge's own
+   in-flow content (the level numeral) but above the badge's own
+   background (ring PNG + navy fill) -- CSS stacking order paints an
+   element's own background first regardless of a child's z-index, so
+   this ordering (ring -> arc -> numeral) needed no extra work, just
+   the right z-index sign; confirmed by cross-checking the actual paint
+   order live, not assumed. No frame/plaque behind the arc itself, per
+   instruction -- a plain stroke, nothing else. */
+.hero-level-xp-arc{
+  position: absolute;
+  inset: -22%;
+  z-index: -1;
+  overflow: visible;
+  pointer-events: none;
+}
+.hero-level-xp-arc-track{
+  fill: none;
+  stroke: #caa657;
+  stroke-opacity: .55;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+.hero-level-xp-arc-fill{
+  fill: none;
+  stroke: #2aa6f2;
+  stroke-width: 7;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 2px rgba(113,209,255,.6));
+}
+/* Level-up-ready glow + level-up flash (2026-09-11, direct instruction:
+   glow through the last 10% of XP, flash once when a level-up fires,
+   then reset). Restrained per the original ruling on this state
+   ("glow/pulse rather than a permanent animation") — the glow is only
+   active for the real, bounded xpPercent>=90 window (computed live in
+   v0215HeroExperimentBHTML), not running continuously, and the flash
+   plays exactly once per level-up: heroLevelUpFlash (app.js) is set
+   true the instant a level-up fires and consumed — read once, cleared
+   — by the very next Hero render, so .level-up-flash is only ever
+   present on that one render, not re-added afterward. */
+@keyframes heroXpNearFullGlow{
+  0%,100%{ filter: drop-shadow(0 0 2px rgba(113,209,255,.6)); }
+  50%{ filter: drop-shadow(0 0 7px rgba(113,209,255,.95)) drop-shadow(0 0 3px rgba(255,224,153,.5)); }
+}
+.home-hero-level-badge.xp-near-full .hero-level-xp-arc-fill{
+  animation: heroXpNearFullGlow 2.2s ease-in-out infinite;
+}
+@keyframes heroXpBadgeGlow{
+  0%,100%{ box-shadow: inset 0 2px 4px rgba(0,0,0,.35); }
+  50%{ box-shadow: inset 0 2px 4px rgba(0,0,0,.35), 0 0 9px rgba(113,209,255,.55); }
+}
+.home-hero-level-badge.xp-near-full{
+  animation: heroXpBadgeGlow 2.2s ease-in-out infinite;
+}
+@keyframes heroLevelUpFlash{
+  0%{ box-shadow: inset 0 2px 4px rgba(0,0,0,.35); transform: translateX(-50%) scale(1); }
+  25%{ box-shadow: inset 0 2px 4px rgba(0,0,0,.35), 0 0 18px 4px rgba(255,224,153,.9); transform: translateX(-50%) scale(1.14); }
+  100%{ box-shadow: inset 0 2px 4px rgba(0,0,0,.35); transform: translateX(-50%) scale(1); }
+}
+.home-hero-level-badge.level-up-flash{
+  animation: heroLevelUpFlash 900ms ease-out 1;
+}
+.rpg-widget-level-badge-value{
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 800;
+  color: #f7edcf;
+  text-shadow: 0 2px 3px #000a;
+  font-size: clamp(11px, 30%, 22px);
+  line-height: 1;
+  /* Centering, corrected 2026-09-11: an earlier pass here added
+     translateY(.27em) to push the numeral down, on the assumption its
+     ink read too high -- user feedback on the live render said the
+     opposite (too low), so that nudge was backwards and is removed.
+     Flex centering on .home-hero-level-badge already lands this
+     element's true bounding box dead-center (confirmed via
+     getBoundingClientRect -- 0px offset both axes); no transform. If
+     it still reads off-center after this, the next move is a nudge in
+     the OTHER direction (negative translateY, upward), not a repeat of
+     the removed one. */
+}
+/* Hero status effects — HUD side (2026-09-11, freed-rows test case,
+   icon-only per direct same-day instruction: "full description on the
+   Player Information page but icons on the HUD"). .hero-grid-status is
+   a real 5th grid row (see .home-hero-grid.has-status above), not a
+   sibling below the grid -- an earlier version used a plain sibling div
+   here, which is what caused the "Weather cut off"/"buffs on the frame"
+   bug fixed the same day; see the long comment at heroStatusEffectsHTML()
+   in the JS file. Costs zero Hero height when state.statusEffects is
+   empty (the common/default case for every real player right now) and
+   grows the Hero naturally when something's active.
+   Real icon art wired in (2026-09-11, home-v3-buff-placeholders
+   package, SHA-256 verified): 24px slot per the package's own README
+   ("use 48px export for a 24 CSS-pixel slot"), image supplied per-icon
+   via the --buff-icon custom property (set inline in the JS, see
+   heroStatusIconHTML()). No frame/backing/ring, per direct instruction
+   -- just the icon itself with a plain drop-shadow for legibility
+   against the scenic background (same treatment as .hero-info-icon
+   elsewhere in the Hero). Debuff gets a warm-red glow instead of a
+   neutral shadow -- still no ring/border, just a coloured shadow, so it
+   stays frameless while keeping SOME buff/debuff distinction (not yet
+   tuned against a real debuff example). `title` on the icon itself
+   carries the name/effect on hover since the HUD shows no text. The
+   full name+effect text lives in the Player Information popup instead
+   (.active-effects-list, below). */
+.hero-status-icon{
+  display: block; width: 24px; height: 24px; flex: 0 0 auto;
+  background-image: var(--buff-icon);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.7));
+}
+.hero-status-icon.debuff{ filter: drop-shadow(0 0 3px rgba(224,120,120,.85)) drop-shadow(0 1px 2px rgba(0,0,0,.7)); }
+/* Active Effects — Player Information popup side, full description.
+   Same icon component, reused at the same 20px size for a consistent
+   identity between HUD and popup. */
+.active-effects-list{ display: flex; flex-direction: column; gap: 6px; }
+.active-effect-row{ display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 7px; background: rgba(169,118,47,.06); border: 1px solid rgba(169,118,47,.28); }
+.active-effect-row.debuff{ border-color: rgba(224,120,120,.4); background: rgba(224,120,120,.06); }
+.active-effect-text{ display: flex; flex-direction: column; line-height: 1.2; min-width: 0; }
+.active-effect-text b{ font-family: var(--font-ui); font-size: 13px; font-weight: 700; color: #2b2214; }
+.active-effect-text span{ font-family: var(--font-micro); font-size: 11px; font-weight: 600; color: #2a8a52; }
+.active-effect-row.debuff .active-effect-text span{ color: #b8493a; }
+
+/* Identity text — a soft semi-transparent backing (not a hard-edged
+   box) keeps name/rank/class/XP legible against any of the 4 scene
+   variants, echoing the concept's implied "info plate" without a
+   dedicated asset for it. */
+.home-hero-identity{
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 8px 12px 10px;
+  border-radius: 10px;
+  background: radial-gradient(ellipse at 30% 30%, rgba(6,12,20,.5), rgba(6,12,20,.28) 70%, transparent 100%);
+  color: #e9eef4;
+}
+/* Typography proof (2026-09-10): font-family swapped to the proposed
+   var(--font-display)/var(--font-ui) system, Georgia fallback kept
+   in each stack so a font-load failure degrades gracefully rather
+   than dropping to the page's own Courier New base. Weight 700 (not
+   the old 800) since Cinzel's loaded weights are 600/700 only —
+   Player Name is the "sparingly" 700 case, the single most prominent
+   identity element on the page. */
+.hero-player-name{ font-family: var(--font-display); font-size: clamp(15px, 4.4vw, 22px); font-weight: 700; line-height: 1.15; color: #fbf3da; text-shadow: 0 2px 4px #000c; overflow-wrap: anywhere; }
+.hero-player-rank{ font-family: var(--font-ui); font-size: clamp(8px,2vw,10px); font-weight: 600; letter-spacing: .1em; color: #f0c060; text-transform: uppercase; margin-top: 3px; text-shadow: 0 1px 2px #000a; }
+.hero-player-class{ font-family: var(--font-ui); font-size: clamp(9px,2.2vw,12px); font-weight: 600; color: #d3dde6; margin-top: 2px; text-shadow: 0 1px 2px #000a; }
+.hero-xp-copy{ font-family: var(--font-ui); margin-top: 7px; display: flex; justify-content: space-between; align-items: baseline; gap: 10px; font-size: clamp(8px,1.9vw,10px); font-weight: 600; letter-spacing: .06em; color: #b7c6d1; }
+.hero-xp-copy b{ font-variant-numeric: tabular-nums; font-size: 15px; color: #f2f6f8; letter-spacing: 0; white-space: nowrap; }
+/* XP trough (Stage 2, corrected 2026-09-11 per Aurelia's fidelity-proof
+   ruling) -- proper 3-part construction instead of stretching the whole
+   capsule: fixed-width end caps (::before/::after) sample just the
+   pointed-diamond ornament from XP_TROUGH_V2.png (source cap ~130px of
+   the 1937px-wide master, scaled 9px wide with background-size so the
+   diamond keeps its native proportions, never stretched), the track
+   between them is pure CSS (a 3-stop vertical gradient reproducing the
+   trough's sampled colours -- bright gold top line #f2dfa0, navy fill
+   #0e1c2a, gold shadow line #caa657 -- so it's mathematically immune to
+   any distortion at any width). background-image (not border-image) is
+   still required for the caps: .hero-xp-bar sits deep inside
+   .home-hero-scene, and border-image was confirmed (see
+   .home-hero-frame's comment) to silently fail to paint anywhere in
+   that subtree. The sapphire fill (<i>) sits behind the caps (z-index)
+   so it fills right up to and under them without ever hiding their
+   ornament, at 0% or 100% XP alike. */
+.hero-xp-bar{ position: relative; height: 10px; margin-top: 4px; overflow: hidden;
+  background: linear-gradient(180deg, #f2dfa0 0 1px, #0e1c2a 1px calc(100% - 1px), #caa657 calc(100% - 1px) 100%);
+}
+.hero-xp-bar::before, .hero-xp-bar::after{ content: ''; position: absolute; top: 0; bottom: 0; width: 9px; z-index: 2;
+  background-image: url('./assets/Home/V3/HeroFrame/XP_TROUGH_V2.png');
+  background-repeat: no-repeat;
+  background-size: 134px 100%;
+}
+.hero-xp-bar::before{ left: 0; background-position: left center; }
+.hero-xp-bar::after{ right: 0; background-position: right center; }
+.hero-xp-bar i{ position: relative; z-index: 1; display:block; height:100%; width:calc(var(--p)*1%); background:linear-gradient(90deg,#0b65ad,#2aa6f2 65%,#71d1ff); box-shadow: inset 0 1px #b7ebff88, 0 0 5px #168fd6aa; }
+
+/* Weather HUD — Candidate E shell (Aurelia, 2026-09-10 — "semi-
+   transparent environmental HUD, not framed widget"): supersedes the
+   2026-09-09 border-image shell below. Weather was always meant to be
+   the one exception to Home's framed-widget language (Resources,
+   Movement, Character, Streak strip all carry the full antique-gold
+   9-slice treatment) — a lightweight readout floating on the scenery,
+   not another ornamented card. The `weather-shell-2x.png` / corner-
+   piece / running-divider-2x.png assets under assets/Home/V3/Weather/
+   are NOT deleted — kept archived and unreferenced as a possible future
+   theme treatment, per Aurelia's explicit instruction — but the
+   canonical build no longer points at them. Originally paired with a
+   1px antique-gold keyline; that keyline was removed 2026-09-10 ("we
+   can remove the frame from weather... it will be a floating
+   translucent pane on the HUD eventually") — no border at all now, just
+   the translucent navy surface + drop-shadow doing the separation work
+   against changing scenery, no frame of any kind. */
+.hero-weather-card{
+  position: relative;
+  width: auto;
+  min-width: 0;
+  padding: 7px 0 0;
+  border-radius: 4px;
+  background-color: rgb(8 23 33 / 62%);
+  box-shadow: 0 4px 12px rgba(0,0,0,.55);
+  color: #f5ead2;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+/* Weather B vertical divider (Stage 2, Aurelia-approved 2026-09-11) --
+   line stretches to the card's own measured height, the 4x8px diamond
+   stays fixed regardless (two separate layers, per the delivered
+   assembly.css, so the ornament never distorts between the 110/113/123px
+   Weather heights). No independent Weather frame is reintroduced -- the
+   card's own local navy surface/shadow above is untouched, this is only
+   the boundary line Weather never had before. */
+.hero-weather-card::before{
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 1px;
+  background: rgb(180 145 82 / 75%);
+  pointer-events: none;
+}
+.hero-weather-card::after{
+  content: "";
+  position: absolute;
+  left: -1.5px;
+  top: calc(50% - 4px);
+  width: 4px;
+  height: 8px;
+  background: url('./assets/Home/V3/Weather/WEATHER_DIAMOND.svg') center/100% 100% no-repeat;
+  pointer-events: none;
+}
+/* Vertical hierarchy (Aurelia, Candidate D, 2026-09-09/10): icon anchors
+   Rows 1-2 (Horten / temperature) as one paired cluster, condition gets
+   its own full-width line, metadata is one compact tertiary line, and
+   Running Conditions is a full-width footer rather than a pill — each
+   row gets the room it actually needs instead of forcing everything
+   into one horizontal strip, which is what was clipping condition/
+   metadata text at every earlier (horizontal) candidate. Labels
+   (location, condition, run state) keep the project's fantasy-serif
+   convention (Georgia); live numerals (temperature, H/L/rain/wind) stay
+   on the inherited body font, same "clean numerals" treatment as XP. */
+/* Base (unqualified) sizes are the 580 tier — the most generous of the
+   three tested proofs, per Aurelia's "580 may reveal richer metadata"
+   note. The two media queries below (already the codebase's own mobile-
+   first-via-max-width convention, matching .home-hero-grid above) scale
+   these down for 375 and 320, matching the exact sizes shown in the
+   approved per-tier screenshots — not just the grid width. */
+.hero-weather-hero-row{ display: flex; align-items: center; gap: 10px; padding: 0 11px; }
+.hero-weather-icon{ width: 42px; height: 42px; object-fit: contain; cursor: pointer; flex: 0 0 auto; filter: drop-shadow(0 2px 3px #0008); }
+.hero-weather-headcol{ display: grid; min-width: 0; line-height: 1; gap: 3px; }
+/* Typography bump (Aurelia, 2026-09-11, "increase both Weather and Hero
+   HUD typography now, then freeze those metrics before final frame
+   integration") -- the full-height Weather pane freed the vertical room
+   for this. Gains concentrated on temperature/condition/location/running
+   state per her explicit ruling; H/L-rain-wind stay subordinate, only a
+   small bump. margin-top values nudged up alongside the sizes (not just
+   the font-size numbers) since she asked for breathing room via spacing
+   too, not size alone. */
+.hero-weather-location{ font-family: var(--font-ui); font-size: 13px; font-weight: 600; letter-spacing: 0; color: #d8b56d; text-transform: uppercase; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-shadow: 0 1px 2px #000a; }
+.hero-weather-temp{ font-family: var(--font-ui); font-variant-numeric: tabular-nums; font-size: 32px; font-weight: 600; letter-spacing: -.01em; color: #f6edda; text-shadow: 0 1px 3px #000c; line-height: 1; }
+.hero-weather-condition{ margin-top: 5px; padding: 0 11px; font-family: var(--font-ui); font-size: 13px; font-weight: 500; color: #d8c9a3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hero-weather-highlow{ margin-top: 7px; padding: 0 11px; font-family: var(--font-micro); font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 500; letter-spacing: 0; color: #c9bb96; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hero-weather-rainwind{ margin-top: 2px; padding: 0 11px; font-family: var(--font-micro); font-variant-numeric: tabular-nums; font-size: 11px; font-weight: 500; letter-spacing: 0; color: #c9bb96; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Running Conditions footer — full-width dark strip with a plain 1px
+   gold border-top standing in for the old running-divider-2x.png (same
+   visual idea, no separate art asset needed at this scale). State is
+   carried by the state word + glyph tint, not a background-color swap —
+   deliberately NOT the old cream-pill-per-state treatment, which read as
+   generic dashboard semaphore. Text is the runningConditions() label
+   as-is ("Good"/"Perfect"/"Caution"/"Poor"/"Mixed") — no "FOR RUNNING"
+   suffix, no forced uppercase; the running-man glyph already carries the
+   category, per Aurelia's 2026-09-10 ruling that the old phrasing was
+   redundant at this size. */
+/* Running divider (Stage 2, Aurelia-approved 2026-09-11) — the flat
+   1px border-top swapped for the delivered restrained gold-line asset
+   (no centre ornament, "the most restrained mobile treatment" per its
+   own README). background-image, not border-image -- same subtree
+   border-image failure as the XP trough above; background-image is
+   confirmed to render correctly here. No layout height added -- the
+   line is a 1px background layer at the same position the old
+   border-top occupied, not an added border. */
+.hero-weather-run2{ margin-top: auto; padding: 7px 11px; display: flex; align-items: center; justify-content: center; gap: 7px; background-color: rgba(4,14,22,.5); background-image: url('./assets/Home/V3/Weather/RUNNING_LINE.png'); background-size: 100% 1px; background-position: top; background-repeat: no-repeat; font-family: var(--font-ui); font-size: 13px; font-weight: 600; letter-spacing: .02em; color: #f0dba0; }
+/* Running Conditions glyph (home-v3-running-icon package, 2026-09-11) --
+   replaces the plain 🏃 emoji with the delivered silhouette, colour-
+   mapped per live running state via the package's own mask technique
+   (one PNG mask, --running-colour swapped per state, not five separate
+   coloured image files). "perfect" isn't in the delivered state list
+   (good/fair/caution/poor/unavailable) since the package didn't know
+   this app's exact runningConditions() vocabulary -- mapped to the same
+   green as "good" rather than left to fall through to greyed-out
+   "unavailable". Colour is never the only state cue: the live label text
+   sits right next to it (unchanged), same as before. */
+.run-glyph{ display: inline-block; width: 15px; height: 15px; flex: 0 0 auto; background-color: var(--running-colour, #B8C2CC); -webkit-mask: url('./assets/Home/V3/Weather/RUNNING_ICON.png') center/contain no-repeat; mask: url('./assets/Home/V3/Weather/RUNNING_ICON.png') center/contain no-repeat; }
+.run-glyph[data-running-state="good"], .run-glyph[data-running-state="perfect"]{ --running-colour: #85D9A0; }
+.run-glyph[data-running-state="fair"], .run-glyph[data-running-state="mixed"]{ --running-colour: #E8CF82; }
+.run-glyph[data-running-state="caution"]{ --running-colour: #F2AB65; }
+.run-glyph[data-running-state="poor"]{ --running-colour: #F07F7F; }
+.run-glyph[data-running-state="unavailable"]{ --running-colour: #B8C2CC; }
+.hero-weather-run2.good,.hero-weather-run2.perfect{ color: #bfe6ad; }
+.hero-weather-run2.caution{ color: #f0dba0; }
+.hero-weather-run2.poor{ color: #f0a89e; }
+
+/* Streak / Today / Next Reward — ONE Inset-framed strip (matches the
+   concept's single STATS_STRIP.png asset), the only bordered "card" in
+   the whole scene. */
+.hero-reward-band{
+  --widget-border-width: 9px;
+  --widget-pad-x: 8px;
+  --widget-pad-y: 5px;
+  min-height: 0;
+  margin: 14px 2px 0;
+}
+.hero-progression{ display: flex; align-items: stretch; }
+.hero-progress-item{
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  align-content: center;
+  gap: 1px;
+  text-align: center;
+  min-width: 0;
+  padding: 0 3px;
+  position: relative;
+}
+.hero-progress-item + .hero-progress-item::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12%;
+  bottom: 12%;
+  width: 1px;
+  background: rgba(228,180,90,.22);
+}
+.hero-progress-item img{ width:19px; height:22px; object-fit:contain; filter: drop-shadow(0 2px 2px #0006); }
+.hero-progress-item div{ display:grid; gap:1px; justify-items:center; min-width:0; }
+.hero-progress-item span{ font-size:6.5px; font-weight:900; letter-spacing:.06em; color:#8fa8b6; white-space:nowrap; }
+.hero-progress-item b{ font-size:9px; color:#e9eef4; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:100%; }
+
+.hero-quip{ text-align:center; margin: 8px 8px 0; font-size: 8px; font-weight: 600; color: #e4ecf1; text-shadow: 0 1px 2px #000a; letter-spacing:.01em; }
+
+@media(max-width:340px){ .hero-quip{ display:none; } }
+
+/* ==========================================================
+   Character Stats module (hotfix) — a plain Standard Panel card,
+   deliberately subordinate to the open hero scene above it: normal
+   bordered widget chrome, not floating on the scenery. */
+.character-stats-module{
+  cursor: pointer;
+  margin: 0 12px 14px;
+}
+.character-stats-module:hover{ filter: brightness(1.04); }
+.character-stats-module:focus-visible{ outline: 2px solid #4bbcff; outline-offset: 2px; }
+.char-stats-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+  font-weight: 900;
+  letter-spacing: .06em;
+}
+.char-stats-header span{ font-size: 12px; color: #e0ab4a; }
+.char-stats-header b{ font-size: 10px; font-weight: 700; color: #9fb3bf; letter-spacing: .02em; }
+.char-stats-grid{
+  display: flex;
+  align-items: stretch;
+}
+.char-stat-cell{
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  align-content: center;
+  gap: 2px;
+  text-align: center;
+  min-width: 0;
+  padding: 0 3px;
+  position: relative;
+}
+.char-stat-cell + .char-stat-cell::before{
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10%;
+  bottom: 10%;
+  width: 1px;
+  background: rgba(228,180,90,.22);
+}
+.char-stat-cell img{ width:19px; height:22px; object-fit:contain; filter: drop-shadow(0 2px 2px #0006); }
+.char-stat-cell div{ display:grid; gap:1px; justify-items:center; min-width:0; }
+.char-stat-cell span{ font-size:6.5px; font-weight:900; letter-spacing:.05em; color:#8fa8b6; white-space:nowrap; }
+.char-stat-cell b{ font-size:9.5px; color:#e9eef4; white-space:nowrap; }
+
+/* Explicit Player/Weather ratio tiers (Aurelia's V3 Hero correction,
+   2026-09-07) — narrower tiers give Weather a slightly larger share
+   since its content (temp/condition/H-L/wind/run-badge) doesn't
+   compress as gracefully as identity's own already-clamped text, but
+   Weather NEVER reclaims the full row at any width. Boundaries chosen
+   so her own two named reference widths land on her own two named
+   ratios exactly: 375px -> 64/36, 320px -> 62/38. */
+@media(max-width:460px){
+  .home-hero-identity-row{ grid-template-columns: 64fr 36fr; }
+}
+@media(max-width:340px){
+  .home-hero-identity-row{ grid-template-columns: 62fr 38fr; }
+}
+@media(max-width:390px){
+  .char-stats-grid{ flex-wrap: wrap; row-gap: 8px; }
+  .char-stat-cell{ flex: 1 1 30%; }
+  .char-stat-cell + .char-stat-cell::before{ display: none; }
+}
+
+/* ==========================================================
+   EXPERIMENT B (2026-09-08) — user's own live "let me try something"
+   pass, kept separate from and on hold pending Aurelia's own notes on
+   the same Hero (she asked for something related but distinct: wider
+   Player, larger intentional Weather, pulled-up reward strip, aligned
+   Help/Settings — this experiment is the user's own quicker sketch of
+   part of that same idea, done first to see it live).
+   EASY REVERT: delete this whole block, delete the matching JS block
+   in v0.02.15-home-widget-player-status.js (search "EXPERIMENT B"),
+   and set HOME_HERO_EXPERIMENT_B=false or remove it — the original,
+   currently-approved Hero (fixed 70/64/62-thirty-ish Player/Weather
+   grid, reward band inside the scene) needs no other changes to come
+   straight back, nothing else in the file depends on this block.
+   What this does, per the user's own instructions:
+   - Player zone (portrait+identity) spans the FULL scene width instead
+     of ~70/64/62% — more horizontal room for the player name specifically
+     ("looks squashed on the phone").
+   - XP bar height halved (10px -> 5px).
+   - Weather card no longer sits in its own grid column; it's pulled
+     down and positioned absolutely over the right side of the now-full-
+     width Player zone, roughly at the XP bar's own vertical level, for
+     a deliberate overlapping/"floating" look instead of two clean
+     side-by-side zones.
+   - Streak/Today/Next Reward is pulled out of .home-hero-scene into its
+     own sibling <section class="hero-reward-widget home-panel"> — genuinely
+     its own widget now (reuses .home-panel's existing plain parchment
+     card styling as-is, no new "card" look invented), not part of the
+     Hero's own composition anymore. */
+.home-hero-experiment-b{ position: relative; }
+/* ==========================================================
+   HOME V3 HERO COMPOSITION LOCK — round 6 (2026-09-08), Aurelia's
+   ruling that Player Status is now permanently mandatory unlocks this
+   cleaner arrangement (see the JS file for the full target diagram).
+   Still one CSS Grid, named areas declared exactly once — §12's
+   explicit rule: "the same zone relationships must remain at every
+   breakpoint... implemented as a deliberate grid/layout matrix rather
+   than relying on free-flowing flex behavior." Media queries below
+   only resize tracks, never redeclare grid-template-areas.
+   Portrait now spans 4 rows (Name/Class/Identity/XP) instead of round
+   5's 3 (Class/Identity/XP) — Name moved beside Portrait instead of
+   above it. Weather now starts at Identity instead of XP — one row
+   earlier than round 5 — spanning Identity/XP/Gold. */
+/* HOME V3 HERO RECOMPOSITION (Aurelia, 2026-09-10 — "Player information
+   reads clearly as a compact stack, Gold no longer wastes a row, XP
+   gains useful width, Weather gains a deliberate right-hand HUD zone").
+   Sandboxed as a live geometry proof first (5 rounds of measurement
+   against real player/weather data, reverted after each capture),
+   approved for permanent implementation once reviewed. Supersedes round
+   6's "Name beside Portrait" arrangement below.
+
+   Structural change from round 6: Name is now its own full-width row
+   ABOVE the Portrait/info/Weather block, not folded beside Portrait —
+   so Class/Title/Gold no longer need to visually span into Weather's
+   column the way Name/Class used to. That's what freed the old 5-track
+   asymmetric-gap technique (portrait | gap | middle | gap | weather,
+   2026-09-09) — nothing needs to fold across a shrinkable gap anymore,
+   so this is back to a plain 3-track grid (portrait | center | weather)
+   with a normal uniform `column-gap`, Name spanning all 3 via its own
+   row. Center is `minmax(min-content, ...)` — pinned to whatever
+   Class/Title/Gold/XP actually need, same content-driven protection
+   principle already proven for XP alone in the 2026-09-09 pass, now
+   covering all four center rows.
+
+   Gold moved from its own standalone row below Portrait into the
+   Class/Title/Gold info stack (`.hero-info-row`) — it no longer has a
+   dedicated `gold` grid-area of its own real estate, just one more row
+   in the stack. Title reuses the existing `rank` data path
+   (v0243PlayerRank — state.character.rank/.title or the profile
+   equivalents, "NOVICE" fallback) under the Title label the brief asked
+   for; no gameplay/data logic changed, only presentation.
+
+   Per-tier widths (measured, not eyeballed) — 320: Weather 139px, flat
+   vs. the already-approved 2026-09-09 figure (Portrait + XP's real
+   content need already consume nearly the full 320px budget; there's no
+   restructuring trick that changes that ceiling). 375: 165px -> 179px
+   (+14px) — real slack once Weather stops folding under Name. 580:
+   184px -> 210px (+26px, deliberately capped rather than left to
+   consume a naive `1fr` — an uncapped split produced a disproportionate
+   ~341px Weather at this tier during the sandbox pass); the rest of
+   580's freed width goes to the center column, which mostly shows up as
+   a substantially wider XP bar (80px -> 227px at 580). Same rule as
+   every pass before this: media queries only resize tracks, never
+   redeclare grid-template-areas.
+
+   Widths re-measured and tightened again 2026-09-10 after splitting the
+   old single metadata line ("H19°/L10° · 20% · 18km/h") into its own
+   High/Low line and Rain/Wind line, with Condition moved up closer to
+   the temperature — shorter lines meant Weather no longer needed as
+   much width to stay clip-free. Measured the real content-driven
+   minimum at each tier (worst-case condition string "Sunny with
+   Clouds", the icon+location cluster, both metadata lines, the Running
+   Conditions footer at its longest state word "Caution") with each
+   element's own `width:max-content`, not eyeballed: 320 needs 107.38px,
+   375 needs 116.75px, 580 needs 124.14px. Card widths below give each
+   tier ~11-14px over that measured floor, not a razor-thin fit. Freed
+   width goes to the center column (already `1fr` at 580 for the same
+   reason) — now `1fr` at every tier, so the reclaimed space becomes a
+   wider XP bar instead of sitting unused. */
+.home-hero-grid{
+  display: grid;
+  /* Middle column min changed from min-content to 0 (2026-09-10,
+     typography proof): min-content as an explicit TRACK function
+     floors the column at the widest unwrapped content of ANY row using
+     it — including the ellipsis-truncating rows (name/class/title/
+     gold), whose nowrap text has a min-content equal to its full
+     un-truncated width. Neither min-width:0 nor overflow:hidden on the
+     individual grid item fixed this (those only suppress the *auto*
+     min-size blowout, a different mechanism) — confirmed via direct
+     measurement, a long Player Name still overflowed the Hero card by
+     220px at 320 with both applied and min-content still on the track.
+     0 is safe here specifically because every row sharing this column
+     already uses nowrap+ellipsis, never wraps — there's no row relying
+     on min-content to avoid an awkward wrap. */
+  grid-template-columns: clamp(64px, 20vw, 92px) minmax(0, 1fr) 138px;
+  /* XP row + its gap row removed (Aurelia's approved architecture
+     change, 2026-09-11): XP moved onto the Level badge as an arc (see
+     .hero-level-xp-arc below and heroLevelXpArcHTML() in the JS file),
+     freeing these two rows for a future status/buffs/debuffs socket.
+     Deliberately down to 4 auto rows, not kept at 6 with two left
+     empty -- the whole point of this 320 proof is to see the actual
+     vertical space gained, not hide it behind reserved-but-invisible
+     rows. Portrait/Weather's grid-row span shortened to match (1/5,
+     was 1/7). */
+  grid-template-rows: auto auto auto auto;
+  /* Weather now spans every row including the name row (Aurelia,
+     2026-09-11, "let Weather own the complete right-hand side top to
+     bottom") -- Weather gains height (110->138 at 320, no width
+     change), Player Name gives up the full-width row it only ever had
+     to protect an unbounded name; it's capped to the identity columns
+     now that the Hero has a real perimeter to make that tradeoff safe.
+     Weather's own height:100% (below) already stretches it to fill
+     whatever its grid-area's height ends up being, and the Weather B
+     divider (::before/::after on .hero-weather-card, top:0;bottom:0)
+     already spans the card's own full height -- neither needed a
+     change for this, they were already written to the card's real
+     height, not a hardcoded number. */
+  /* Portrait now starts at row 1 too, flush with Weather's new top edge
+     (2026-09-11 follow-up) -- confirmed live that Portrait's OWN grid
+     position was unchanged by the earlier Weather-height edit (byte-
+     identical top offset with the old vs new area string, tested
+     directly), so "Portrait looks sunk" was entirely about Weather now
+     starting higher while Portrait stayed at row 2. Name moves out of
+     the portrait column into row 1 of the info column only -- it can no
+     longer span both, since Portrait now owns column 1 for the whole
+     height. Name's available width shrinks accordingly (was portrait+
+     info combined, now just info) but keeps the same nowrap+ellipsis
+     treatment, still verified single-line and contained. */
+  grid-template-areas:
+    "portrait name    weather"
+    "portrait class   weather"
+    "portrait title   weather"
+    "portrait gold    weather";
+  column-gap: 10px;
+  row-gap: 4px;
+  align-items: start;
+}
+.home-hero-grid.no-weather{
+  grid-template-columns: clamp(64px, 20vw, 92px) 1fr;
+  grid-template-areas:
+    "name     name"
+    "portrait class"
+    "portrait title"
+    "portrait gold";
+}
+/* Status row as a REAL 5th grid row (2026-09-11, layout correction --
+   see the long comment at heroStatusEffectsHTML() in the JS file for
+   the "Weather cut off"/"buffs on the frame" root cause). Only applied
+   when .has-status is present (state.statusEffects non-empty) so an
+   empty Hero costs nothing -- matches "stay empty when nothing is
+   active." Portrait/Weather's row-spans extend into this row via their
+   own selectors below, so Weather's height:100% correctly covers the
+   status row too, and status gets the grid's own row-gap instead of an
+   eyeballed margin. */
+.home-hero-grid.has-status{
+  grid-template-rows: auto auto auto auto auto;
+  grid-template-areas:
+    "portrait name    weather"
+    "portrait class   weather"
+    "portrait title   weather"
+    "portrait gold    weather"
+    "portrait status  weather";
+}
+.home-hero-grid.no-weather.has-status{
+  grid-template-areas:
+    "name     name"
+    "portrait class"
+    "portrait title"
+    "portrait gold"
+    "portrait status";
+}
+.hero-grid-status{ grid-area: status; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 6px; }
+/* .hero-grid-portrait is a real <button> — tapping it opens
+   v0215ProgressPopupHTML (Streak/Today/Next Reward, plus Help/Settings
+   as of round 6 — see the JS file) — reset its native button chrome so
+   it still reads as plain portrait art, not a form control. Spans all
+   4 rows (2026-09-11: shortened from 1/7 to 1/5 when the XP row was
+   removed -- see the grid-template-rows comment above); extends to 1/6
+   when .has-status adds the 5th row, below. */
+.home-hero-grid.has-status .hero-grid-portrait{ grid-row: 1 / 6; }
+.hero-grid-portrait{
+  grid-area: portrait;
+  grid-row: 1 / 5;
+  position: relative;
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  align-self: start;
+}
+.hero-grid-portrait:focus-visible{ outline: 2px solid #4bbcff; outline-offset: 3px; border-radius: 50%; }
+/* min-width:0 alone wasn't enough (2026-09-10, typography proof
+   testing) — the middle column track is deliberately
+   minmax(min-content,1fr) (so Class/Title/Gold labels don't wrap), and
+   an explicit min-content TRACK function pulls its minimum straight
+   from the item's own content size regardless of the item's min-width
+   property; that override only suppresses the *auto*-min-size
+   blowout, a different mechanism. overflow:hidden here is what
+   actually stops this nowrap row from feeding its full unwrapped
+   width into that calculation. Confirmed via live measurement: without
+   it, a long Player Name still overflowed the Hero card by 220px at
+   320 even after min-width:0, silently masked by an ancestor's own
+   overflow:hidden rather than the name's own ellipsis ever triggering. */
+.hero-grid-name{ grid-area: name; margin-bottom: 6px; min-width: 0; overflow: hidden; }
+.hero-grid-class{ grid-area: class; }
+.hero-grid-identity{ grid-area: title; }
+.hero-grid-gold{ grid-area: gold; }
+/* Class/Title/Gold — one shared value row pattern (.hero-info-row),
+   replacing round 6's plain text-only rows and Gold's old standalone
+   span/b label pair. Class and Title originally carried icons (Class
+   had a real one via characterClassAsset(); Title used a placeholder,
+   flagged back to Aurelia/Velora as a real art gap) — removed per
+   Aurelia's 2026-09-10 follow-up ("remove the icons from Title and
+   Class, they are not needed"), text-only now. Gold keeps its 🪙
+   placeholder icon; that ruling only named Title and Class. */
+.hero-info-row{ display: flex; align-items: center; gap: 6px; min-width: 0; }
+.hero-info-icon{ width: 16px; height: 16px; object-fit: contain; flex: 0 0 auto; filter: drop-shadow(0 1px 2px #0008); }
+.hero-info-value{ font-family: var(--font-ui); font-size: 11px; font-weight: 600; color: #d3dde6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 1px 2px #000a; }
+/* Title color lightened #f0c060 -> #f6d98a (background-tuning pass,
+   2026-09-11, Aurelia-directed): #f0c060 measured at only 3.61:1 against
+   the Hero's own 50-58% navy fill even at the highest tested opacity --
+   a color-luminance problem the fill alone can't solve without
+   darkening the whole Hero for one row. #f6d98a keeps the same gold
+   family/identity (still reads as a title, not a plain white value)
+   while gaining enough luminance to clear AA against the navy -- see
+   the project memory / manifest entry for the re-measured ratio. */
+.hero-info-value-title{ color: #f6d98a; text-transform: uppercase; letter-spacing: .06em; font-size: 17px; }
+.hero-info-value-gold{ color: #f2f6f8; font-weight: 700; font-variant-numeric: tabular-nums; }
+/* Class/Title/Gold sizes (Aurelia, 2026-09-11 typography bump — table
+   values at the 580 tier; 375/320 overrides live in their own media
+   queries below). Each row scoped individually so none of the three
+   share a size by accident the way they briefly did off the 11px base. */
+.hero-grid-class .hero-info-value{ font-size: 17px; }
+.hero-grid-gold .hero-info-value{ font-size: 17px; }
+.home-hero-grid .hero-weather-card{
+  grid-area: weather;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+/* Name is now a dedicated top row spanning the full Hero width — one
+   line only, ellipsis on overflow, and its box can never push Weather
+   or resize the grid since it's a normal block box constrained to its
+   own row, not a flex/grid item competing for column space. */
+.hero-grid-name .hero-player-name{ font-size: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: block; }
+/* Streak/Today/Next Reward popup — opened by tapping the portrait.
+   Reuses .hero-progression/.hero-progress-item as-is, but those carry
+   light-on-dark colors (span/b) meant for the Hero's own dark scenic
+   background; the popup renders inside Home's light-cream themed modal
+   (body[data-theme="home"] .modal) instead, so needs the same kind of
+   dark-ink override already used for Main Quest/the round-1 reward
+   widget when the legacy marble layer was retired. */
+/* Player Information popup restructure (2026-09-11, user-requested):
+   renamed from "Streak & Rewards", Experience split into its own
+   section separate from Streaks/Rewards, with current Level/XP values
+   shown (superseding the earlier "no numeric readout" note for this
+   specific spot -- that ruling was about the Hero card itself, this is
+   a different, explicitly requested location). Reuses .hero-xp-bar as
+   before -- same frozen caps/stretch-safe centre/sapphire fill
+   construction, just nested one level deeper inside the new clickable
+   row. */
+.player-info-section{ margin-top: 14px; }
+.player-info-section:first-of-type{ margin-top: 6px; }
+.player-info-section-title{ margin: 0 0 6px; font-family: var(--font-ui); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #a9762f; }
+.player-info-xp-row{ display: block; width: 100%; appearance: none; border: 1px solid rgba(169,118,47,.28); background: rgba(169,118,47,.06); border-radius: 8px; padding: 10px 12px; text-align: left; cursor: pointer; font: inherit; }
+.player-info-xp-row:hover{ background: rgba(169,118,47,.12); }
+.player-info-xp-headline{ display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 6px; }
+.player-info-xp-headline span{ font-family: var(--font-ui); font-weight: 700; color: #2b2214; font-size: 13px; }
+.player-info-xp-headline b{ font-variant-numeric: tabular-nums; color: #8a7a52; font-size: 12px; font-weight: 600; }
+.player-info-xp-row .hero-xp-bar{ height: 10px; width: 100%; }
+.player-info-xp-chevron{ display: block; text-align: right; margin-top: 4px; color: #a9762f; font-size: 13px; }
+.hero-progress-popup .hero-progression{ display: flex; align-items: stretch; gap: 8px; margin-top: 4px; }
+.hero-progress-popup .hero-progress-item span{ color: #8a7a52; }
+.hero-progress-popup .hero-progress-item b{ color: #2b2214; font-size: 13px; }
+.hero-progress-popup .hero-progress-item img{ width: 30px; height: 34px; }
+.hero-progress-popup .hero-progress-item + .hero-progress-item::before{ background: rgba(169,118,47,.3); }
+/* Help/Settings — round 6, moved here from the independent top bar.
+   Plain .rpg-btn (already themed correctly for this light "home" modal
+   — see body[data-theme="home"] .modal in v0.02.5-home-baseline.css —
+   same as every other modal button on Home), no new button style. */
+.hero-progress-popup-tools{ display: flex; gap: 8px; margin-top: 14px; }
+.hero-progress-popup-tools .rpg-btn{ flex: 1 1 0; }
+/* Experience overview (2026-09-11) — reached by tapping the Experience
+   row above. Same light-cream popup shell (.hero-progress-popup reused
+   via xp-overview-popup), a text back-button rather than a second close
+   affordance (the modal's own × still closes the whole thing). .mini-
+   progress reused as-is from the existing Daily Challenge tracker modal
+   (styles.css) for the source-breakdown bars -- same pattern, not a new
+   progress-bar component. */
+.xp-overview-back{ appearance: none; border: 0; background: none; padding: 0; margin-bottom: 8px; font-family: var(--font-ui); font-size: 12px; font-weight: 700; color: #a9762f; cursor: pointer; }
+.xp-overview-popup h2{ margin-top: 0; }
+.xp-overview-list{ display: flex; flex-direction: column; gap: 6px; max-height: 220px; overflow-y: auto; margin-bottom: 16px; }
+.xp-overview-row{ display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 6px 8px; border-radius: 6px; background: rgba(169,118,47,.06); }
+.xp-overview-row-main{ display: flex; flex-direction: column; min-width: 0; }
+.xp-overview-row-main b{ font-variant-numeric: tabular-nums; color: #2b2214; font-size: 13px; }
+.xp-overview-row-main span{ color: #8a7a52; font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.xp-overview-row small{ color: #a9762f; font-size: 10px; white-space: nowrap; flex: 0 0 auto; }
+.xp-overview-sources{ display: flex; flex-direction: column; gap: 10px; }
+.xp-overview-source-row{ display: flex; flex-direction: column; gap: 4px; }
+.xp-overview-source-head{ display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.xp-overview-source-head span{ font-family: var(--font-ui); font-weight: 700; color: #2b2214; font-size: 13px; }
+.xp-overview-source-head b{ font-variant-numeric: tabular-nums; color: #8a7a52; font-size: 11px; font-weight: 600; }
+@media(max-width:460px){
+  /* 375 tier — 128px, ~11px over the measured 116.75px content floor
+     (worst-case "Sunny with Clouds" condition / icon+location cluster).
+     Center is now `1fr` here too (was min-content) so the width freed by
+     splitting the metadata line becomes a wider XP bar instead of going
+     unused. The 7px right-edge bleed into the widget frame's own padding
+     (present since the 2026-09-09 pass) was removed 2026-09-11 per
+     Aurelia's Stage 1 ruling: .home-hero-scene must be the one
+     unambiguous Hero boundary Velora's frame art encloses, with no
+     content (Weather especially) bleeding past it on one side only. */
+  .home-hero-grid{ grid-template-columns: clamp(64px, 20vw, 92px) minmax(0, 1fr) 128px; column-gap: 8px; }
+  .home-hero-grid.no-weather{ grid-template-columns: clamp(64px, 20vw, 92px) 1fr; }
+  .hero-weather-hero-row{ gap: 9px; padding: 0 10px; }
+  .hero-weather-icon{ width: 40px; height: 40px; }
+  .hero-weather-location{ font-size: 12px; }
+  .hero-weather-temp{ font-size: 30px; }
+  .hero-weather-condition{ margin-top: 4px; padding: 0 10px; font-size: 12px; }
+  .hero-weather-highlow{ margin-top: 6px; padding: 0 10px; font-size: 10px; }
+  .hero-weather-rainwind{ margin-top: 2px; padding: 0 10px; font-size: 10px; }
+  .hero-weather-run2{ padding: 6px 10px; gap: 6px; font-size: 12px; }
+  .run-glyph{ width: 14px; height: 14px; }
+  /* Hero HUD typography bump, 375 tier (Aurelia, 2026-09-11). */
+  .hero-grid-name .hero-player-name{ font-size: 18.5px; }
+  .hero-grid-class .hero-info-value{ font-size: 15px; }
+  .hero-info-value-title{ font-size: 15px; }
+  .hero-grid-gold .hero-info-value{ font-size: 15px; }
+  .hero-xp-copy b{ font-size: 13px; }
+}
+@media(max-width:340px){
+  /* 320 tier — 118px, ~11px over the measured 107.38px content floor.
+     Was 139px; shrinking it here is what the 2026-09-10 line-split
+     actually bought at this tier (2026-09-09's version was flat at
+     139px because the old single metadata line needed the width — once
+     it's two short lines, the box itself can shrink). Center is now
+     `1fr` (was min-content) so the ~21px freed goes straight into the
+     XP bar. Gap stays 6px; the old 7px right-edge bleed is gone as of
+     2026-09-11 (see the 375-tier comment above for why). */
+  .home-hero-grid{ grid-template-columns: clamp(64px, 20vw, 92px) minmax(0, 1fr) 118px; column-gap: 6px; }
+  .home-hero-grid.no-weather{ grid-template-columns: clamp(64px, 20vw, 92px) 1fr; }
+  .hero-weather-hero-row{ gap: 8px; padding: 0 8px; }
+  .hero-weather-icon{ width: 38px; height: 38px; }
+  .hero-weather-location{ font-size: 11px; }
+  .hero-weather-temp{ font-size: 28px; }
+  .hero-weather-condition{ margin-top: 4px; padding: 0 8px; font-size: 11px; }
+  .hero-weather-highlow{ margin-top: 6px; padding: 0 7px; font-size: 9.5px; }
+  .hero-weather-rainwind{ margin-top: 2px; padding: 0 7px; font-size: 9.5px; }
+  .hero-weather-run2{ padding: 6px 8px; gap: 5px; font-size: 11px; }
+  .run-glyph{ width: 13px; height: 13px; }
+  /* Hero HUD typography bump, 320 tier (Aurelia, 2026-09-11) — the
+     narrowest tier, so also the one Aurelia asked to sandbox/verify
+     first: check the 118px Weather pane still handles the longest
+     expected condition/metadata text cleanly at these larger sizes. */
+  .hero-grid-name .hero-player-name{ font-size: 17px; }
+  .hero-grid-class .hero-info-value{ font-size: 14px; }
+  .hero-info-value-title{ font-size: 14px; }
+  .hero-grid-gold .hero-info-value{ font-size: 14px; }
+  .hero-xp-copy b{ font-size: 12px; }
+}

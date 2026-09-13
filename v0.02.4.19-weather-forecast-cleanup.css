@@ -1,0 +1,59 @@
+/* RPG v0.02.4.19 — Weather 5-day forecast popup cleanup
+   (Lyra's Home Upgrade Handoff, Task 1 / 3.2).
+   Removes the ornate gold border-image frame + gem diamonds, flattens to
+   plain cream + thin border (matching the rest of Home), fixes the
+   "Feels/High-Low/Rain/Wind" summary row's text contrast (the marble
+   text-color correction only reached the container, not the explicitly
+   -colored span/b children inside it — same class of bug fixed elsewhere
+   this session), enlarges Next Days, and bumps font sizes generally. */
+
+.weather-forecast-modal.home-v2-modal-frame{
+  border-style:solid!important;
+  border-width:1px!important;
+  border-color:#c9a86a!important;
+  border-image-source:none!important;
+  border-radius:10px!important;
+  background-image:none!important;
+  background-color:#f4f0e7!important;
+  box-shadow:0 8px 24px rgba(0,0,0,.35)!important;
+  padding:20px!important;
+}
+
+.weather-forecast-shell{color:#16233f}
+.forecast-heading{border-bottom-color:#c9a86a60}
+.forecast-heading>span{color:#a9762f;font-size:10px}
+.forecast-heading h2{color:#16233f!important;font-size:24px!important}
+
+.forecast-current{background:rgba(255,255,255,.4)!important;border-color:#c9a86a60!important}
+.forecast-current-main>b{color:#16233f!important;font-size:34px}
+.forecast-current-main>strong{color:#5b4a2a!important;font-size:13px}
+.forecast-current-main>small{color:#7a6a45!important}
+
+/* The actual contrast fix: these children carry their own explicit color
+   that the marble correction never reached. */
+.forecast-current-details{border-left-color:#c9a86a60!important}
+.forecast-current-details span{color:#7a6a45!important;font-size:10px!important}
+.forecast-current-details b{color:#16233f!important;font-size:14px!important}
+
+.forecast-section-title{border-bottom-color:#c9a86a60!important}
+.forecast-section-title>span{color:#a9762f!important;font-size:11px!important}
+.forecast-section-title>small{color:#7a6a45!important;font-size:9px!important}
+
+.forecast-period{background:rgba(255,255,255,.4)!important;border-color:#c9a86a60!important}
+.forecast-period-name{color:#a9762f!important}
+.forecast-period b{color:#16233f!important;font-size:15px!important}
+.forecast-period small{color:#5b4a2a!important}
+
+/* Next Days — larger rows, easier to scan */
+.forecast-day-list{gap:8px!important}
+.forecast-day-row{
+  background:rgba(255,255,255,.4)!important;
+  border-color:#c9a86a60!important;
+  padding:10px 12px!important;
+  grid-template-columns:56px 46px minmax(90px,1fr) minmax(80px,.8fr) minmax(84px,.9fr)!important;
+}
+.forecast-day-row>strong{color:#16233f!important;font-size:12px!important}
+.forecast-day-row>img{width:44px!important;height:44px!important}
+.forecast-day-row>span:not(.forecast-run-state){color:#5b4a2a!important;font-size:11px!important}
+
+.forecast-source{color:#7a6a45!important}

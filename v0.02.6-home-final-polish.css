@@ -1,0 +1,73 @@
+/* RPG v0.02.6 — Home Final Visual Polish (Astra "Safe Overnight Handoff",
+   §1). Explicitly scoped as the LAST small normalisation pass, not a
+   redesign — every rule here is a local correction, not a new system.
+   Loaded after v0.02.5-home-baseline.css so it can refine specific
+   spots without re-litigating the shared standards that file owns. */
+
+/* ---- Resources: Tracker/History sit directly in the header, no dark
+   button box behind them (utility icons stay smaller than the 62px
+   content-icon standard, just without the box chrome). ---- */
+#view .resources-v3-icon{
+  background:transparent!important;
+  border:0!important;
+  border-radius:0!important;
+}
+#view .resources-v3-icon:hover{filter:brightness(1.2)}
+
+/* ---- Daily Wisdom: darker, higher-contrast, slightly larger body text
+   against the cream surface. ---- */
+#view .wisdom-text{color:#16233f!important;font-size:15px!important;line-height:1.6!important}
+
+/* ---- Player / Level structure: one shared, larger, frameless portrait
+   size for Home and Character, with Level sitting directly below it and
+   a small empty reserved slot for future buff/status icons underneath
+   that. Portrait -> Level -> Buffs is the stable stack on both pages. */
+#view .v8-class-art{
+  width:112px!important;height:112px!important;
+  border:0!important;border-radius:12px!important;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.45))!important;
+}
+#view .v8-class-frame{width:118px!important}
+#view .v8-class-stack{width:126px!important}
+#view .v8-buffs-slot{
+  margin:8px 0 0;width:100%;min-height:26px;
+  border:1px dashed #c9a86a80;border-radius:8px;
+}
+@media(max-width:700px){
+  #view .v8-class-art{width:96px!important;height:96px!important}
+  #view .v8-class-frame{width:100px!important}
+  #view .v8-class-stack{width:108px!important}
+}
+@media(max-width:390px){
+  #view .v8-class-art{width:84px!important;height:84px!important}
+  #view .v8-class-frame{width:88px!important}
+  #view .v8-class-stack{width:92px!important}
+}
+
+.character-portrait-stack{display:flex;flex-direction:column;align-items:center;width:100%;flex-shrink:0}
+.character-class-art{width:112px!important;height:112px!important;border:0!important}
+.character-level-badge{
+  margin:8px 0 0;width:fit-content;background:#0b1728;border:1px solid #c9a86a;
+  border-radius:10px;padding:4px 12px;display:flex;align-items:baseline;gap:5px;
+}
+.character-level-badge small{color:#a9762f;letter-spacing:.08em;font-size:8px}
+.character-level-badge b{color:#f3ecd9;font-size:17px}
+.character-buffs-slot{margin:8px 0 0;width:100%;min-height:26px;border:1px dashed #c9a86a80;border-radius:8px}
+
+/* ---- Achievement schema addition: Celestial rarity (§4) ----
+   Only .rarity-secret has a dedicated accent color today; Celestial gets
+   the same minimal treatment rather than styling every rarity tier
+   (out of scope — not part of this pass). */
+.achievement-popup.rarity-celestial{border-color:#8ad4ff}
+/* .v0242-identity-main is the actual live grid container — Character is
+   rendered by v0.02.4.2-character.js's renderCharacter override, not the
+   base app.js one — widened slightly to match the shared portrait size. */
+.v0242-identity-main{grid-template-columns:126px minmax(0,1fr)!important}
+@media(max-width:700px){
+  .character-portrait-stack,.character-class-art{width:92px!important;height:92px!important}
+  .v0242-identity-main{grid-template-columns:104px minmax(0,1fr)!important}
+}
+@media(max-width:320px){
+  .character-portrait-stack,.character-class-art{width:78px!important;height:78px!important}
+  .v0242-identity-main{grid-template-columns:86px minmax(0,1fr)!important}
+}

@@ -1,0 +1,176 @@
+/* RPG v0.02.4.6 — Variant 8 Player Box frame/control corrective hotfix only.
+   Approved stack: inset marble surface (0) -> masking lip (1) -> live content (4/10) -> frame (20).
+   Loaded after v0.02.4.5; no gameplay, binding, route, persistence, Character, or other Home ownership. */
+
+.home-player-v8 .player-status-panel.v8-player-box.v8-layout-hotfix-active.v8-frame-control-hotfix-active{
+  --player-frame-overscan:2px;
+  --player-frame-inner-edge:clamp(20px,2.4vw,30px);
+  --player-content-safe-inset:clamp(32px,3.4vw,44px);
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  background-color:transparent!important;
+  background-image:none!important;
+  background:none!important;
+  padding:38px 48px 38px!important;
+}
+
+/* Surface is the only layer allowed to paint marble. It stops beneath the frame inner rail. */
+.home-player-v8 .v8-frame-control-hotfix-active .v8-player-surface{
+  position:absolute!important;
+  inset:var(--player-frame-inner-edge)!important;
+  z-index:0!important;
+  overflow:hidden!important;
+  border-radius:9px!important;
+  background:#f2eee6 url('assets/Variant - Marble Background.png') center/cover no-repeat!important;
+  pointer-events:none!important;
+  user-select:none!important;
+}
+
+/* Restrained inner seating lip. No marble or opaque foreground paint here. */
+.home-player-v8 .player-status-panel.v8-player-box.v8-frame-control-hotfix-active::before{
+  content:""!important;
+  position:absolute!important;
+  inset:calc(var(--player-frame-inner-edge) - 2px)!important;
+  z-index:1!important;
+  pointer-events:none!important;
+  border:1px solid rgba(93,65,23,.42)!important;
+  border-radius:10px!important;
+  background:transparent!important;
+  box-shadow:inset 0 0 0 2px rgba(8,20,38,.13),inset 0 0 10px rgba(11,24,42,.18)!important;
+}
+.home-player-v8 .player-status-panel.v8-player-box.v8-frame-control-hotfix-active::after{
+  content:none!important;
+  background:none!important;
+  pointer-events:none!important;
+}
+
+/* All existing live UI remains the middle content layer. */
+.home-player-v8 .v8-frame-control-hotfix-active .v8-player-content-layer{
+  position:relative!important;
+  z-index:4!important;
+  min-width:0!important;
+  background:transparent!important;
+}
+
+/* The frame is the sole foreground layer. Minimal overscan aligns its visible rail with the clipped panel edge. */
+.home-player-v8 .v8-frame-control-hotfix-active .v8-player-frame-overlay{
+  position:absolute!important;
+  inset:calc(-1 * var(--player-frame-overscan))!important;
+  z-index:20!important;
+  display:block!important;
+  width:calc(100% + (2 * var(--player-frame-overscan)))!important;
+  height:calc(100% + (2 * var(--player-frame-overscan)))!important;
+  max-width:none!important;
+  object-fit:fill!important;
+  pointer-events:none!important;
+  user-select:none!important;
+  background:transparent!important;
+}
+
+/* Help + Settings use one identical component box and matched V8 artwork dimensions. */
+.home-player-v8 .v8-frame-control-hotfix-active .v8-player-tools{
+  position:absolute!important;
+  top:var(--player-content-safe-inset)!important;
+  right:var(--player-content-safe-inset)!important;
+  z-index:10!important;
+  display:flex!important;
+  align-items:center!important;
+  gap:clamp(7px,.8vw,10px)!important;
+  margin:0!important;
+  padding:0!important;
+}
+.home-player-v8 .v8-frame-control-hotfix-active .v8-tool{
+  box-sizing:border-box!important;
+  display:grid!important;
+  place-items:center!important;
+  flex:0 0 auto!important;
+  width:clamp(38px,4vw,44px)!important;
+  height:clamp(38px,4vw,44px)!important;
+  margin:0!important;
+  padding:1px!important;
+  border:0!important;
+  transform:none!important;
+  background:transparent!important;
+}
+.home-player-v8 .v8-frame-control-hotfix-active .v8-tool img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  max-width:100%!important;
+  max-height:100%!important;
+  margin:0!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  transform:none!important;
+}
+.home-player-v8 .v8-frame-control-hotfix-active #settingsButton img{
+  filter:contrast(1.12) saturate(1.02) drop-shadow(0 2px 2px rgba(0,0,0,.32))!important;
+}
+
+/* Flavour text uses the live content safe area and never sits against the lower rail. */
+.home-player-v8 .v8-frame-control-hotfix-active .v8-player-quip{
+  position:relative!important;
+  z-index:4!important;
+  margin:12px 0 0!important;
+  padding:0 2px 6px!important;
+  line-height:1.35!important;
+}
+
+@media(max-width:760px){
+  .home-player-v8 .player-status-panel.v8-player-box.v8-frame-control-hotfix-active{
+    --player-content-safe-inset:clamp(30px,4vw,36px);
+    padding:35px 38px 35px!important;
+  }
+}
+@media(max-width:620px){
+  .home-player-v8 .player-status-panel.v8-player-box.v8-frame-control-hotfix-active{
+    --player-frame-inner-edge:20px;
+    --player-content-safe-inset:29px;
+    padding:33px 30px 35px!important;
+  }
+  .home-player-v8 .v8-frame-control-hotfix-active .v8-tool{width:38px!important;height:38px!important}
+}
+@media(max-width:390px){
+  .home-player-v8 .player-status-panel.v8-player-box.v8-frame-control-hotfix-active{
+    --player-frame-inner-edge:18px;
+    --player-content-safe-inset:27px;
+    padding:32px 24px 37px!important;
+  }
+  .home-player-v8 .v8-frame-control-hotfix-active .v8-tool{width:36px!important;height:36px!important}
+  .home-player-v8 .v8-frame-control-hotfix-active .v8-player-quip{margin-top:11px!important;padding-bottom:7px!important}
+}
+@media(max-width:340px){
+  .home-player-v8 .v8-frame-control-hotfix-active .v8-player-quip{display:none!important}
+  .home-player-v8 .player-status-panel.v8-player-box.v8-frame-control-hotfix-active{padding-bottom:38px!important}
+}
+
+/* Responsive correction: render the approved frame derivative as a 9-slice border.
+   This keeps corner/rail thickness stable on tall mobile panels instead of stretching the full PNG. */
+.home-player-v8 .v8-frame-control-hotfix-active .v8-player-frame-overlay{
+  display:none!important;
+}
+.home-player-v8 .v8-frame-control-hotfix-active .v8-player-frame-border{
+  --v8-frame-width:clamp(20px,2.7vw,28px);
+  position:absolute!important;
+  inset:calc(-1 * var(--player-frame-overscan))!important;
+  z-index:20!important;
+  display:block!important;
+  pointer-events:none!important;
+  user-select:none!important;
+  border-style:solid!important;
+  border-width:var(--v8-frame-width)!important;
+  border-image-source:url('assets/Home/Variant 8/Variant 8 - Player Panel Frame Only.png')!important;
+  border-image-slice:42 42 42 42!important;
+  border-image-width:var(--v8-frame-width)!important;
+  border-image-outset:0!important;
+  border-image-repeat:stretch!important;
+  background:transparent!important;
+}
+@media(max-width:620px){
+  .home-player-v8 .v8-frame-control-hotfix-active .v8-player-frame-border{--v8-frame-width:22px}
+}
+@media(max-width:390px){
+  .home-player-v8 .v8-frame-control-hotfix-active .v8-player-frame-border{--v8-frame-width:20px}
+  .home-player-v8 .v8-frame-control-hotfix-active .v8-player-quip{padding-bottom:12px!important}
+}

@@ -1,0 +1,56 @@
+/* RPG v0.02.11 — Journeys / World Tours (ASTRA Update Package 1 §2-23,
+   2026-09-06). Reuses the existing dark-frame/gold-accent Quests
+   language throughout; the "live map" is a stylized route track, not a
+   real geographic map — a map provider/library is explicitly out of
+   scope for this pass. */
+
+.campaign-banner-card.no-art{background:linear-gradient(160deg,#1a2632,#0b131c)}
+
+.journey-preview-stats{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.journey-preview-stats>div{flex:1 1 100px;background:#0c1723;border:1px solid #334b5b;border-radius:5px;padding:8px;text-align:center}
+.journey-preview-stats span{display:block;font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#8fa8b6}
+.journey-preview-stats b{font-size:15px;color:#e7c676}
+
+.journey-movement-option{display:flex;gap:10px;align-items:flex-start;border:1px solid #334b5b;border-radius:5px;padding:8px;margin:6px 0;cursor:pointer}
+.journey-movement-option input{margin-top:3px}
+.journey-movement-option h3{margin:0 0 2px;font-size:12px;color:#e7c676}
+.journey-custom-type-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:4px 10px;margin:8px 0;font-size:10px;color:#a8bcc7}
+.journey-custom-type-grid label{display:flex;align-items:center;gap:5px}
+
+.journey-body{display:flex;flex-direction:column;gap:12px}
+
+.journey-route-track{position:relative;height:14px;background:#08121b;border:1px solid #334b5b;border-radius:7px;overflow:visible;margin:10px 4px 22px}
+.journey-route-fill{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#9a7423,#efc75d);border-radius:7px 0 0 7px}
+.journey-route-landmark{position:absolute;top:50%;width:9px;height:9px;border-radius:50%;background:#5c6b75;border:1px solid #08121b;transform:translate(-50%,-50%);z-index:1}
+.journey-route-landmark.discovered{background:#e7c676;box-shadow:0 0 6px #e7c67699}
+.journey-route-position{position:absolute;top:-10px;width:0;height:0;border-left:7px solid transparent;border-right:7px solid transparent;border-top:10px solid #4bbcff;transform:translateX(-50%);z-index:2}
+.journey-route-position::after{content:'';position:absolute;left:-4px;top:-16px;width:8px;height:8px;border-radius:50%;background:#4bbcff;box-shadow:0 0 8px #4bbcffaa}
+
+.journey-position-card{background:#0c1723;border:1px solid #334b5b;border-radius:5px;padding:10px}
+.journey-position-line{display:flex;justify-content:space-between;align-items:baseline;font-size:13px;color:#dce8ed}
+.journey-position-line b{color:#e7c676;font-size:15px}
+.journey-position-meta{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;font-size:10px;color:#8fa8b6}
+
+.journey-region-list{display:flex;flex-direction:column;gap:8px}
+.journey-region-row{border:1px solid #2c414f;border-radius:5px;padding:8px}
+.journey-region-row.current{border-color:#8a6728}
+.journey-region-head{display:flex;justify-content:space-between;font-size:11px;color:#dce8ed;margin-bottom:4px}
+.journey-region-row small{display:block;margin-top:4px;color:#8fa8b6;font-size:9px}
+
+.journey-controls{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px}
+.journey-movement-rules-note{font-size:10px;color:#8fa8b6}
+
+.journey-landmark-list h4{margin:0 0 6px;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#e6c46f}
+.journey-landmark-row{display:flex;align-items:center;gap:8px;padding:5px 0;border-top:1px solid #2c414f;font-size:11px}
+.journey-landmark-row:first-of-type{border-top:0}
+.journey-landmark-row span{width:16px;text-align:center;color:#5c6b75}
+.journey-landmark-row.found span{color:#8fd09a}
+.journey-landmark-row b{color:#dce8ed;font-weight:600}
+.journey-landmark-row small{display:block;color:#8fa8b6;font-size:9px}
+
+.journey-aster-note{border-top:1px solid #394554;margin-top:8px;padding-top:8px;font-size:11px;color:#c9b98a;font-style:italic}
+
+@media(max-width:390px){
+  .journey-preview-stats>div{flex:1 1 80px}
+  .journey-position-line{flex-direction:column;gap:2px}
+}

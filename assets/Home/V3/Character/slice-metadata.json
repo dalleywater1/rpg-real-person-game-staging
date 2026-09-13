@@ -1,0 +1,15 @@
+{
+  "status": "frame-only candidate; structure locked; static approval pending",
+  "family": "frozen Resource Standard-family components, unchanged copies",
+  "targets_css_px": [{"tier":320,"width":280,"height":179,"arrangement":"3+2"},{"tier":375,"width":335,"height":179,"arrangement":"3+2"},{"tier":580,"width":534,"height":114,"arrangement":"five across"}],
+  "corner_css_px": 9,
+  "slice_source_px": {"1x":9,"2x":18},
+  "canonical_source": "character-frame-320-2x.png",
+  "center": "transparent; retain live #f4f0e7 parchment",
+  "padding_css_px": [16,18],
+  "stat_gap_css_px": 10,
+  "hero_separation_css_px": 16,
+  "icon_css_px": [24,28],
+  "tap": "entire card opens Character page",
+  "scaling": "fixed corners; stretch only edge lengths; do not stretch full frame"
+}

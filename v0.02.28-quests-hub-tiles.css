@@ -1,0 +1,367 @@
+/* RPG v0.02.28 — Quests Front Page hub tiles
+   (ASTRA — QUESTS FRONT PAGE IMPLEMENTATION HANDOVER, 2026-09-13).
+
+   Styles ONLY the new .quest-hub-tile family (questHubTileHTML(),
+   app.js) rendered by questsHubTileGridHTML() when qpView==='hub'.
+   Everything else on the Quests page (Main Quest surface, Side/Daily/
+   Quick sub-pages, .mq-* classes) is untouched — this handover is
+   explicitly front-page-hub-only (§1/§17).
+
+   Core rule this file exists to honor (§1/§4): artwork provides
+   atmosphere and category identity, CSS provides every frame/border/
+   corner/button/shadow/separator/progress-bar/label/arrow, live data
+   provides every number and state word. No PNG frames anywhere below —
+   .qht-art holds ONLY the delivered scene photography, cropped via
+   object-fit, never a background image standing in for a border.
+
+   Loads after v0.02.23 (which still defines the old flat .qp-tile
+   rule, now dead — nothing emits class="qp-tile" anymore, only
+   class="quest-hub-tile quest-hub-tile--<system>", see app.js) and
+   overrides .qp-tile-grid's own breakpoint (see the responsive block
+   at the bottom — the old 340px collapse point didn't match this
+   handover's explicit "320/375 single-column, 580+ 2x2" requirement,
+   340<375 meant 375 was still 2-column under the old rule). */
+
+/* ---- Grid (§2) — mobile-first single column in DOM order (Main,
+   Side, Daily, Quick — exactly the required 320/375 stack order, no
+   reordering needed since that's already the markup order), widening
+   to a plain 2-column grid at 580+ which naturally places Main+Side on
+   row 1 and Daily+Quick on row 2 given that same DOM order. ---- */
+.qp-tile-grid{
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 10px 0;
+}
+@media(min-width: 580px){
+  .qp-tile-grid{ grid-template-columns: 1fr 1fr; gap: 16px; }
+}
+
+/* ---- Hub-only header (§16) — three stacked lines (title / descriptor
+   / tagline). The shared .page-head is a horizontal
+   space-between flex row everywhere else (title left, a pill-badge
+   .sub on the right) — overridden to a plain vertical stack here only,
+   since this handover's header is a fixed 3-line structure, not the
+   generic 2-slot one. */
+.qp-hub-head{
+  display: block !important;
+}
+.qp-hub-head .sub{
+  display: block;
+  margin-top: 4px;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  font-size: 11px;
+  color: #a8b5c0;
+}
+.qp-hub-tagline{
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: #8a97a3;
+}
+
+/* ============================================================
+   Shared tile shell (§3/§4) — very dark navy body, antique-gold outer
+   edge, muted-bronze inner edge, top/left highlight fading to bottom/
+   right depth, restrained shadow, ~9px radius. One component family
+   for all four tiles; category identity comes from the art + a small
+   accent token (--qht-accent), never a whole-panel recolor (§5).
+   ============================================================ */
+.quest-hub-tile{
+  --qht-accent: #d9ac5c; /* antique gold — Main Quests' own accent, and the shared default */
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  text-align: left;
+  appearance: none;
+  padding: 0;
+  cursor: pointer;
+  overflow: hidden;
+  border-radius: 9px;
+  background: linear-gradient(160deg, #0a1119 0%, #060a10 60%, #050810 100%);
+  border: 1px solid var(--qht-accent);
+  box-shadow:
+    inset 0 0 0 1px rgba(160,120,60,.28),
+    inset 1px 1px 0 rgba(255,255,255,.05),
+    inset -1px -1px 0 rgba(0,0,0,.45),
+    0 4px 14px rgba(0,0,0,.45);
+  transition: box-shadow .15s ease, border-color .15s ease;
+}
+.quest-hub-tile--side{ --qht-accent: #4a9d5f; }   /* forest green, used sparingly (§5) */
+.quest-hub-tile--daily{ --qht-accent: #d99a3a; }  /* warm amber / sun-gold */
+.quest-hub-tile--quick{ --qht-accent: #d9c85c; }  /* electric gold, family-consistent with light-blue below */
+
+/* Main Quests: richest treatment (§5) — slightly stronger edge/glow,
+   nothing else about its SIZE changes (§18 "remains broadly similar
+   in size... without becoming physically oversized"). */
+.quest-hub-tile--main{
+  box-shadow:
+    inset 0 0 0 1px rgba(217,172,92,.4),
+    inset 1px 1px 0 rgba(255,255,255,.07),
+    inset -1px -1px 0 rgba(0,0,0,.5),
+    0 6px 18px rgba(0,0,0,.55);
+}
+
+/* ---- Header: icon + title + descriptor (§3/§11) ---- */
+.qht-header{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px 10px;
+}
+.qht-icon{
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,.6));
+}
+@media(min-width: 580px){
+  .qht-icon{ width: 36px; height: 36px; }
+}
+.qht-heading{ min-width: 0; }
+.qht-heading h2{
+  margin: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: #f1e6c8;
+}
+.qht-descriptor{
+  display: block;
+  margin-top: 1px;
+  font-size: 9.5px;
+  color: #8a97a3;
+  font-style: italic;
+}
+
+/* ---- Artwork region (§6/§7/§8) — fixed aspect ratio, object-fit
+   cover, focal position tuned per category, brightness kept readable
+   under the live data below (no gradient scrim needed since the data
+   region is its own parchment card, not overlaid text). ---- */
+.qht-art{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #060a10;
+}
+.qht-art img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: filter .15s ease;
+}
+.quest-hub-tile--main .qht-art img{ object-position: center 40%; }
+.quest-hub-tile--side .qht-art img{ object-position: center 50%; }
+.quest-hub-tile--daily .qht-art img{ object-position: center 55%; }
+.quest-hub-tile--quick .qht-art img{ object-position: center 45%; }
+
+/* ---- Live data region (§9/§10) — the one place on this page that's
+   deliberately parchment, per the handover's explicit carve-out from
+   Home's own (unrelated) parchment-retirement rule. Plain surface, no
+   ornate mini-frame. ---- */
+.qht-data{
+  margin: 10px 12px;
+  padding: 10px 12px;
+  border-radius: 6px;
+  background: #f8f4e8;
+  box-shadow: inset 0 0 0 1px #c9a86a60;
+}
+.qht-count{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: #a9762f;
+  text-transform: uppercase;
+}
+.qht-title{
+  margin-top: 3px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #16233f;
+  line-height: 1.25;
+}
+.qht-meta{
+  margin-top: 2px;
+  font-size: 9.5px;
+  color: #5b4a2a;
+}
+.qht-substat{
+  margin-top: 5px;
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #7a5a1a;
+}
+
+/* Progress bar (Main Quests) — semantic value always shown as text
+   alongside the bar (§15: state is never colour-only). */
+.qht-progress-row{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.qht-progress-bar{
+  position: relative;
+  flex: 1 1 auto;
+  height: 7px;
+  border-radius: 4px;
+  background: #e0d2ac;
+  box-shadow: inset 0 1px 2px rgba(90,60,20,.35);
+  overflow: hidden;
+}
+.qht-progress-bar > i{
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--qht-accent), #f2dfa0);
+  width: 0%;
+}
+.qht-percent{
+  flex: 0 0 auto;
+  font-variant-numeric: tabular-nums;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #16233f;
+}
+
+/* State label (§5's pace states / Daily Quest completion) — text
+   label always present, colour is an accent only. */
+.qht-state{
+  display: inline-block;
+  margin-top: 6px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  border: 1px solid #c9a86a;
+  color: #7a5a1a;
+  background: #efe6cc;
+}
+.qht-state--ahead,
+.qht-state--completed{ color: #256b3a; border-color: #3fa15c; background: #dff3e0; }
+.qht-state--on_track{ color: #1f5a86; border-color: #4a90c2; background: #dcecf7; }
+.qht-state--at_risk{ color: #8a5f1a; border-color: #c9a86a; background: #f3e5c2; }
+.qht-state--behind{ color: #8a2c22; border-color: #c0392b; background: #fbe1de; }
+
+.qht-milestone{
+  margin-top: 7px;
+  padding-top: 7px;
+  border-top: 1px solid #c9a86a55;
+}
+.qht-milestone small{
+  display: block;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  color: #a9762f;
+  text-transform: uppercase;
+}
+.qht-milestone span{
+  display: block;
+  margin-top: 1px;
+  font-size: 11px;
+  color: #16233f;
+  font-weight: 600;
+}
+
+/* Quick Quests checklist preview (§9 — capped at 3 rows so it never
+   crowds the tile at any width, matching the "prefer a compact
+   summary over cramped rows" instruction without needing a separate
+   narrow-only layout). */
+.qht-checklist{ display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+.qht-checklist-row{ display: flex; align-items: center; gap: 7px; font-size: 11px; color: #16233f; }
+.qht-checkbox{
+  display: flex; align-items: center; justify-content: center;
+  width: 14px; height: 14px; flex: 0 0 auto;
+  border: 1.5px solid #a9762f; border-radius: 3px;
+  font-size: 9px; font-weight: 800; color: #3fa15c;
+  background: #fff;
+}
+.qht-checklist-row.done{ color: #5b4a2a; }
+.qht-checklist-row.done .qht-checkbox{ background: #dff3e0; border-color: #3fa15c; }
+
+/* ---- Empty states (§14) — same tile/art, data region swaps to a
+   short message + link, no separate illustration. ---- */
+.qht-empty p{
+  margin: 0;
+  font-size: 12px;
+  color: #5b4a2a;
+}
+.qht-empty-link{
+  display: inline-block;
+  margin-top: 5px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #a9762f;
+}
+
+/* ---- Arrow / tap target (§12) — CSS only, no art asset. Whole tile
+   is already the tap target (it's a <button>); this is the visual
+   navigation cue in the corner. ---- */
+.qht-arrow{
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(8,20,32,.85);
+  border: 1px solid var(--qht-accent);
+  color: var(--qht-accent);
+  font-size: 13px;
+  line-height: 1;
+  transition: background .15s ease, color .15s ease;
+}
+
+/* ---- Hover / focus (§13) — desktop only, restrained: slight edge
+   brighten, tiny artwork brightness lift, arrow brightens. No zoom,
+   no large motion. ---- */
+@media(hover: hover) and (pointer: fine){
+  .quest-hub-tile:hover{
+    box-shadow:
+      inset 0 0 0 1px color-mix(in srgb, var(--qht-accent) 55%, transparent),
+      inset 1px 1px 0 rgba(255,255,255,.07),
+      inset -1px -1px 0 rgba(0,0,0,.45),
+      0 5px 16px rgba(0,0,0,.5);
+  }
+  .quest-hub-tile:hover .qht-art img{ filter: brightness(1.06); }
+  .quest-hub-tile:hover .qht-arrow{ background: var(--qht-accent); color: #0a1119; }
+}
+.quest-hub-tile:focus-visible{
+  outline: 2px solid #4bbcff;
+  outline-offset: 2px;
+}
+.quest-hub-tile:active{
+  box-shadow:
+    inset 0 0 0 1px rgba(160,120,60,.28),
+    inset 1px 1px 0 rgba(255,255,255,.03),
+    inset -1px -1px 0 rgba(0,0,0,.55),
+    0 2px 8px rgba(0,0,0,.5);
+}
+
+@media(max-width: 375px){
+  .qht-header{ padding: 10px 11px 8px; gap: 8px; }
+  .qht-icon{ width: 24px; height: 24px; }
+  .qht-heading h2{ font-size: 12px; }
+  .qht-data{ margin: 9px 10px; padding: 9px 10px; }
+  .qht-title{ font-size: 13px; }
+}

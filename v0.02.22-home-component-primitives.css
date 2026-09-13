@@ -1,0 +1,326 @@
+/* RPG v0.02.22 — Home V3 Internal Component Normalization Pass (2026-09-11).
+
+   Aurelia's diagnosis: colour alone couldn't fix Home because the widgets
+   had drifted into five different internal component systems (compact
+   wells, oversized tiles, one deep inset box, a flat body, a navy+flat
+   mix) even after sharing the same parchment tokens. This file is the
+   actual fix — real shared primitives, with Character Stats as the
+   reference, that every non-Feature widget now renders through:
+
+     Header       — icon + title + action, one size/tone/position
+     Inset cell   — Character Stats / Resources / Movement data
+     Standard Row — Calendar / Priorities / Side Quests
+     Progress     — one thin bar language, semantic colour preserved
+     Integrated Action — text-weight, gold, hover-glow (no navy plaque)
+
+   Main Quest stays the one deliberate exception (Feature Module, navy
+   header + parchment body, in v0.02.18) — everything here is for the
+   calmer "standard widget" tier. Built on top of the token system in
+   v0.02.21; every colour below reads from those tokens, not a literal. */
+
+/* ============================================================
+   HEADER — canonical icon/title/action row.
+   .home-panel-header already existed and is reused as-is (Today/
+   Priorities/Calendar/Side Quests/Movement/Resources already built on
+   it); this section only removes the one drift it had (Calendar's own
+   34px icon override) and gives Character Stats a matching typographic
+   base for its title, since it has no icon asset to put in that slot —
+   flagged here, not silently faked with a mismatched achievement-style
+   icon (checked what exists; nothing fits the plain header-icon family
+   this pass standardizes on). Character Stats also switches its action
+   from a bespoke class to the same shared text-action modifier Standard
+   Rows use for their action slot. ============================== */
+#view .home-todaygroup-calendar .home-panel-icon{ width: 28px; height: 28px; }
+#view .home-todaygroup-calendar .home-panel-header>span{ font-size: 11px; }
+
+#view .hw-header{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+#view .hw-header-title{
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 11px;
+  letter-spacing: 1.4px;
+  color: var(--gold-accent, #a9762f);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+/* Character Stats — same navy header band as Main Quest's Feature
+   Module (.feature-module-header, v0.02.18), per "same setup as Main
+   Quest" (2026-09-12). .character-stats-module is one box with its own
+   16px/18px padding (unlike Main Quest's separate header+body boxes),
+   so the band bleeds to the card's edges via a negative margin instead
+   of restructuring the module into two boxes — same visual result,
+   smaller change. Only .hw-header's own instance inside Character
+   Stats is touched (scoped to .character-stats-module .hw-header);
+   .hw-header/.hw-header-title/.hw-header-action have no other
+   consumer, confirmed by grep, so nothing else is affected. */
+/* v6 (Jay, 2026-09-12) — header felt compressed next to the reference
+   ("thin navy strip, small title, small button"). Padding/title/button
+   all up ~15-20% for more presence, still the same negative-margin
+   bleed-to-edge technique. */
+#view .character-stats-module .hw-header{
+  margin: -16px -18px 12px;
+  padding: 10px 18px;
+  background: linear-gradient(var(--home-navy, #071727), var(--home-navy-soft, #0b2237));
+  border-radius: 8px 8px 0 0;
+  box-shadow: inset 0 -1px 0 rgba(202,166,87,.4), inset 0 1px 0 rgba(255,255,255,.05);
+}
+#view .character-stats-module .hw-header-title{
+  color: #f0d99b;
+  text-shadow: 0 1px 2px #000;
+  letter-spacing: .06em;
+  font-size: 13px;
+  white-space: nowrap;
+}
+/* v5 refinement (HOME_V3_PARCHMENT_CANONICAL) — was a flat
+   parchment-inset pill matching Main Quest's "Find a Quest" exactly;
+   the approved reference gives View Character its own slightly
+   richer treatment (a light gradient fill + deeper gold text) since
+   it now sits on the navy header band rather than the parchment body
+   Find a Quest lives in. Find a Quest itself is untouched — this is a
+   deliberate divergence for this one button, not a correction. */
+#view .hw-header-action{
+  margin-left: auto;
+  flex-shrink: 0;
+  appearance: none;
+  border: 1px solid rgba(156,101,29,.5);
+  border-radius: 5px;
+  background: linear-gradient(180deg,#f5e5bd,#e7ce96);
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: #815316;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 9px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255,248,220,.7), inset 0 -1px 2px rgba(112,71,22,.12);
+  transition: color .15s ease, background .15s ease, box-shadow .15s ease;
+}
+#view .hw-header-action i{ font-style: normal; font-size: 12px; line-height: 1; }
+#view .hw-header-action:hover,
+#view .hw-header-action:focus-visible{
+  color: #70430b;
+  background: linear-gradient(180deg,#faedca,#ead29b);
+  box-shadow: inset 0 1px 0 rgba(255,250,227,.85), 0 0 6px rgba(196,137,47,.25);
+  outline: none;
+}
+#view .hw-header-action:active{ background: #dcc18a; box-shadow: inset 0 2px 4px rgba(83,51,17,.19); }
+
+/* ============================================================
+   INSET CELL — Character Stats' stat-well material, generalized.
+   .stat-well/.stat-well-icon/.stat-well-value/.stat-well-label/
+   .stat-well-meta in v0.02.19 stay as the compact 5-across variant;
+   .hw-inset below is the same material declared once for every other
+   consumer (Resources tiles, Movement) so there's one definition, not
+   three copies that quietly diverge. A `.hw-inset-wide` modifier
+   covers single, wider insets (Movement) that read icon-left/content-
+   right instead of stacked — same background/radius/shadow/progress
+   language either way, only the internal arrangement differs, per
+   "size can change; styling does not". ============================== */
+#view .hw-inset{
+  background-color: var(--parchment-inset, #ecdfc0);
+  background-image: linear-gradient(rgba(110,75,35,.05), rgba(255,255,255,.025)), var(--parchment-texture);
+  background-size: auto, 512px 512px;
+  background-repeat: no-repeat, repeat;
+  box-shadow: inset 0 2px 5px rgba(60,38,18,.13), inset 0 -1px 1px rgba(255,255,255,.22);
+  border-radius: 9px;
+  position: relative;
+}
+#view .hw-inset-icon{
+  width: 30px;
+  height: 30px;
+  object-fit: contain;
+  flex-shrink: 0;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.25));
+}
+#view .hw-inset-value{
+  font-family: var(--font-ui, Georgia, serif);
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.15;
+  color: var(--ink-primary, #16233f);
+}
+#view .hw-inset-label{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-secondary, #5b4a2a);
+}
+#view .hw-inset-meta-line{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 9px;
+  color: var(--ink-tertiary, #8a7a52);
+  margin-top: 4px;
+}
+
+/* Stacked variant (Resources tiles): icon top, text centered below —
+   identical arrangement to Character Stats' own stat wells. */
+#view .hw-inset.hw-inset-stack{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 2px;
+  padding: 9px 6px 8px;
+}
+#view .hw-inset.hw-inset-stack .hw-inset-icon{ margin-bottom: 3px; }
+#view .hw-inset.hw-inset-stack .hw-inset-value{ white-space: normal; word-break: break-word; }
+#view .hw-inset.hw-inset-stack .hw-progress-bar{ margin-top: 5px; width: 82%; }
+/* Resources tiles split into two buttons (icon + body) sharing the same
+   [data-resource] click target the app already wires generically — both
+   reset to plain, unstyled interactive surfaces so the .hw-inset-stack
+   layout above controls all the actual visual arrangement. */
+#view .hw-inset-icon-btn,
+#view .hw-inset-body-btn{
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+#view .hw-inset-icon-btn{ width: auto; }
+
+/* Wide variant (Movement): icon left, content column right. */
+#view .hw-inset.hw-inset-wide{
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px;
+}
+#view .hw-inset-wide-body{ flex: 1 1 auto; min-width: 0; }
+#view .hw-inset-wide-row{ display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; }
+#view .hw-inset-wide-row .hw-inset-value{ font-size: 17px; }
+#view .hw-inset-wide-row .hw-inset-label{ font-size: 10px; letter-spacing: .02em; text-transform: none; }
+
+/* ============================================================
+   PROGRESS — one thin bar language. Semantic colour (calorie safe/
+   warm/hot/over, positive-overflow) is preserved as modifier classes
+   with their own fill colour, never lost — "colour used for meaning,
+   not decoration" stays true even inside the shared thin bar. ======= */
+#view .hw-progress-bar{
+  display: block;
+  width: 100%;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(202,166,87,.4);
+  overflow: hidden;
+  margin-top: 4px;
+}
+#view .hw-progress-bar>i{ display: block; height: 100%; width: calc(var(--p) * 1%); background: linear-gradient(90deg,#1f79b3,#2aa6f2); }
+#view .hw-progress-bar.hw-progress-over>i{ background: linear-gradient(90deg,#caa657,#e8bd55); }
+#view .hw-progress-bar.hw-progress-cal-safe>i{ background: linear-gradient(90deg,#7ecb84,#4a9d52); }
+#view .hw-progress-bar.hw-progress-cal-warm>i{ background: linear-gradient(90deg,#e8c467,#cf9a3a); }
+#view .hw-progress-bar.hw-progress-cal-hot>i{ background: linear-gradient(90deg,#e8825a,#c8502b); }
+#view .hw-progress-bar.hw-progress-cal-over>i{ background: linear-gradient(90deg,#b47eea,#7c3fbd); }
+
+/* ============================================================
+   STANDARD ROW — Calendar / Priorities / Side Quests. Same darker-
+   parchment (inset) material as the cell, same height family, same
+   chevron/action position on the right. ============================== */
+#view .hw-row-list{ display: flex; flex-direction: column; gap: 6px; }
+#view .hw-row{
+  appearance: none;
+  font: inherit;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border-radius: 9px;
+  background-color: var(--parchment-inset, #ecdfc0);
+  background-image: linear-gradient(rgba(110,75,35,.045), rgba(255,255,255,.02)), var(--parchment-texture);
+  background-size: auto, 512px 512px;
+  background-repeat: no-repeat, repeat;
+  box-shadow: inset 0 1px 3px rgba(60,38,18,.1), inset 0 -1px 1px rgba(255,255,255,.2);
+  text-align: left;
+  border: 0;
+  cursor: pointer;
+  width: 100%;
+}
+#view .hw-row-icon{ width: 26px; height: 26px; object-fit: contain; flex-shrink: 0; filter: drop-shadow(0 1px 2px rgba(0,0,0,.2)); }
+#view .hw-row-time{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 9px;
+  font-weight: 800;
+  color: var(--ink-secondary, #5b4a2a);
+  flex-shrink: 0;
+}
+#view .hw-row-body{ min-width: 0; flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; }
+#view .hw-row-title{
+  font-family: var(--font-ui, Georgia, serif);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-primary, #16233f);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#view .hw-row-title.muted{ font-family: var(--font-micro, "Alegreya Sans", sans-serif); font-weight: 500; font-style: italic; color: var(--ink-tertiary, #8a7a52); }
+#view .hw-row-sub{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 9px;
+  color: var(--ink-tertiary, #8a7a52);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+#view .hw-row-chevron{
+  flex-shrink: 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 15px;
+  color: var(--gold-accent, #a9762f);
+  line-height: 1;
+}
+#view .hw-row:hover .hw-row-chevron,
+#view .hw-row:focus-visible .hw-row-chevron{ color: var(--gold-accent-bright, #c98f3a); }
+#view .hw-row-action{
+  flex-shrink: 0;
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--gold-accent, #a9762f);
+  background: none;
+  border: 0;
+  padding: 4px 2px;
+  cursor: pointer;
+  transition: color .15s ease, text-shadow .15s ease;
+}
+#view .hw-row-action:hover,
+#view .hw-row-action:focus-visible{ color: var(--gold-accent-bright, #c98f3a); text-shadow: 0 0 6px rgba(169,118,47,.35); outline: none; }
+#view .hw-row-tag{
+  flex-shrink: 0;
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 7.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+  color: var(--ink-secondary, #5b4a2a);
+  border: 1px solid var(--separator-tone, rgba(201,168,106,.42));
+  border-radius: 3px;
+  padding: 2px 5px;
+}
+#view .hw-row.done .hw-row-tag{ color: #2c7a45; border-color: #3fa15c88; }
+
+@media (max-width: 420px){
+  #view .hw-inset-value{ font-size: 14px; }
+  #view .hw-row{ padding: 8px 9px; gap: 8px; }
+  #view .hw-row-icon{ width: 22px; height: 22px; }
+}
