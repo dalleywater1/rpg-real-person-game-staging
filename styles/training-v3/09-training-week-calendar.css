@@ -1,0 +1,59 @@
+/* Training v3 — This Week calendar (Astra Handover — Training Overview
+   Current-Week Calendar, 2026-09-17)
+   Session rows reuse the existing .tr-row primitive (07-training-rows.css,
+   built for exactly this "Recent Training/History" row shape but unused
+   until now) rather than a second row system — only the day-strip/day-
+   grid wrapper below is new. One HTML structure serves both layouts;
+   these rules are what actually switches between them per breakpoint. */
+.tr-week-calendar{display:flex;flex-direction:column;gap:var(--tr-space-3)}
+
+/* Mobile default: compact 7-day strip + only the selected day's grid
+   cell shown below it. */
+.tr-week-strip{display:flex;gap:var(--tr-space-1);justify-content:space-between}
+.tr-week-strip-day{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--tr-surface-1);border:1px solid var(--tr-border);border-radius:var(--tr-radius-sm);padding:6px 2px;color:var(--tr-text-muted);cursor:pointer;position:relative}
+.tr-week-strip-day span{font-size:8px;letter-spacing:.03em;text-transform:uppercase}
+.tr-week-strip-day b{font-size:12px;color:var(--tr-text-secondary);font-weight:600}
+.tr-week-strip-day.today{border-color:var(--tr-gold-strong)}
+.tr-week-strip-day.today b{color:var(--tr-gold)}
+.tr-week-strip-day.active{border-color:var(--tr-gold);background:var(--tr-surface-3)}
+.tr-week-strip-dot{width:4px;height:4px;border-radius:50%;background:var(--tr-blue);margin-top:1px}
+
+.tr-week-grid{display:block}
+.tr-week-day{display:none;flex-direction:column;gap:var(--tr-space-2)}
+.tr-week-day.active{display:flex}
+.tr-week-day-head{display:none}
+.tr-week-day-empty{margin:0;padding:var(--tr-space-2) 0;color:var(--tr-text-muted);font-size:10.5px;text-align:center}
+
+/* Session row — .tr-row is a <div>-shaped grid primitive; these two
+   rules make a <button> behave the same way without touching .tr-row
+   itself (other future consumers of that primitive stay untouched). */
+.tr-row.tr-week-session{display:grid;width:100%;background:transparent;border:0;border-bottom:1px solid var(--tr-divider);text-align:left;font:inherit;cursor:pointer;padding:var(--tr-space-2) 0}
+.tr-row.tr-week-session:last-child{border-bottom:0}
+.tr-week-session .tr-row-title{color:var(--tr-text)}
+/* States (Visual/UX Rules: "handle planned/today/completed/missed
+   states in CSS; do not bake states into icons") — a left accent bar
+   per state, icon art itself never changes. */
+.tr-week-session{border-left:2px solid transparent;padding-left:6px}
+.tr-week-session.completed{border-left-color:var(--tr-green)}
+.tr-week-session.today{border-left-color:var(--tr-gold)}
+.tr-week-session.missed{border-left-color:var(--tr-red)}
+.tr-week-session.planned{border-left-color:var(--tr-blue)}
+.tr-week-session.completed .tr-row-value{color:var(--tr-green)}
+.tr-week-session.missed .tr-row-value{color:var(--tr-red)}
+
+.tr-week-more{padding:4px 0 0;color:var(--tr-text-muted);font-size:9.5px;text-align:center}
+
+/* Desktop/tablet: full 7-day week view at once, strip no longer needed. */
+@media(min-width:580px){
+  .tr-week-strip{display:none}
+  .tr-week-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:var(--tr-space-2);align-items:start}
+  .tr-week-day{display:flex !important}
+  .tr-week-day-head{display:flex;justify-content:space-between;align-items:baseline;color:var(--tr-text-muted);font-size:9px;text-transform:uppercase;letter-spacing:.03em;padding-bottom:4px;border-bottom:1px solid var(--tr-divider)}
+  .tr-week-day-head b{color:var(--tr-text-secondary);font-size:11px}
+  .tr-week-day.today .tr-week-day-head b{color:var(--tr-gold)}
+  .tr-week-session .tr-row-meta,.tr-week-session .tr-row-status{display:none}
+  .tr-week-session{grid-template-columns:auto minmax(0,1fr);gap:6px;padding:6px 0 6px 6px}
+  .tr-week-session .tr-row-icon{width:20px;height:20px}
+  .tr-week-session .tr-row-title{font-size:9.5px;white-space:normal}
+  .tr-week-session .tr-row-value{font-size:9px}
+}

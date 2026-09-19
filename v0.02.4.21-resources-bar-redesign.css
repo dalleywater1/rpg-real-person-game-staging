@@ -1,0 +1,93 @@
+/* RPG v0.02.4.21 — Resources bar redesign
+   (Lyra's Home Upgrade Handoff, Task 3 / 5.1-5.5; Calories/Food layout
+   revised per Home Baseline Correction items 9-10).
+
+   5.1 Solid, readable bar style: cream/white track, fills toward blue,
+   becomes gold at completion/overfill — replacing the segmented-grid
+   style and the per-resource pastel fill colors (food/sleep/mind/steps/
+   social each had their own tint; the handoff asks for one consistent
+   language across all of them).
+   5.3 Mindfulness: single-metric row, same treatment as Water/Steps.
+   5.5 Social: same treatment, now minutes-based (see app.js).
+   5.6 (triple-fill glow/shine) is explicitly deferred by the handoff
+   itself ("polish after the new bars are working") — not implemented
+   here, and item 11 explicitly asks not to let it block this pass. */
+
+#view .css-resource-bar .resource-empty-track{
+  background:#f4f0e7!important;
+  border:1px solid #c9a86a!important;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.12)!important;
+}
+#view .css-resource-bar .segment-grid{display:none!important}
+
+/* Fill: light blue -> deeper blue as it approaches target, on every
+   resource alike (the old per-resource pastel tints are dropped). */
+#view .css-resource-bar .segment-fill,
+#view .resource-list-row .css-resource-bar .base-fill{
+  background:linear-gradient(180deg,#bcd9f5 0%,#6fb3e8 50%,#3d8ee0 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5)!important;
+}
+/* Complete / overfill -> gold */
+#view .css-resource-bar .overflow-fill,
+#view .css-resource-bar.positive-overflow .base-fill{
+  background:linear-gradient(180deg,#f6e2a6 0%,#e9c877 50%,#c9a86a 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55)!important;
+}
+
+/* Movement popup (ASTRA Home Resources / Movement Rework, 2026-09-08) —
+   the first place barMeter()'s output renders inside #modalRoot rather
+   than #view. Every rule above is #view-scoped, so without this the
+   Overview tab's bar fell back to the old raw segmented-grid look
+   instead of the solid redesign every other resource bar already uses.
+   Mirrors only the base-plate + fill rules Movement's bar actually
+   needs (no calorie-state or food-dual-track rules — Movement doesn't
+   use either), scoped narrowly to .movement-overview-bar rather than
+   broadening every #view rule above to #modalRoot as well, since
+   nothing else currently renders a bar inside a modal. */
+#modalRoot .movement-overview-bar .css-resource-bar .resource-empty-track{
+  background:#f4f0e7!important;
+  border:1px solid #c9a86a!important;
+  box-shadow:inset 0 1px 3px rgba(0,0,0,.12)!important;
+}
+#modalRoot .movement-overview-bar .css-resource-bar .segment-grid{display:none!important}
+#modalRoot .movement-overview-bar .css-resource-bar .segment-fill,
+#modalRoot .movement-overview-bar .css-resource-bar .base-fill{
+  background:linear-gradient(180deg,#bcd9f5 0%,#6fb3e8 50%,#3d8ee0 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.5)!important;
+}
+#modalRoot .movement-overview-bar .css-resource-bar .overflow-fill,
+#modalRoot .movement-overview-bar .css-resource-bar.positive-overflow .base-fill{
+  background:linear-gradient(180deg,#f6e2a6 0%,#e9c877 50%,#c9a86a 100%)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55)!important;
+}
+
+/* ---- Calories (item 10) — a consumption-limit gauge, not a completion
+   bar: green while there's headroom, warming through amber/orange as the
+   value approaches the upper limit, purple once it's actually exceeded.
+   Calories-specific only — Protein and every other resource keep the
+   shared blue->gold language above. */
+#view .css-resource-bar.calorie-safe .base-fill{background:linear-gradient(180deg,#bfe6c2 0%,#7ecb84 50%,#4a9d52 100%)!important}
+#view .css-resource-bar.calorie-warm .base-fill{background:linear-gradient(180deg,#f7e6a3 0%,#e8c467 50%,#cf9a3a 100%)!important}
+#view .css-resource-bar.calorie-hot .base-fill{background:linear-gradient(180deg,#f5b98f 0%,#e8825a 50%,#c8502b 100%)!important}
+#view .css-resource-bar.calorie-hot{border-color:#c8502b60!important}
+#view .css-resource-bar.calorie-over .base-fill{background:linear-gradient(180deg,#ddc3f2 0%,#b47eea 50%,#7c3fbd 100%)!important}
+#view .css-resource-bar.calorie-over{border-color:#7c3fbd60!important}
+
+/* ---- Food (item 9) — ONE thicker bar split into two horizontal tracks
+   (Calories on top, Protein underneath), not two narrow side-by-side
+   bars. A shared outer border/background wraps both tracks so it reads
+   as one unified Food resource; each track keeps its own full-width,
+   readable bar. */
+#view .food-dual-track{
+  display:flex;flex-direction:column;
+  border:1px solid #c9a86a;border-radius:8px;overflow:hidden;background:#f4f0e7;
+}
+#view .food-dual-track .resource-bar-button{padding:0;margin:0}
+#view .food-dual-track .css-resource-bar{border-radius:0!important;border-left:0!important;border-right:0!important;border-top:0!important}
+#view .food-track-cal .css-resource-bar{border-bottom:1px solid #c9a86a80!important}
+#view .food-track-protein .css-resource-bar,
+#view .food-track-cal .css-resource-bar{border-top:0!important}
+#view .food-dual-track .resource-empty-track{border:0!important;border-radius:0!important}
+
+/* Mindfulness (5.3) is a plain single-metric row — no dedicated rule
+   needed, it already gets the generic blue->gold treatment above. */

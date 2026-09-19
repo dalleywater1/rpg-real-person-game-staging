@@ -1,0 +1,40 @@
+/* RPG v0.02.4.17 — Phase 0 flat interim background (2026-09-04).
+   Per icon-system-audit.md section 0/7: strip the generated marble texture
+   and drop shadow from Player Box, Weather, and Resources (Today's own
+   panels are handled directly in v0.02.4.15), replacing it with a plain
+   solid cream background and a simple thin border. No ornate gold frame,
+   no gem diamonds, no marble texture — icons and text carry all the
+   visual weight until the icon system is locked and background/frame art
+   is redesigned to fit it (phase 5 of that doc).
+   Overrides the marble background set by the base `.home-variant-2
+   .player-status-panel, .weather-panel, .resource-section-frame` rule in
+   styles.css (which uses !important) — matched here with equal
+   !important and higher selector specificity (#view + class) so this
+   wins regardless of load order. */
+#view .player-status-panel,
+#view .weather-panel,
+#view .resource-section-frame{
+  background-color:#f4f0e7!important;
+  background-image:none!important;
+  box-shadow:none!important;
+  border:1px solid #c9a86a!important;
+  border-radius:10px!important;
+}
+
+/* Player Box (Variant 8) paints its marble on a separate inset child layer
+   rather than the panel itself — flatten that too, and let it fill the
+   panel edge-to-edge now that the ornate frame overlay is hidden. */
+#view .v8-player-surface{
+  inset:0!important;
+  background:#f4f0e7!important;
+  border-radius:10px!important;
+}
+#view .player-status-panel.v8-player-box{
+  padding:16px 18px!important;
+}
+#view .player-status-panel.v8-player-box::before{
+  inset:0!important;
+  border:1px solid #c9a86a!important;
+  border-radius:10px!important;
+  box-shadow:none!important;
+}

@@ -1,0 +1,158 @@
+[
+  {
+    "filename": "movement-320-native-preview.png",
+    "width": 320,
+    "height": 148,
+    "sha256": "015bbafe628d09718b5e579e12c226d773abb54cb9a09a02bee452c0632f2395"
+  },
+  {
+    "filename": "movement-bottom-1x.png",
+    "width": 121,
+    "height": 9,
+    "sha256": "a6e1d0c7c4c7f0b4b434e8ca2998a8b27bf53f923ae8d4a6c318e3dcad85a88c"
+  },
+  {
+    "filename": "movement-bottom-2x.png",
+    "width": 242,
+    "height": 18,
+    "sha256": "1c5bf32ca293013f1418952658cda044cf4f97373183e209ba4cfa9a870f489a"
+  },
+  {
+    "filename": "movement-bottom-left-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "5db6e73010eafaadbc843c42021f23d6cc58dc71ed002055c991fc09387ea733"
+  },
+  {
+    "filename": "movement-bottom-left-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "059d9de9b430897fd9f95be32b36c9d294672f3c071632c9d3380d32c3bad5c7"
+  },
+  {
+    "filename": "movement-bottom-right-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "54f38788cafca1b8cd39c7b66d8b80611fc7de34ee8c547f9800cba982829c7a"
+  },
+  {
+    "filename": "movement-bottom-right-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "34ee01049ca6dd2fa74b632bcbcca2f1773064ea5515310982cbe040f8a53b40"
+  },
+  {
+    "filename": "movement-frame-320-1x.png",
+    "width": 304,
+    "height": 128,
+    "sha256": "490509aa482d4ca9a58bc000b49216c41f715e606e6bfb5c472049346e797dd0"
+  },
+  {
+    "filename": "movement-frame-320-2x.png",
+    "width": 608,
+    "height": 256,
+    "sha256": "354af6fedc23eee276a79ec9029fa9296d8a7a2a0071c325b9a89dd3bfe0294f"
+  },
+  {
+    "filename": "movement-frame-375-1x.png",
+    "width": 359,
+    "height": 134,
+    "sha256": "b21d634d684119a471baf3145e592af88f808a9ab24192cb9f7212271c2b0272"
+  },
+  {
+    "filename": "movement-frame-375-2x.png",
+    "width": 718,
+    "height": 268,
+    "sha256": "87f300db6ec6da0c7400efb07a930a41416e2f2b7c3ce23f84c430ebf4844a4f"
+  },
+  {
+    "filename": "movement-frame-580-1x.png",
+    "width": 558,
+    "height": 140,
+    "sha256": "2cb9783fa133356f576ae9bbe82286e0c1dbe504169ad388a4b773c383074d09"
+  },
+  {
+    "filename": "movement-frame-580-2x.png",
+    "width": 1116,
+    "height": 280,
+    "sha256": "b46dfe277c3e037053fe2ab21da44fdd2da4f1f71ba0dad657248f05255672f1"
+  },
+  {
+    "filename": "movement-frame-580-expanded-1x.png",
+    "width": 558,
+    "height": 158,
+    "sha256": "72b2ac582b5ad66fa8793d947f0843a9db8ab351b488e84036c4fd4c0c7b3e21"
+  },
+  {
+    "filename": "movement-frame-580-expanded-2x.png",
+    "width": 1116,
+    "height": 316,
+    "sha256": "42415b1b7dbed0422f39fc7db28c8f93328d02e3342eaf832eba5f9dc7c22119"
+  },
+  {
+    "filename": "movement-frame-size-review.png",
+    "width": 1180,
+    "height": 760,
+    "sha256": "b40baade6260374a04dec92ea672c4b489b0ed9d0cab06ab7a5eebfced109cd8"
+  },
+  {
+    "filename": "movement-left-1x.png",
+    "width": 9,
+    "height": 92,
+    "sha256": "9f916c8dd77f960ae42a7dc3103d6d8adfd05a435b8df000aadaa849c9e8e6ef"
+  },
+  {
+    "filename": "movement-left-2x.png",
+    "width": 18,
+    "height": 184,
+    "sha256": "308139464c979a0f3d54b4324b2cc01906680c34910a6a239c84cbb02cdbcf2f"
+  },
+  {
+    "filename": "movement-right-1x.png",
+    "width": 9,
+    "height": 92,
+    "sha256": "95ed6d808024ae67c3205dcf29cdeeb993816cf9f2813e2b9b080f1afdb7fc37"
+  },
+  {
+    "filename": "movement-right-2x.png",
+    "width": 18,
+    "height": 184,
+    "sha256": "caf729dc03e3431190913f234bce5ee95e7e3aa7888ed301e497bc162da5fd41"
+  },
+  {
+    "filename": "movement-top-1x.png",
+    "width": 121,
+    "height": 9,
+    "sha256": "48a55ab6fa1663d9ea5e9179d7600cc667098658e15aa28448381739cb180002"
+  },
+  {
+    "filename": "movement-top-2x.png",
+    "width": 242,
+    "height": 18,
+    "sha256": "6785b14ca6194ca491dceee9b8f0f7e1526de572e4fea1b4f8bba555149f7833"
+  },
+  {
+    "filename": "movement-top-left-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "967aa9a13c15949245d59c0ae585ff4e3dff86be7e811b90bdfcfbe578ec6d2d"
+  },
+  {
+    "filename": "movement-top-left-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "6043570ba00b025709ffac3672c29a681a339b1f476d899d5499f9156e352f1f"
+  },
+  {
+    "filename": "movement-top-right-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "a35e2dc0e9a9163b302fe34114121d30b451083a4e8f96fca04324d7b35cfcdc"
+  },
+  {
+    "filename": "movement-top-right-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "b03d914e67b34fcd9df570197aad0e6a33426062ceddd3a21d7e94c220cf1316"
+  }
+]

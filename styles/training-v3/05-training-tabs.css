@@ -1,0 +1,10 @@
+/* Training v3 — shared tab system (Phase 7)
+   Not wired into Running/Strength yet (both keep their own
+   .running-tab-rail/.strength-tab-rail through Gate 1, per "no visual
+   redesign of Running/Strength yet") — built here as a complete,
+   ready primitive so Gate 3 can adopt it without inventing new CSS. */
+.tr-tabs{display:flex;gap:var(--tr-space-1);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;border-bottom:1px solid var(--tr-divider)}
+.tr-tabs::-webkit-scrollbar{display:none}
+.tr-tab{flex:0 0 auto;background:transparent;border:0;border-bottom:2px solid transparent;color:var(--tr-text-muted);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;padding:8px 12px;cursor:pointer;white-space:nowrap;min-height:36px}
+.tr-tab:focus-visible{outline:2px solid var(--tr-category-accent);outline-offset:-2px}
+.tr-tab--active{color:var(--tr-category-accent);border-bottom-color:var(--tr-category-accent);font-weight:700}

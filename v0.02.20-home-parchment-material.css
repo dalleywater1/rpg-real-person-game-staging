@@ -1,0 +1,81 @@
+/* RPG v0.02.20 — Home Shared Parchment Material (2026-09-11).
+
+   Surface-only change per Aurelia's integration brief: adds a real
+   grain texture (home-v3-parchment-texture.png, delivered as
+   PARCHMENT_TEXTURE_512.png — a 512x512 transparent repeat-safe tile,
+   SHA-256 verified against the package's own manifest.csv) over the
+   ALREADY-APPROVED cream base (#f4f0e7), shared by every Home
+   parchment widget. It does not touch layout, padding, dimensions,
+   gold frames, icons, or interactions — every rule below adds only
+   `background-image` (never the `background` shorthand, so each
+   selector's own existing background-color survives) plus a depth
+   box-shadow, layered on top of each surface's pre-existing rule in
+   v0.02.4.15/v0.02.16/v0.02.18. The delivered parchment.css sample
+   used a placeholder #d9c397 base — per its own README ("match the
+   approved live parchment tone before rollout") that's swapped here
+   for the real #f4f0e7 already in production, not the sample tone.
+
+   Scope this pass, per "start with Character and Today... then apply
+   to the remaining surfaces once that looks right": Character Stats
+   (.character-stats-module) and every Today surface — Main Quest
+   (.feature-module-body) and Priorities/Calendar, which share Today's
+   one outer .home-panel background (no separate per-block surface to
+   texture there). Stat wells get the same texture at their own,
+   independently-opaque tile (see below) rather than inheriting the
+   parent's — an opaque per-well background-color is required so a
+   nested well doesn't show the parent's grain bleeding through a
+   translucent tint and double the pattern. No motif layer is added:
+   the delivered package deliberately contains no motif artwork. */
+
+/* 2026-09-12 update — v2/v3 recipe, STILL LIVE for .home-panel and
+   .feature-module-body only. Character Stats has moved on (see the v4
+   block below); Today/Main Quest deliberately have NOT — per Jay's
+   explicit instruction to test the new asset-based approach on
+   Character Stats alone before touching anything else, this old
+   gradient-blend recipe stays exactly as it was for these two so the
+   rest of Home doesn't drift again mid-review. Re-scope this
+   selector once the v4 approach is approved. */
+#view .home-panel,
+#view .feature-module-body{
+  background-image:
+    radial-gradient(ellipse at 46% 35%, rgba(255,244,207,.42) 0%, rgba(255,244,207,.16) 42%, rgba(120,75,25,.04) 70%, rgba(90,52,18,.12) 100%),
+    linear-gradient(90deg, rgba(85,50,18,.10) 0%, rgba(85,50,18,.02) 8%, transparent 18%, transparent 82%, rgba(85,50,18,.02) 92%, rgba(85,50,18,.10) 100%),
+    var(--parchment-texture);
+  background-size: 100% 100%, 100% 100%, 512px 512px;
+  background-blend-mode: soft-light, multiply, multiply;
+  box-shadow:
+    inset 0 0 0 1px rgba(126,82,30,.42),
+    inset 0 0 18px rgba(90,52,18,.18),
+    inset 0 1px 2px rgba(255,255,255,.2);
+}
+
+/* v4 material recipe — Character Stats ONLY (2026-09-12, third pass
+   same day). Replaces CSS-gradient-simulated ageing/grain with two
+   real overlay assets (v0.02.21's --parchment-grain-overlay/-edge-
+   overlay, built this pass — see PARCHMENT_GRAIN_OVERLAY_512.png/
+   PARCHMENT_EDGE_OVERLAY_512.png): a seamless low-alpha fibre/mottle/
+   speckle tile, and a separate non-tiling perimeter-ageing vignette
+   with a clear centre. No background-blend-mode needed this time —
+   both assets already carry their own alpha, composited normally
+   (source-over), which is the whole point of building real assets
+   instead of continuing to fake it with blend-mode math on one flat
+   tile. background-color stays owned by v0.02.16's own rule. */
+/* v6 (Jay, 2026-09-12): centre-lift radial strengthened (.3/.12 ->
+   .48/.22, matching the approved reference's visible reading-area
+   glow) and PARCHMENT_EDGE_OVERLAY_512.png itself regenerated with
+   stronger alpha + extra bottom-weighted ageing — "increase only the
+   edge overlay, not the full-sheet colour" — so the darkening comes
+   from the edge asset's own alpha, not from a second CSS layer. Still
+   soft-light/normal/normal, still additive. */
+#view .character-stats-module{
+  background-image:
+    radial-gradient(ellipse at 50% 42%, rgba(255,248,220,.48) 0%, rgba(255,248,220,.22) 45%, transparent 72%),
+    var(--parchment-edge-overlay),
+    var(--parchment-grain-overlay);
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-size: 100% 100%, 100% 100%, 512px 512px;
+  background-blend-mode: soft-light, normal, normal;
+  box-shadow:
+    inset 0 0 0 1px rgba(126,82,30,.3),
+    inset 0 1px 2px rgba(255,255,255,.2);
+}

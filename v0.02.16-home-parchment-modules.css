@@ -1,0 +1,649 @@
+/* RPG v0.02.16 — Home Geometry Reset / Frame Strip Pass (2026-09-07).
+
+   HISTORY: this file originally wired HEADER_HOME_WIDGET/
+   BUTTON_HOME_WIDGET/DIVIDER_HOME_WIDGET into the lower Home modules as
+   small navy accent elements (approved by Aurelia at the time). During
+   real mobile QA of the Hero, a genuine layout bug surfaced in Today's
+   header (the completion-count text overlapping the centered title at
+   320px) — pre-existing in the underlying grid sizing, but only made
+   visible once the header got an opaque background to overlap against.
+   Rather than keep patching frame-integration bugs one at a time, the
+   instruction for this pass is to STRIP frame dependency back out of
+   the lower modules entirely — plain/simple surfaces, correct
+   proportions locked first — so a future frame family can be designed
+   against a known-good geometry instead of guessed onto a moving one.
+
+   So: the Header/Button/Divider wiring below is REMOVED (not just
+   unused) — the corresponding classes were also removed from app.js's
+   own template strings, so Today/Development/Daily Puzzle's headers,
+   buttons and dividers are back to their original plain styling from
+   v0.02.4.15-today-panels.css/styles.css, untouched by this file.
+
+   What remains in this file:
+   1. A plain placeholder surface for the Character Stats module (it
+      previously depended entirely on the now-removed
+      .rpg-widget-standard class for ANY styling — this replaces that
+      with simple neutral/parchment card styling, matching the "use
+      simple neutral/paper/parchment placeholder surfaces for lower
+      modules" instruction, not a frame asset).
+   2. The Today-header count/gear narrow-width shrink — kept because
+      it's a genuine content-fit fix (the text simply doesn't fit at
+      320px regardless of whether the header has a border), not
+      decorative frame treatment. */
+
+/* ---------- Independent Help/Settings toolbar ----------
+   2026-09-07, user report: Help/Settings used to live inside Player
+   Status's own markup, so hiding that module (via Home Settings) took
+   away the only way to reach Help/Settings from Home directly — the
+   only remaining path was navigating away to Character's Profile &
+   Setup section. Rendered by app.js's homeToolsHTML() at the very top
+   of every Home render now, in normal document flow (not absolutely
+   positioned over the hero, since the hero itself may not even be
+   present if Player Status is hidden) — so it's genuinely independent
+   of every other module's visibility, not just visually adjacent to
+   Player Status. Same small dark circular icon-button style already
+   proven in the Hero. */
+#view .home-tools-bar{
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 4px 8px;
+}
+/* .home-tools-bar-hero-corner (the pulled-up-onto-the-Hero-corner
+   positioning from the previous round) is retired along with the bar
+   itself now that Help/Settings render inside the portrait popup in
+   the experiment — see homeToolsHTML() in app.js. The base
+   .home-tools-bar/.home-tool-btn rules below stay: still used whenever
+   HOME_HERO_EXPERIMENT_B is off. */
+#view .home-tool-btn{
+  appearance: none;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: rgba(8,16,26,.55);
+  border: 1.5px solid rgba(228,180,90,.75);
+  box-shadow: 0 2px 6px #0007;
+}
+#view .home-tool-btn img{ width: 60%; height: 60%; object-fit: contain; filter: drop-shadow(0 1px 2px #0008); }
+#view .home-tool-btn:hover{ background: rgba(8,16,26,.75); }
+#view .home-tool-btn:focus-visible{ outline: 2px solid #4bbcff; outline-offset: 2px; }
+
+/* ---------- Character Stats — Standard parchment data widget ----------
+   Width + frame cleanup (Aurelia — Home V3 Character Stats Width + Frame
+   Cleanup Handover, 2026-09-11): the ornate character-frame-320-2x.png
+   border-image overlay is REMOVED — with the real parchment texture,
+   recessed stat wells and icon family all now in place, the extra
+   navy/gold perimeter made this read as a separate, smaller-framed
+   component family sitting above Today instead of the same family as
+   it. This is now a plain parchment card — same surface, border,
+   radius and padding as .home-panel (Today/Priorities/Calendar/Side
+   Quests), and critically the same `margin:0` (the old `margin:0 12px`
+   was the actual cause of Character Stats reading narrower than every
+   other Home widget — confirmed live: 280px wide vs Today's 304px at
+   320, a 12px inset on each side nothing else in Home carries).
+   Establishes two reusable rules per that handover: (1) standard Home
+   widgets share one outer content width/gutter unless there's a
+   deliberate functional exception: (2) standard parchment data widgets
+   don't need a heavy fantasy outer frame — stronger outer framing is
+   reserved for higher-weight Feature/Hero components (Main Quest). */
+#view .character-stats-module{
+  position: relative;
+  background: var(--parchment-main, #e3c98f);
+  border: 1px solid var(--parchment-edge, #a97832);
+  border-radius: 8px;
+  padding: 16px 18px;
+  margin: 0 0 14px;
+  overflow: hidden;
+  cursor: pointer;
+}
+/* filter, never the `background` shorthand — a literal hover colour
+   here would wipe the radial/linear/texture image stack v0.02.20 layers
+   onto this same selector (later-loaded file, same property, same
+   specificity — the shorthand always wins and clears it). */
+#view .character-stats-module:hover{ filter: brightness(1.035); }
+#view .character-stats-module:focus-visible{ outline: 2px solid var(--gold-accent-bright, #c58b32); outline-offset: 2px; }
+#view .char-stats-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 10px;
+}
+#view .char-stats-header span{ font-size: 13px; font-weight: 800; letter-spacing: .1em; color: #a9762f; text-transform: uppercase; }
+#view .char-stats-header b{ font-size: 10px; font-weight: 600; color: #7a6a45; }
+#view .char-stats-grid{ display: flex; align-items: stretch; }
+#view .char-stat-cell{
+  flex: 1 1 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  justify-items: center;
+  align-content: center;
+  gap: 3px;
+  text-align: center;
+  min-width: 0;
+  padding: 0 4px;
+}
+#view .char-stat-cell img{ width: 24px; height: 28px; object-fit: contain; }
+#view .char-stat-cell span{ font-size: 8px; font-weight: 800; letter-spacing: .04em; color: #8a7a52; white-space: nowrap; }
+#view .char-stat-cell b{ font-size: 12px; color: #2b2214; white-space: nowrap; }
+@media(max-width:390px){
+  #view .char-stats-grid{ flex-wrap: wrap; row-gap: 10px; }
+  #view .char-stat-cell{ flex: 1 1 30%; }
+}
+
+/* ---------- Today header — content-fit only, not decorative ----------
+   .home-today-count ("0 / 3 complete") + the settings gear button
+   don't fit their allotted grid column at narrow widths regardless of
+   the header's own background/border — confirmed by testing with the
+   header's border/background both removed, the overlap persisted.
+   Shrinking rather than hiding, since the count isn't shown anywhere
+   else in the Today panel. */
+@media(max-width:400px){
+  #view .home-today-outer .home-section-controls{ gap: 4px; }
+  #view .home-today-outer .home-today-count{ font-size: 8px; }
+  #view .home-today-outer .home-settings-gear{ width: 22px; height: 22px; }
+}
+
+/* ---------- Daily Activities — launcher widget + shared popup ----------
+   ASTRA — Home Daily Activities Widget Change (2026-09-07). Consolidates
+   the old Daily Word / Daily Wisdom / Daily Challenge / Daily Puzzle Home
+   panels (challengePanelHTML/wordPanelHTML/wisdomPanelHTML/puzzlePanelHTML,
+   removed from app.js) into one compact icon-launcher on Home, whose
+   buttons open one shared popup (openDailyActivityPopup in app.js). The
+   widget itself reuses .home-panel's plain parchment card as-is (no new
+   "card" look, per this pass's own "use current stable Home UI styling,
+   do not begin another decorative Home frame redesign" instruction) — the
+   grid below is genuinely the only new Home-page styling.
+   The popup's inner content reuses several classes that used to be
+   #view-scoped only (.challenge-content-v2, .challenge-category-icon-lg,
+   .challenge-content-copy, .puzzle-inline-row/-prompt, .trial-result,
+   .today-v2-rotation-note, .challenge-actions) because they lived only in
+   Home. The popup itself renders inside #modalRoot, a sibling of #view, so
+   those rules never reached it — plain unscoped versions below give the
+   popup the same layout, but with the modal's own light-on-dark palette
+   (the Home originals used a couple of light-background-only colors,
+   e.g. puzzle-inline-prompt's dark ink, that would be unreadable on the
+   modal's dark navy background). .word-detail/.wisdom-text/.challenge-
+   content/.challenge-actions'.rpg-btn etc. needed no such override — they
+   were already styled for a dark surface (Home's own dark "Development"
+   layout, before Home moved to parchment cards) and already render
+   correctly inside .modal unscoped, same as every other modal today. */
+#view .daily-activities-grid{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px 8px;
+  margin-top: 2px;
+}
+#view .daily-activity-btn{
+  appearance: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 4px 8px;
+  background: #fff9ec;
+  border: 1px solid #c9a86a;
+  border-radius: 9px;
+  min-width: 0;
+}
+#view .daily-activity-btn:hover{ background: #f4ecd6; }
+#view .daily-activity-btn:focus-visible{ outline: 2px solid #2a85d4; outline-offset: 2px; }
+#view .daily-activity-btn img{ width: 30px; height: 30px; object-fit: contain; }
+#view .daily-activity-btn span{ font-size: 9px; font-weight: 800; letter-spacing: .02em; color: #5b4a2a; text-align: center; line-height: 1.2; }
+
+/* Shared popup shell — lives inside the existing .modal box (backdrop +
+   close button already provided by app.js's modal()); only this inner
+   head/body/controls layout is new. Daily Activities only ever opens
+   from Home, so the modal is always in the light "home" theme (see
+   body[data-theme="home"] .modal in v0.02.5-home-baseline.css) — text
+   colors below are chosen for THAT light/cream surface, not the app's
+   default dark modal. */
+.daily-activity-popup-head{ display: flex; align-items: center; gap: 10px; margin: 0 26px 12px 0; }
+.daily-activity-popup-head img{ width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; }
+.daily-activity-popup-head span{ display: block; font-family: Georgia,"Times New Roman",serif; font-size: 15px; font-weight: 800; letter-spacing: .04em; color: #8a5f1a; }
+.daily-activity-popup-head small{ display: block; font-size: 10px; color: #5b4a2a; margin-top: 2px; }
+.daily-activity-popup-body{ display: flex; flex-direction: column; gap: 2px; color: #16233f; }
+.daily-activity-popup-controls{ display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 14px; }
+
+/* Popup-context versions of previously #view-only Home layout classes
+   (same class names as before, so the inner markup didn't need to change,
+   just where it renders). Also re-colors a few classes that are styled
+   correctly for #view's own parchment cards or the app's default dark
+   modal, but not for this light "home" modal — .wisdom-text,
+   .example-translation and .challenge-content's own p/strong all carry
+   light/pale colors from styles.css meant for a dark surface. */
+.challenge-content-v2{ display: flex; align-items: flex-start; gap: 14px; text-align: left; }
+.challenge-category-icon-lg{ width: 64px; height: 64px; object-fit: contain; flex-shrink: 0; }
+.challenge-content-copy{ min-width: 0; flex: 1; }
+.daily-activity-popup-body .challenge-content p{ color: #3a3020; }
+.daily-activity-popup-body .challenge-content strong{ color: #8a5f1a; }
+.daily-activity-popup-body .challenge-actions{ display: flex; align-items: center; gap: 8px; }
+.daily-activity-popup-body .wisdom-text{ color: #2b2214; }
+.daily-activity-popup-body .word-detail .example-translation{ color: #5c6f80; }
+.today-v2-rotation-note{ margin-top: 8px; font-size: 10px; font-style: italic; color: #7a6a45; }
+.puzzle-inline-prompt{ color: #16233f; font-size: 14px; line-height: 1.5; margin: 2px 0 12px; }
+.puzzle-inline-row{ display: flex; gap: 8px; }
+.puzzle-inline-row input{ flex: 1; min-width: 0; }
+#puzzleInlineResult .trial-error{ color: #c0392b; font-size: 12px; font-weight: 700; margin-top: 8px; }
+.trial-result{ padding: 10px 12px; border-radius: 8px; background: rgba(63,161,92,.14); border: 1px solid #3fa15c60; }
+.trial-result b{ color: #2c7a45; font-size: 13px; }
+@media(max-width:420px){ .challenge-category-icon-lg{ width: 52px; height: 52px; } }
+
+/* ---------- V3 Widget Geometry / Interaction Pass — Side Quests ----------
+   ASTRA — Home V3 Widget Geometry / Interaction Pass (2026-09-07), §1.
+   Compact quest row: icon (28px) + title/subtitle/bar (flexible middle
+   column) + a circular progress ring (32px) on the right. Fixed
+   horizontal structure (icon/ring stay their own size at every width),
+   the list itself grows vertically — no max-height/scroll, no fixed
+   widget height. Plain/temporary surfaces only, per this pass's own
+   "do not introduce final decorative frame art yet" instruction — the
+   ring is a conic-gradient (same mechanic Resources' own .resource-ring
+   already uses elsewhere), not a frame asset. */
+#view .today-v2-side-list{ display: flex; flex-direction: column; gap: 6px; margin-top: 2px; }
+#view .side-quest-row{
+  position: relative;
+  display: grid;
+  grid-template-columns: 28px 1fr 32px;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 6px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+/* filter, not `background` shorthand — the row now paints the shared
+   .hw-row parchment material (background-color+image), and the
+   shorthand used here previously would silently clear that on hover. */
+#view .side-quest-row:hover{ filter: brightness(1.03); }
+#view .side-quest-row input[type="checkbox"]{ position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+#view .side-quest-row-icon{ width: 28px; height: 28px; object-fit: contain; }
+#view .side-quest-row-body{ min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+/* Typography consistency pass (2026-09-11, Home internal-language
+   rollout, item 2 — Side Quests): these two had no font-family of
+   their own, so they were silently inheriting the page's base
+   Courier New rather than the serif/micro pairing used everywhere
+   else in the redesigned widgets. Aligned to the same ink tokens as
+   Main Quest/Character Stats (#16233f title, #8a7a52 muted metadata)
+   for one consistent "row title" / "metadata" tier across widgets —
+   no structural change, the row/bar/ring markup is untouched. */
+#view .side-quest-row-title{ font-family: var(--font-ui,Georgia,serif); font-size: 12px; font-weight: 700; color: var(--ink-primary, #16233f); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#view .side-quest-row-sub{ font-family: var(--font-micro,"Alegreya Sans",sans-serif); font-size: 9px; color: var(--ink-tertiary, #8a7a52); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#view .side-quest-row-bar{ height: 4px; border-radius: 3px; background: #e4d9bd; overflow: hidden; }
+#view .side-quest-row-bar i{ display: block; height: 100%; background: linear-gradient(90deg,#2a85d4,#4bbcff); }
+#view .side-quest-ring{
+  position: relative;
+  --p: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: conic-gradient(#2a85d4 calc(var(--p)*1%), #e4d9bd 0);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+/* Ring centre hole was a plain off-white (#fff9ec) — a "legacy pale
+   fill" outside the canonical parchment system. Now the same main
+   parchment tone as everything else (2026-09-11 colour/effects pass). */
+#view .side-quest-ring::before{ content: ''; position: absolute; inset: 3.5px; border-radius: 50%; background: var(--parchment-main, #f4f0e7); }
+#view .side-quest-ring span{ position: relative; z-index: 1; font-family: var(--font-micro,"Alegreya Sans",sans-serif); font-size: 7px; font-weight: 800; color: var(--ink-secondary, #5b4a2a); }
+
+/* ---------- V3 Widget Geometry / Interaction Pass — Today's Schedule ----------
+   ASTRA — Home V3 Widget Geometry / Interaction Pass (2026-09-07), §2.
+   Originally a wrap-grid of cards (.schedule-card-list, flex-wrap row,
+   this rule's now-removed `flex: 1 1 200px; min-width: 180px` sized
+   each card to a 200px-wide column). The Internal Component
+   Normalization pass (Aurelia, 2026-09-11) moved the real container
+   onto the shared .hw-row-list — a COLUMN flex list, not a wrapping
+   row — without updating this still-attached .schedule-card class, so
+   that same `flex: 1 1 200px` kept being read as a 200px flex-BASIS on
+   the column's cross axis... which is height, not width, once the
+   container's axis flipped. Every schedule card was silently rendering
+   200px tall regardless of content (found 2026-09-17 testing the
+   Training Overview Current-Week Calendar, which populated this widget
+   with real same-day entries for the first time). .schedule-card-list
+   itself is dead too — homeScheduleColumnHTML has rendered .hw-row-list
+   since that same pass — left in place as a harmless historical rule
+   rather than deleted mid-unrelated-fix. */
+#view .schedule-card-list{ display: flex; flex-wrap: wrap; gap: 8px; }
+#view .schedule-card{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  background: #fff9ec;
+  border: 1px solid #c9a86a55;
+  cursor: pointer;
+}
+/* filter, not `background` shorthand — same fix as .side-quest-row:hover
+   above, for the same reason: the card now paints the shared .hw-row
+   parchment material, which a background shorthand here would clear
+   on hover (:hover's specificity otherwise beats the plain .hw-row rule). */
+#view .schedule-card:hover{ filter: brightness(1.03); }
+#view .schedule-card-time{ font-size: 9px; font-weight: 800; color: #5b4a2a; flex-shrink: 0; }
+#view .schedule-card-icon{ width: 22px; height: 22px; object-fit: contain; flex-shrink: 0; }
+#view .schedule-card-body{ min-width: 0; flex: 1; display: flex; flex-direction: column; gap: 1px; }
+#view .schedule-card-body strong{ display: block; font-size: 12px; font-weight: 700; color: #2b2214; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#view .schedule-card-body small{ display: block; font-size: 9.5px; color: #7a6a45; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#view .schedule-card-accent.tag{ flex-shrink: 0; font-size: 7.5px; }
+#view .schedule-card-chevron{ flex-shrink: 0; color: #a9762f; font-size: 15px; line-height: 1; }
+#view .schedule-card.done .schedule-card-accent{ color: #2c7a45; border-color: #3fa15c; }
+
+/* ---------- V3 Widget Geometry / Interaction Pass — Resources ----------
+   ASTRA — Home V3 Widget Geometry / Interaction Pass (2026-09-07), §3.
+   Same resource-row markup/logic as before (resourceCard/resourceFood/
+   resourceMind, barMeter, calorieSegmentedBar — none of that JS changed;
+   this is layout only), just laid out as a responsive grid of cells
+   instead of one full-width vertical list, per "prototype a cleaner
+   resource-row/cell geometry... do not replace icons... this is a
+   layout/visual restructure only." 3 columns down to 480px, 2 below it
+   — the "do not shrink icons/text below comfortable mobile readability
+   just to preserve 3 columns" instruction is why the 2-column drop
+   happens at 480px rather than holding 3 columns all the way to 320px.
+   High specificity + !important: Home currently still carries the
+   legacy .home-marble-correction/.home-variant-2 layers (HOME_VISUAL_MARBLE
+   is true — see v0.02.4-integration.js), which apply their own
+   !important rules to the exact same .resource-list-row/.resource-row-*
+   classes these cells reuse. This scoped override only wins inside
+   .resource-grid-v3 specifically — those legacy layers are untouched
+   everywhere else, since deciding whether to retire them entirely is a
+   separate, larger call this pass doesn't make (flagged in the geometry
+   report as a "V2 constraint that should be removed before V3"). */
+#view .resource-grid-v3.resource-vertical-list{
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 10px !important;
+}
+/* Cell layout, per Lyra's note: icon + title sit beside each other on
+   their own row (title to the right of the icon, not under it), and the
+   bar sits on its own row below spanning the full cell width — freeing
+   the bar to show just its value text, centered. .resource-row-main is
+   set to display:contents so its two children (.resource-row-head and
+   .resource-bar-button — or, for Food, .food-dual-track) become direct
+   grid items of .resource-list-row and can be placed into the "bar" row
+   independently, without changing any markup in app.js. */
+/* Resource tiles as shallow parchment wells (Aurelia — Home V3 Character
+   Stats/Resources/Movement Width + Frame Cleanup Handover, 2026-09-11):
+   the per-tile gold 9-slice frame (resource-tile-frame-2x.png) is
+   REMOVED — each tile was reading as its own small framed mini-card,
+   the exact pattern the handover calls out ("let each resource tile
+   remain a shallow recessed parchment well, not a framed mini-card").
+   Tiles now use the same opaque, slightly darker/warmer parchment tone
+   and inset shadow as Character Stats' stat wells (#ecdfc0 + the
+   shared texture tile, own opaque background so the section's own
+   grain doesn't bleed through and double-pattern — see
+   v0.02.20-home-parchment-material.css), not the old near-white
+   #fff9ec flat fill. Geometry (grid areas, padding, gap) is untouched. */
+#view .resource-grid-v3.resource-vertical-list .resource-list-row{
+  display: grid !important;
+  grid-template-columns: auto 1fr !important;
+  grid-template-areas: "icon title" "calLabel calLabel" "bar bar" "proteinLabel proteinLabel" !important;
+  align-items: center !important;
+  column-gap: 8px !important;
+  row-gap: 6px !important;
+  min-width: 0 !important;
+  padding: 10px 10px 12px !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 9px !important;
+  background-color: var(--parchment-inset, #ecdfc0) !important;
+  background-image: linear-gradient(rgba(110,75,35,.05), rgba(255,255,255,.025)), var(--parchment-texture) !important;
+  background-size: auto, 512px 512px !important;
+  background-repeat: no-repeat, repeat !important;
+  box-shadow: inset 0 2px 5px rgba(60,38,18,.13), inset 0 -1px 1px rgba(255,255,255,.22) !important;
+  position: relative !important;
+}
+/* Internal Component Normalization pass (2026-09-11): the grid layout
+   above (icon/title/calLabel/bar/proteinLabel areas) is now dead for
+   any tile using the new .hw-inset-stack markup — those tiles no
+   longer contain a .resource-row-head/.resource-bar-button/.food-
+   track-label at all, so this override only needs to replace the ONE
+   still-matching property set (display/areas/padding/gap) with the
+   shared Inset-cell stacked layout. Matches the old selector's own
+   specificity plus one class, so it wins regardless of load order —
+   the rest of the old grid-area sub-rules below are simply inert now
+   (their selectors match nothing in the new markup), left as-is
+   rather than deleted, same precedent as every other superseded block
+   in this project. */
+#view .resource-grid-v3.resource-vertical-list .resource-list-row.hw-inset-stack{
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  text-align: center !important;
+  grid-template-areas: none !important;
+  column-gap: 0 !important;
+  row-gap: 0 !important;
+  padding: 9px 6px 8px !important;
+}
+#view .resource-grid-v3.resource-vertical-list .resource-row-icon{ grid-area: icon; width: 30px !important; height: 30px !important; min-width: 0 !important; }
+#view .resource-grid-v3.resource-vertical-list .resource-row-icon img{ width: 28px !important; height: 28px !important; }
+#view .resource-grid-v3.resource-vertical-list .resource-row-main{ display: contents !important; }
+/* Title: un-hide .resource-row-head (the resources-panel hotfix,
+   v0.02.4.9, hides it by default and bakes name+value into an overlay on
+   the bar instead) and show BOTH name and value here now (2026-09-08,
+   user request: move the resource text above the bar and drop the
+   black outline-shadow that was only there for contrast against the
+   bar's own fill colour — sitting on the plain card background instead
+   needs no shadow). Food's Calories/Protein labels get the same
+   treatment via .food-track-label below (2026-09-08 follow-up:
+   Calories text above the top bar, Protein text below the bottom bar —
+   resourceFood() in app.js no longer passes overlayHTML into either
+   bar at all, so nothing renders on top of the bars themselves
+   anymore). */
+#view .resource-grid-v3.resource-vertical-list .resource-row-head{
+  display: flex !important;
+  grid-area: title !important;
+  flex-direction: column !important;
+  align-items: flex-start !important;
+  gap: 1px !important;
+  text-align: left !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+#view .resource-grid-v3.resource-vertical-list .resource-row-head strong{ font-size: 10.5px !important; color: #8a5f1a !important; white-space: normal !important; overflow-wrap: break-word !important; }
+/* Stacked (name then value, each its own line) rather than side-by-side
+   — a single row couldn't fit longer values (e.g. "9,500 / 8,000") at
+   the grid's narrower column widths without the value bleeding past
+   the card edge. overflow/ellipsis below is a safety net, not the
+   primary fix. */
+#view .resource-grid-v3.resource-vertical-list .resource-row-head > span:last-child{ display: block !important; max-width: 100% !important; font-size: 9.5px !important; color: #8a5f1a !important; white-space: nowrap !important; overflow: hidden !important; text-overflow: ellipsis !important; text-shadow: none !important; }
+#view .resource-grid-v3.resource-vertical-list .resource-bar-button,
+#view .resource-grid-v3.resource-vertical-list .food-dual-track{ grid-area: bar; width: 100% !important; }
+#view .resource-grid-v3.resource-vertical-list .segmented-resource-bar{ height: 22px !important; }
+#view .resource-grid-v3.resource-vertical-list .food-track-label{
+  display: flex !important;
+  align-items: baseline !important;
+  gap: 5px !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+#view .resource-grid-v3.resource-vertical-list .food-track-label-cal{ grid-area: calLabel; }
+#view .resource-grid-v3.resource-vertical-list .food-track-label-protein{ grid-area: proteinLabel; }
+#view .resource-grid-v3.resource-vertical-list .food-track-label strong{ font-size: 9.5px !important; color: #8a5f1a !important; text-transform: uppercase; letter-spacing: .04em; white-space: nowrap; }
+#view .resource-grid-v3.resource-vertical-list .food-track-label span{ font-size: 9.5px !important; color: #8a5f1a !important; text-shadow: none !important; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+/* Suppress the on-bar overlay everywhere in this grid — safe to apply
+   unconditionally now: Water/Sleep/Mindfulness/Steps/Social never
+   generate one once .resource-row-head is un-hidden above, and Food no
+   longer generates one at all (resourceFood() stopped passing
+   overlayHTML into either bar — see .food-track-label above instead). */
+#view .resource-grid-v3.resource-vertical-list .resources-v2-bar-overlay{ display: none !important; }
+@media(max-width: 480px){
+  #view .resource-grid-v3.resource-vertical-list{ grid-template-columns: repeat(2, 1fr) !important; }
+  /* At 3 columns, DOM order (Water/Calories/Sleep/Mind/Protein/Social)
+     naturally puts Calories and Protein in the same middle column,
+     directly above/below each other — the locked relationship this
+     grid exists to preserve (ASTRA Home Resources / Movement Rework,
+     2026-09-08, §2/§13: "the intended relationship between Calories
+     and Protein should remain visually obvious even when the grid
+     reflows"). At 2 columns that same DOM order splits them onto
+     separate, non-adjacent rows instead, so reorder visually here:
+     Water+Sleep first, then Calories+Protein sharing their own row
+     directly, then Mind+Social — pairing preserved without touching
+     DOM order or JS. */
+  #view .resource-grid-v3.resource-vertical-list .resource-list-row.water{ order: 1; }
+  #view .resource-grid-v3.resource-vertical-list .resource-list-row.sleep{ order: 2; }
+  #view .resource-grid-v3.resource-vertical-list .resource-list-row.calories{ order: 3; }
+  #view .resource-grid-v3.resource-vertical-list .resource-list-row.protein{ order: 4; }
+  #view .resource-grid-v3.resource-vertical-list .resource-list-row.mindfulness{ order: 5; }
+  #view .resource-grid-v3.resource-vertical-list .resource-list-row.social{ order: 6; }
+}
+
+/* ---------- V3 Geometry Finalization — legacy Home visual variant retirement ----------
+   ASTRA — V3 Geometry Finalization (2026-09-07). HOME_VISUAL_MARBLE/
+   HOME_VARIANT_2/HOME_PLAYER_VARIANT_8 are now flipped off in
+   v0.02.4-integration.js/v0.02.4.3-player-box.js (archived, not
+   deleted — every rule/function they controlled is untouched and
+   reachable again by flipping the flags back). Regression-testing that
+   removal (per Aurelia's explicit instruction to find out what broke,
+   not guess) surfaced exactly two real dependencies — everything else
+   this session's own V3 work (Side Quests/Schedule/Resources/Daily
+   Activities/Character Stats, all already carrying their own explicit
+   #view-scoped styling) was already fully self-contained and needed no
+   changes at all:
+
+   1. .home-top-panel (the Hero's wrapping <header>) is plain .rpg-frame
+      .standard underneath — a real dark boxed-card background/border/
+      shadow/padding (styles.css:24) that the marble layer was silently
+      zeroing out. Without that, the Hero regresses to a boxed card,
+      undoing the whole "open scenic Hero on the page's own background"
+      design from the Home UI Fidelity Correction pass. Ported forward
+      here, unconditionally, so it no longer depends on marble at all.
+   2. Main Quest's approved-copy text classes (.quest-title-approved/
+      .approved-copy/.approved-meta) have base colors from the app's
+      original dark theme (white/pale blue-gray/pale gold — styles.css
+      ~line 111) that the marble layer's own color:var(--marble-ink)
+      overrides were silently keeping legible against Today's cream
+      .home-panel background. Without marble, a real Main Quest's title
+      renders white-on-cream (confirmed live, effectively invisible).
+      Re-colored here to the same dark-ink palette the rest of V3
+      already uses, not marble's own custom properties. */
+#view .home-top-panel{
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+/* .home-top-panel is a 2-column grid by default (styles.css:204,
+   minmax(0,1.65fr) minmax(0,1fr) !important) from the old shell-grid
+   architecture where Player Status and Weather were two separate
+   top-level grid items side by side. Since the Weather-in-Hero pass
+   merged them into one combined section (Weather now renders INSIDE
+   playerStatusHTML() itself), renderHome() has added the
+   .home-top-panel-solo modifier class every single time a shell
+   section is visible at all (shellCount is always 0 or 1 now, never
+   2) — solo's own grid-template-columns:1fr (v0.02.12) is meant to
+   let that lone section span the full width. But solo's rule has no
+   !important, so it lost to the base grid's !important outright — a
+   real, reachable bug that the (now-retired) legacy marble layer's OWN
+   competing !important 1fr override was accidentally masking the
+   whole time (.home-marble-correction .home-top-panel, styles.css:
+   1074). Retiring that layer exposed it: a dead ~35% second grid
+   column sat empty behind the scene at any width wide enough to show
+   it (reported directly from a live screenshot, not something this
+   session's own narrower-viewport testing had caught). Since solo is
+   now effectively the ONLY reachable state, this simply makes it win
+   for real instead of patching the old 2-column default. */
+#view .home-top-panel.home-top-panel-solo{ grid-template-columns: 1fr !important; }
+#view .quest-title-approved{ color: #16233f; }
+#view .approved-copy{ color: #3a3020; }
+#view .approved-meta{ color: #7a6a45; }
+
+/* ---------- Movement widget + popup (ASTRA Home Resources / Movement
+   Rework, 2026-09-08) — Steps split out of Resources into its own Home
+   widget. Card reuses .home-panel's plain parchment surface as-is (same
+   card Side Quests/Daily Activities already use), so only the content
+   inside it needs new rules here. Modal content colors are written
+   explicitly rather than relying on body[data-theme="home"] .modal's
+   unscoped defaults, since a couple of the new classes (the chart) have
+   no equivalent existing modal content to inherit from. */
+/* Movement frame REMOVED (Aurelia — Home V3 Character Stats/Resources/
+   Movement Width + Frame Cleanup Handover, 2026-09-11): the
+   movement-frame-320-2x.png border-image overlay this section used to
+   carry is gone — Movement is a standard parchment data widget, not a
+   Feature/Hero component, so it now uses .home-panel's own plain
+   surface (cream, thin gold border, the shared parchment texture)
+   exactly like Today/Priorities/Calendar/Side Quests, with no
+   .home-panel-movement override needed at all. Width was already
+   correct (this widget always used .home-panel as its base, confirmed
+   304px wide at 320 — same as Today) — only the frame needed removing. */
+#view .home-panel-movement .movement-summary{
+  display:block;width:100%;text-align:left;
+  background:transparent;border:0;padding:0;margin:0;cursor:pointer;
+  font-family:inherit;color:inherit;
+}
+#view .home-panel-movement .movement-summary:focus-visible{outline:2px solid #8a5f1a;outline-offset:3px;border-radius:6px}
+/* Recessed steps/progress inset (Aurelia — canonical parchment colour/
+   material pass, 2026-09-11): same opaque #ecdfc0 + shared texture +
+   inset shadow as Character Stats' stat wells and Resources' tiles —
+   one material for every "recessed" surface in Home, not three visually
+   similar-but-different ones. Any future Movement metric row (distance
+   is already here; more can follow) sits inside this same inset rather
+   than getting its own one-off treatment. */
+#view .movement-inset{
+  background-color: var(--parchment-inset, #ecdfc0);
+  background-image:
+    linear-gradient(rgba(110,75,35,.05), rgba(255,255,255,.025)),
+    var(--parchment-texture);
+  background-size: auto, 512px 512px;
+  background-repeat: no-repeat, repeat;
+  box-shadow: inset 0 2px 5px rgba(60,38,18,.13), inset 0 -1px 1px rgba(255,255,255,.22);
+  border-radius: 9px;
+  padding: 12px 12px 11px;
+}
+#view .movement-steps-row{display:flex;align-items:baseline;gap:6px;margin-bottom:6px}
+#view .movement-steps-row b{font-size:18px;color:var(--ink-primary,#16233f);font-variant-numeric:tabular-nums}
+#view .movement-steps-row span{font-size:11px;color:var(--ink-secondary,#5b4a2a)}
+#view .movement-distance-row{margin-top:6px;font-size:10.5px;color:var(--ink-tertiary,#8a7a52)}
+
+/* Everything below this point renders inside the Movement popup, which
+   lives in #modalRoot, not #view (a genuinely different DOM subtree —
+   this file's #view-scoped rules never match anything inside a modal).
+   First caught via a live rendering bug: the chart initially collapsed
+   to ~24px tall because #view .movement-chart{height:120px} silently
+   matched nothing. Scoped to #modalRoot instead, correctly this time. */
+#modalRoot .movement-overview{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+#modalRoot .movement-overview-bar{margin:2px 0}
+#modalRoot .movement-overview-row{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:#5b4a2a}
+#modalRoot .movement-overview-row b{color:#16233f;font-variant-numeric:tabular-nums}
+#modalRoot .movement-overview #movementEditSteps{margin-top:2px}
+
+#modalRoot .movement-range-toggle{margin:10px 0 4px}
+#modalRoot .movement-readout{font-size:11px;color:#7a6a45;margin-bottom:8px;min-height:14px}
+#modalRoot .movement-empty{margin-top:10px}
+#modalRoot .movement-chart{
+  position:relative;
+  display:flex;align-items:flex-end;gap:4px;
+  height:120px;padding:0 2px;
+  overflow-x:auto;
+}
+#modalRoot .movement-chart .movement-bar{
+  flex:1 0 18px;min-width:18px;max-width:34px;
+  display:flex;flex-direction:column;align-items:center;gap:5px;height:100%;
+  background:transparent;border:0;padding:0;cursor:pointer;
+}
+#modalRoot .movement-bar-track{
+  position:relative;width:100%;flex:1;
+  background:#f4f0e7;border:1px solid #c9a86a55;border-radius:4px;
+  display:flex;align-items:flex-end;overflow:hidden;
+}
+/* Target reference line, drawn once per chart via the container's own
+   --movement-target-h custom property rather than per-bar, so it stays
+   perfectly aligned across every bar regardless of that bar's own fill
+   height. */
+#modalRoot .movement-chart::after{
+  content:'';position:absolute;left:2px;right:2px;
+  bottom:calc(var(--movement-target-h, 0%) + 14px);
+  border-top:1px dashed #a9762f90;
+  pointer-events:none;
+}
+#modalRoot .movement-bar-fill{
+  width:100%;border-radius:3px 3px 0 0;
+  background:linear-gradient(180deg,#bcd9f5 0%,#3d8ee0 100%);
+  transition:height .2s ease;
+}
+#modalRoot .movement-bar-fill.met{background:linear-gradient(180deg,#f6e2a6 0%,#c9a86a 100%)}
+#modalRoot .movement-bar small{font-size:8.5px;color:#8a5f1a;white-space:nowrap}
+#modalRoot .movement-bar[aria-label]:hover .movement-bar-track{border-color:#c9a86a}

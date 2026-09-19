@@ -1,0 +1,133 @@
+/* RPG v0.02.8 — Rewards -> Achievements page (Astra Achievements handoff).
+   Trophy-room grid: badge first, information second. Dark theme,
+   matching Rewards/Character/Adventure (not part of Home's cream
+   flattening). Rarity ladder: Common -> Uncommon -> Rare -> Epic ->
+   Legendary -> Celestial, escalating trim/glow per tier. */
+
+.rewards-subnav{display:flex;gap:6px;margin:10px 0 4px;overflow-x:auto;scrollbar-width:thin}
+.rewards-subnav-btn{
+  flex:0 0 auto;padding:8px 14px;border:1px solid #4a3d24;border-radius:8px;
+  background:#0c1723;color:#9aa7b4;font-size:11px;letter-spacing:.06em;
+  text-transform:uppercase;font-weight:700;cursor:pointer;white-space:nowrap;
+}
+.rewards-subnav-btn.active{border-color:#c9a86a;background:#1c2432;color:#f0d28a}
+.rewards-tab-body{margin-top:12px}
+
+/* ---- Header stats ---- */
+.ach-header-stats{display:flex;gap:16px;margin:2px 0 10px;font-size:12px;color:#c3ced8}
+.ach-header-stats span:first-child{color:#f0d28a;font-weight:700}
+
+/* ---- Filter chips (All / Recent / Hidden) ---- */
+.ach-filter-row{display:flex;gap:8px;margin-bottom:14px}
+.ach-filter-chip{
+  padding:7px 14px;border:1px solid #4a3d24;border-radius:20px;background:#0c1723;
+  color:#9aa7b4;font-size:11px;font-weight:700;letter-spacing:.04em;cursor:pointer;
+}
+.ach-filter-chip.active{border-color:#c9a86a;background:#231c0f;color:#f0d28a}
+
+/* ---- Featured latest achievement ---- */
+.ach-featured{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;align-items:center;margin-bottom:16px}
+.ach-featured-empty{display:block;text-align:center;padding:18px}
+.ach-featured-badge{width:96px;height:96px;display:grid;place-items:center;border-radius:12px}
+.ach-featured-badge img{width:100%;height:100%;object-fit:contain}
+.ach-featured-copy{min-width:0}
+.ach-featured-kicker{display:block;font-size:9px;letter-spacing:.16em;color:#d8b56d;margin-bottom:3px}
+.ach-featured-copy h2{margin:0 0 2px;font-size:19px;color:#f6edda}
+.ach-featured-rarity{display:block;font-size:10px;letter-spacing:.1em;color:#c3ced8;margin-bottom:6px;text-transform:uppercase}
+.ach-featured-copy .helper{margin:0 0 4px}
+.ach-featured-copy small{display:block;color:#8fa0b0;margin-bottom:6px}
+
+/* ---- Category selector (mirrors Personal Growth's horizontally
+   scrollable filter chip pattern) ---- */
+.ach-categories{display:flex;gap:8px;overflow-x:auto;padding:2px 2px 10px;scrollbar-width:thin;overscroll-behavior-inline:contain}
+.ach-category{
+  flex:0 0 auto;min-height:34px;padding:7px 14px;border:1px solid rgba(199,170,103,.28);
+  border-radius:20px;background:rgba(7,14,25,.78);color:#d9d2c2;font-size:11px;
+  white-space:nowrap;cursor:pointer;
+}
+.ach-category.active{border-color:#c5a75f;background:rgba(33,30,25,.92);color:#f0d28a}
+
+/* ---- Grid: 4 columns desktop/tablet, 2 columns mobile ---- */
+.ach-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ach-empty{grid-column:1/-1;text-align:center;padding:20px}
+@media(max-width:700px){.ach-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+.ach-tile{
+  display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;
+  padding:12px 8px;border:1px solid #33445a;border-radius:10px;background:#0a1420;
+  cursor:pointer;min-height:150px;justify-content:center;
+}
+.ach-tile-badge{width:56px;height:56px;display:grid;place-items:center}
+.ach-tile-badge img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 5px rgba(0,0,0,.5))}
+.ach-tile-badge-fallback{font-size:28px}
+.ach-tile-badge-locked{
+  width:56px;height:56px;border-radius:50%;display:grid;place-items:center;
+  background:#050b12;border:1px dashed #3a4b5c;color:#5a6b7c;font-size:15px;font-weight:800;
+}
+.ach-tile-locked{opacity:.72}
+.ach-tile-locked .ach-tile-name{color:#6b7a89}
+.ach-tile-name{font-size:11px;font-weight:700;color:#e4dccb;line-height:1.25}
+.ach-tile-rarity{font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:#9aa7b4}
+.ach-tile-date{font-size:8.5px;color:#7e919d}
+
+/* Rarity accents — the badge art itself carries most of the identity;
+   these are subtle escalating trim/glow only. */
+.ach-tile-unlocked.rarity-common,.ach-featured-badge.rarity-common,.ach-detail-badge.rarity-common{border:1px solid #6b5d3f}
+.ach-tile-unlocked.rarity-uncommon,.ach-featured-badge.rarity-uncommon,.ach-detail-badge.rarity-uncommon{border:1px solid #3fa15c}
+.ach-tile-unlocked.rarity-rare,.ach-featured-badge.rarity-rare,.ach-detail-badge.rarity-rare{border:1px solid #2f7dc4;box-shadow:0 0 8px rgba(47,125,196,.25)}
+.ach-tile-unlocked.rarity-epic,.ach-featured-badge.rarity-epic,.ach-detail-badge.rarity-epic{border:1px solid #8a4fd1;box-shadow:0 0 10px rgba(138,79,209,.3)}
+.ach-tile-unlocked.rarity-legendary,.ach-featured-badge.rarity-legendary,.ach-detail-badge.rarity-legendary{border:1px solid #d4a017;box-shadow:0 0 12px rgba(212,160,23,.4)}
+.ach-tile-unlocked.rarity-celestial,.ach-featured-badge.rarity-celestial,.ach-detail-badge.rarity-celestial{border:1px solid #8ad4ff;box-shadow:0 0 16px rgba(138,212,255,.55)}
+/* Demonic — approved SPECIAL frame, the thematic counterpart/opposite to
+   Celestial (ASTRA Visual Handoff Master v2 §9). No achievement is
+   assigned this rarity yet; the treatment exists so one can render
+   correctly the moment it is. */
+.ach-tile-unlocked.rarity-demonic,.ach-featured-badge.rarity-demonic,.ach-detail-badge.rarity-demonic{border:1px solid #d43f3f;box-shadow:0 0 16px rgba(212,63,63,.55)}
+.ach-tile-unlocked.rarity-mythic,.ach-featured-badge.rarity-mythic,.ach-detail-badge.rarity-mythic{border:1px solid #ff8fd0;box-shadow:0 0 14px rgba(255,143,208,.4)}
+.ach-tile-unlocked.rarity-secret,.ach-featured-badge.rarity-secret,.ach-detail-badge.rarity-secret{border:1px solid #8e7caa}
+
+/* ---- Detail view ---- */
+.ach-back{margin:10px 0;display:inline-block;color:#d8b56d}
+.ach-detail-panel{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;padding:22px 18px}
+.ach-detail-badge{width:110px;height:110px;border-radius:16px;display:grid;place-items:center;margin-bottom:6px}
+.ach-detail-badge img{width:100%;height:100%;object-fit:contain}
+.ach-detail-panel h2{margin:0;color:#f6edda;font-size:21px}
+.ach-detail-rarity{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:#c3ced8}
+.ach-detail-status{font-size:9px;letter-spacing:.1em;text-transform:uppercase;padding:2px 9px;border-radius:10px;margin:2px 0}
+.ach-detail-status.unlocked{background:rgba(63,161,92,.18);color:#7edc92}
+.ach-detail-status.locked{background:rgba(120,120,120,.18);color:#9aa7b4}
+.ach-detail-desc{max-width:420px;color:#c3ced8;font-size:13px;line-height:1.55;margin:6px 0}
+.ach-detail-tagline{max-width:420px;margin:2px 0 6px;font-family:Georgia,"Times New Roman",serif;font-style:italic;font-size:16px;line-height:1.4;color:#e8c775}
+.ach-detail-row{display:flex;justify-content:space-between;gap:14px;width:100%;max-width:340px;border-top:1px solid #253444;padding:7px 0;font-size:11px;color:#9aa7b4}
+.ach-detail-row b{color:#e4dccb}
+.ach-detail-progress{width:100%;max-width:340px;margin:8px 0;text-align:left}
+.ach-detail-progress span{display:block;font-size:11px;color:#c3ced8;margin-bottom:4px}
+.ach-detail-system{max-width:340px}
+.ach-class-marker{
+  margin-top:8px;padding:8px 16px;border:1px solid #8a4fd1;border-radius:8px;
+  background:rgba(138,79,209,.12);font-size:10px;letter-spacing:.12em;color:#c7a6f0;
+  display:flex;flex-direction:column;gap:2px;
+}
+.ach-class-marker b{font-size:14px;color:#f0d28a;letter-spacing:0}
+.ach-view-series{margin-top:10px}
+
+/* ---- Series view (Hydration Achievement Live Test Batch) ---- */
+.ach-series-panel{padding:20px 18px}
+.ach-series-panel h2{margin:0 0 14px;color:#f6edda;font-size:18px;text-align:center}
+.ach-series-list{display:flex;flex-direction:column;gap:2px}
+.ach-series-row{
+  display:flex;align-items:center;gap:10px;width:100%;padding:10px 4px;
+  border:0;border-top:1px solid #253444;background:transparent;color:inherit;
+  text-align:left;cursor:pointer;
+}
+.ach-series-row:first-child{border-top:0}
+.ach-series-status{font-size:15px;width:20px;text-align:center;flex-shrink:0}
+.ach-series-name{flex:1;min-width:0;font-size:13px;font-weight:700;color:#e4dccb}
+.ach-series-rarity{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#9aa7b4;flex-shrink:0}
+
+@media(max-width:390px){
+  .ach-featured{grid-template-columns:72px minmax(0,1fr);gap:10px}
+  .ach-featured-badge{width:72px;height:72px}
+  .ach-tile{min-height:132px;padding:9px 6px}
+  .ach-tile-badge,.ach-tile-badge-locked{width:46px;height:46px}
+}

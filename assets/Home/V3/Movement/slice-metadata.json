@@ -1,0 +1,18 @@
+{
+  "status": "Movement frame candidate; pending static approval and live QA",
+  "source_family": "frozen Home V3 Resource frame components",
+  "corner_css_px": 9,
+  "slice_source_px": {"1x":9,"2x":18},
+  "canonical_source": "movement-frame-320-2x.png",
+  "targets_css_px": [
+    {"tier":320,"width":304,"height":128,"icon_slot":42,"bar_width":274,"bar_height":24},
+    {"tier":375,"width":359,"height":134,"icon_slot":48,"bar_width":329,"bar_height":24},
+    {"tier":580,"width":558,"height":140,"icon_slot":54,"bar_width":528,"bar_height":24},
+    {"tier":580,"state":"expanded","width":558,"height":158,"distance_row_height":12}
+  ],
+  "padding_css_px": [12,14],
+  "resources_gap_css_px": 10,
+  "center": "transparent; existing live surface preserved",
+  "scaling": "corners fixed; edges scale on their long axis only; vertical expansion does not change width",
+  "limits": "expanded height at narrow tiers not independently measured; do not infer it from 580"
+}

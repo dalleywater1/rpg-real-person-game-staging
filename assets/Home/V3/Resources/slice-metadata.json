@@ -1,0 +1,14 @@
+{
+  "status": "production candidate; pending visual acceptance and live integration QA",
+  "geometry_source": "ASTRA_RESOURCES_MOVEMENT_GEOMETRY_REMEASURE_20260908.md",
+  "targets_css_px": [{"tier":320,"width":139,"height":110},{"tier":375,"width":163.5,"height":110},{"tier":580,"width":172,"height":110}],
+  "grid_gap_css_px": 10,
+  "master": {"file":"resource-tile-frame-master.png","width":1390,"height":1100,"slice_px":90},
+  "exports": [{"file":"resource-tile-frame-1x.png","width":139,"height":110,"slice_px":9},{"file":"resource-tile-frame-2x.png","width":278,"height":220,"slice_px":18}],
+  "corner_extent_css_px": 9,
+  "center": "transparent; no center tile required; application controls navy fill",
+  "scaling": "fixed corners; horizontal edges stretch horizontally; vertical edges stretch vertically; never stretch entire flattened frame",
+  "placement": "overlay inside existing tile bounds, no layout padding or size changes",
+  "medallion": "48 CSS px is an illustrative visual-fit test only, not an approved layout change",
+  "geometry_note": "9px corner extent is the frame export construction choice, not an inferred content inset from the presentation board"
+}

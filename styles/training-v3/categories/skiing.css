@@ -1,0 +1,5 @@
+/* Category accent (Visual System Overhaul §27, LOCKED hex) — Skiing
+   gets a secondary token too (a touch of blue-white bias, never pure
+   white) since it's the one accent this pale that needs a dark outline
+   to stay visible on its own glow per the brief. */
+.training-skiing{--tr-category-accent:#e8f2f6;--tr-category-accent-secondary:#bfddea}

@@ -1,0 +1,204 @@
+/* RPG v0.02.19 — Home Internal Redesign: Standard Data Module (2026-09-11).
+
+   Character Stats is the second proven half of the Home V3 internal
+   component language (Feature Module = Main Quest, in
+   v0.02.18-home-feature-module.css; Standard Data Module = this).
+   Calendar/Side Quests/Priorities/Resources/Steps/Daily Activities are
+   meant to inherit from one of these two, not invent new styles.
+
+   Scope discipline per Aurelia's ruling: the outer .character-stats-
+   module shell — its background-color, border, the ::after border-
+   image frame overlay (character-frame-320-2x.png, stretched across
+   320/375/580 by border-image-repeat:stretch — see frame-manifest.json,
+   only the 320 source is actually wired), padding, margin, the
+   [data-open-character] click target, :hover/:focus-visible — is
+   UNCHANGED, defined in v0.02.16-home-parchment-modules.css. This file
+   only adds a background-image texture layer to that same selector
+   (additive — background-image alone, never the background shorthand,
+   so the existing background-color survives) and styles the NEW
+   standard-module/stat-well classes v0.02.15's rewritten
+   characterStatsHTML() now renders inside it. The old .char-stats-
+   header/.char-stats-grid/.char-stat-cell rules are left alone,
+   unused now, not removed — same precedent as Main Quest's old
+   .quest-* classes. */
+
+/* The old hand-drawn diagonal hatch that used to live here (2026-09-11)
+   is gone — same selector's background-image is now owned entirely by
+   v0.02.20's canonical radial/linear/texture recipe (that file loads
+   after this one, so it was already fully overriding this rule; this
+   was confirmed-dead code, not a live layered effect, removed rather
+   than left as a misleading no-op during the 2026-09-12 parchment
+   material rebuild's legacy-CSS audit). */
+
+/* ---- Header: widget title (strongest gold display) + an integrated,
+   text-weight "View Character" action, not a separate button ---- */
+#view .standard-module-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 11px;
+  position: relative;
+}
+#view .standard-module-label{
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: var(--gold-accent, #a9762f);
+}
+/* View Character — was a plain sapphire link, no hover state at all.
+   Aurelia's parchment colour/effects handover calls this out by name
+   as an "integrated parchment action": restrained gold (matching the
+   restyled Main Quest buttons, one consistent action-accent instead
+   of two different ones) with the shared hover/focus text-glow. */
+#view .standard-module-action{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .03em;
+  color: var(--gold-accent, #a9762f);
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+#view .standard-module-action i{ font-style: normal; font-size: 12px; line-height: 1; }
+
+/* ---- Stat wells: one continuous parchment surface, each stat a
+   shallow carved inset rather than a bordered mini-card ---- */
+#view .stat-well-row{
+  display: flex;
+  align-items: stretch;
+  gap: 7px;
+  position: relative;
+}
+/* Well material — v4 (2026-09-12, third pass same day): the v2/v3
+   recipes (linear-gradient bevel + multiply-blended texture + a real
+   border, then just a fainter border) still read as "five separate
+   tiles with bevels", not impressions pressed into one sheet. Undone
+   almost entirely per Jay's explicit direction:
+     - NO border at all (was rgba(139,92,36,.2), now removed outright)
+     - NO gradient bevel layer (was the linear-gradient(180deg,...))
+     - only a small colour step down from main (--parchment-inset,
+       tuned in v0.02.21 to be close to --parchment-main) + the SAME
+       grain overlay tile the main sheet uses (real continuity of
+       material, not a second independently-textured surface) + a
+       soft top-inset shadow and a faint bottom-lip highlight for the
+       "pressed in" read. This is deliberately much closer to "almost
+       disappearing into the sheet" than a card. */
+/* v7 refinement (Jay, 2026-09-12, "Reference Match Pass: parchment
+   only") — v6's wells were reported as still having "a much stronger
+   dark-edge/recess effect" than the reference. Border cut again (.08
+   -> .04, nearly gone) and the shadow's dark component softened
+   further; centre-lift radial left AS-IS this pass — Jay's own read
+   was "well centres are actually fairly close", only the surrounding
+   material/edge needed correcting. */
+#view .stat-well{
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 9px 4px 8px;
+  border-radius: 7px;
+  background-color: var(--parchment-inset, #f0deb7);
+  background-image:
+    radial-gradient(ellipse at 50% 42%, rgba(255,248,220,.42) 0%, rgba(255,248,220,.18) 50%, transparent 74%),
+    var(--parchment-grain-overlay);
+  background-repeat: no-repeat, repeat;
+  background-size: 100% 100%, 512px 512px;
+  background-blend-mode: soft-light, normal;
+  border: 1px solid rgba(130,84,30,.04);
+  box-shadow: inset 0 2px 4px rgba(80,48,18,.07), inset 0 -1px 1px rgba(255,244,213,.32);
+}
+/* Restraint pass (2026-09-11): the medallion icons are real delivered
+   art, not the concern — at 42px, five of them in a row started to
+   out-weigh the values they're meant to support, working against the
+   approved "value strongest" hierarchy. Trimmed to 36px (32px under
+   420px) so the icon reads as an identifier, not a competing focal
+   point; the value stays the biggest thing in the well. */
+#view .stat-well-icon{
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+  margin-bottom: 4px;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.25));
+}
+#view .stat-well-value{
+  font-family: var(--font-ui, Georgia, serif);
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ink-primary, #16233f);
+  white-space: nowrap;
+}
+#view .stat-well-label{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 7.8px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--ink-secondary, #5b4a2a);
+  margin-top: 2px;
+}
+/* Fixed-height meta slot so wells with a progress accent (hp/stamina/
+   focus) and wells without one (damage/defence) stay the same overall
+   height — never a fake bar on a value that has no real ceiling. */
+#view .stat-well-meta{
+  min-height: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  width: 100%;
+  margin-top: 4px;
+}
+/* Thin recessed pill track, semantic coloured fill — colour belongs to
+   the stat's MEANING, not the parchment: HP red, Stamina light blue,
+   Focus purple (HOME_V3_PARCHMENT_CANONICAL semantic tokens, v0.02.21).
+   Track stays one shared warm bronze-brown inset regardless of which
+   stat it belongs to; only the fill (`>i`) changes per modifier class,
+   set by v0215StatWellHTML per stat key. Fill is a vertical (top-to-
+   bottom) two-stop gradient — a lighter sheen at the top of the pill,
+   not a left-to-right hue shift — per the approved reference. */
+#view .stat-well-bar{
+  display: block;
+  width: 78%;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(89,66,42,.42);
+  box-shadow: inset 0 1px 2px rgba(54,35,18,.38), 0 1px 0 rgba(255,237,197,.18);
+  overflow: hidden;
+}
+#view .stat-well-bar>i{ display: block; height: 100%; border-radius: inherit; width: calc(var(--p) * 1%); background: linear-gradient(180deg,var(--stat-hp-light,#ef5a60),var(--stat-hp,#d73b3f)); }
+#view .stat-well-bar.bar-hp>i{ background: linear-gradient(180deg,var(--stat-hp-light,#ef5a60),var(--stat-hp,#d73b3f)); }
+#view .stat-well-bar.bar-stamina>i{ background: linear-gradient(180deg,var(--stat-stamina-light,#54c8f4),var(--stat-stamina,#2aa9e8)); }
+#view .stat-well-bar.bar-focus>i{ background: linear-gradient(180deg,var(--stat-focus-light,#ae64ed),var(--stat-focus,#8b42d7)); }
+#view .stat-well-pct{ font-size: 7.2px; font-weight: 700; color: var(--ink-tertiary, #725b3d); letter-spacing: .03em; }
+
+/* Reserved buff-overfill hooks (HOME_V3_PARCHMENT_CANONICAL) — NOT
+   wired into v0215StatWellHTML and never rendered: v0243CombatSummary()
+   still has no baseValue/effectiveValue/bonusValue field anywhere in
+   its data shape (see app.js's v0.02.4.3-player-box.js), so there is
+   nothing real to drive either visual yet. Kept here, unused, so the
+   recipe exists the moment that data does — same "mechanism now,
+   inert until real data" precedent as MAIN_QUEST_PACE_CONFIG/
+   MAIN_QUEST_REWARD_CONFIG elsewhere in this project. Do not wire
+   these up without real base/bonus values to read. */
+#view .stat-well-bar-buff{ height: 100%; border-radius: 0 999px 999px 0; filter: brightness(1.25); box-shadow: 0 0 5px currentColor, 0 0 9px currentColor; }
+#view .stat-well-bonus{ margin-left: .22em; color: #4f9a48; font-size: .78em; font-weight: 700; }
+
+@media (max-width: 390px){
+  #view .stat-well-row{ flex-wrap: wrap; row-gap: 10px; }
+  #view .stat-well{ flex: 1 1 30%; }
+}
+@media (max-width: 420px){
+  #view .standard-module-label{ font-size: 12px; }
+  #view .stat-well-value{ font-size: 16px; }
+  #view .stat-well-icon{ width: 32px; height: 32px; }
+}

@@ -1,0 +1,11 @@
+/* Training v3 — quick-action tile system (Phase 10)
+   Not wired into Running's Start-a-Run grid yet (.running-session-grid
+   stays untouched through Gate 1); this is the ready replacement for
+   Gate 3, sized for Running's own real targets (3x2 at 320/375, up to
+   6-across from 580 up). */
+.tr-action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--tr-space-2)}
+.tr-action{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;background:var(--tr-surface-2);border:1px solid var(--tr-border);border-radius:var(--tr-radius-sm);padding:var(--tr-space-3) var(--tr-space-2);cursor:pointer;color:var(--tr-text);min-height:64px}
+.tr-action:hover,.tr-action:focus-visible{border-color:var(--tr-border-strong)}
+.tr-action-icon{font-size:18px;line-height:1}
+.tr-action-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.03em;text-align:center}
+@media(min-width:580px){.tr-action-grid{grid-template-columns:repeat(6,1fr)}}

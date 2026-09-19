@@ -1,0 +1,394 @@
+/* RPG v0.02.25 — Home V3 Classic HUD Visual Reset, Phases 3-6
+   (ASTRA_HOME_V3_CLASSIC_HUD_HANDOVER_20260912.md).
+
+   Continues the Phase 1 (Character Stats, v0.02.24) / Phase 2 (Player
+   HUD frame removal) work onto every remaining Home widget in one
+   combined pass, per explicit direction to run Phases 3-6 together:
+
+     Phase 3 — Resources, Movement
+     Phase 4 — Overview shell / To Do (Priorities) / Calendar / Side Quests
+     Phase 5 — Main Quest (Home widget)
+     Phase 6 — Daily Activities
+
+   Reuses the SAME --hud-* tokens Phase 1 declared on #view
+   (v0.02.24) rather than inventing a second token set — this file
+   only adds token *consumers*.
+
+   Scoping note, unlike Phase 1: Character Stats needed careful
+   per-class scoping because its .stat-well material is bespoke to it
+   alone. Everything in THIS file, by contrast, already goes through
+   the shared primitives from v0.02.22 (.hw-inset, .hw-row,
+   .hw-progress-bar) or a single shared outer shell (.home-panel /
+   .resource-section-frame) — and every one of that primitive's
+   consumers (Resources, Movement, Priorities, Calendar, Side Quests,
+   Daily Activities) is in scope for this combined pass. So the base
+   primitive rules are converted directly, not re-scoped per widget.
+   Main Quest is the one exception, same as the handover's own
+   architecture note: it never used the shared primitives (its own
+   .feature-module-* system, v0.02.18) — converted separately below.
+
+   Confirmed via live getComputedStyle before writing this, not
+   assumed: .resource-section-frame, .home-panel (all its consumers),
+   .hw-inset and .hw-row were all still rendering the old cream/
+   parchment material (#f4f0e7 / #f0deb7 + grain textures) at the time
+   this file was written. */
+
+/* ---- Outer shells: Resources' own frame + the shared .home-panel
+   base (Today outer / Side Quests / Daily Activities / Movement all
+   render through this one class). ---- */
+#view .resource-section-frame,
+#view .home-panel{
+  background: var(--hud-panel-bg) !important;
+  background-image: none !important;
+  border: 1px solid var(--hud-panel-border) !important;
+  box-shadow: var(--hud-shadow) !important;
+}
+/* .home-panel-count chip (e.g. Side Quests' relevant-count badge) —
+   was dark ink on a near-transparent black chip, invisible once the
+   panel behind it went dark. */
+#view .home-panel-count{ color: var(--hud-text-primary); background: rgba(255,255,255,.08); }
+
+/* ---- Inset cell (Resources tiles, Movement's wide inset) ---- */
+#view .hw-inset{
+  background-color: var(--hud-panel-well-bg);
+  background-image: none;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.4), inset 0 -1px 0 rgba(255,255,255,.03);
+}
+/* Resources tiles specifically carry a MORE specific !important rule
+   (v0.02.16, .resource-grid-v3.resource-vertical-list .resource-list-row)
+   that re-declares the parchment background — needed for its own
+   grid-template-areas layout, but it also wins over the plain .hw-inset
+   rule above regardless of load order. Matched here at equal
+   specificity so this file's later load order decides the tie. */
+#view .resource-grid-v3.resource-vertical-list .resource-list-row{
+  background-color: var(--hud-panel-well-bg) !important;
+  background-image: none !important;
+}
+#view .hw-inset-value{ color: var(--hud-text-primary); }
+#view .hw-inset-label{ color: var(--hud-text-secondary); }
+#view .hw-inset-meta-line{ color: var(--hud-text-muted); }
+
+/* ---- Standard Row (Priorities / Calendar's .schedule-card / Side
+   Quests — all render via .hw-row) ---- */
+#view .hw-row{
+  background-color: var(--hud-panel-well-bg);
+  background-image: none;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.4), inset 0 -1px 0 rgba(255,255,255,.03);
+}
+#view .hw-row-title{ color: var(--hud-text-primary); }
+#view .hw-row-title.muted{ color: var(--hud-text-muted); }
+#view .hw-row-sub{ color: var(--hud-text-secondary); }
+#view .hw-row-tag{ color: var(--hud-text-secondary); }
+
+/* ---- Progress track — one shared thin-bar language (handover §15):
+   neutral dark recessed track, semantic fill colours untouched. ---- */
+#view .hw-progress-bar{ background: rgba(255,255,255,.09); }
+
+/* ---- Side Quests' extra progress-ring bits (not covered by .hw-row,
+   its own bespoke pieces) ---- */
+#view .side-quest-row-bar{ background: rgba(255,255,255,.12); }
+#view .side-quest-ring{ background: conic-gradient(#2a85d4 calc(var(--p)*1%), rgba(255,255,255,.12) 0); }
+#view .side-quest-ring::before{ background: var(--hud-panel-bg); }
+#view .side-quest-ring span{ color: var(--hud-text-secondary); }
+
+/* ---- Daily Activities buttons (Phase 6 — "compact dark HUD buttons",
+   handover §38) ---- */
+#view .daily-activity-btn{
+  background: var(--hud-panel-well-bg) !important;
+  border-color: var(--hud-panel-border) !important;
+}
+#view .daily-activity-btn:hover{ background: rgba(255,255,255,.09) !important; }
+#view .daily-activity-btn span{ color: var(--hud-text-secondary); }
+
+/* ---- Main Quest (Phase 5), full correction (2026-09-13): the first
+   pass only recoloured v0.02.18's original Feature Module chrome,
+   which left Main Quest as a visibly separate, more ornamented card
+   than Priorities/Calendar right below it in the same Today panel —
+   its own navy header band, its own bordered body box, its own gold
+   corner brackets, and a CSS shield-shape frame behind the crest icon.
+   That shield made sense for the OLD flat crest art; the new
+   HOMEV3_ICON_MAIN_QUEST.png medallion (wired in the icon pass) is
+   already a complete self-framed circular medallion, so the shield
+   became a redundant second frame around it. This pass strips the
+   header band, the body's own border/background-box, the corner
+   brackets, and the shield shape — Main Quest now sits flush in the
+   Today panel exactly like Priorities/Calendar, matching their gold
+   serif title treatment (.home-panel-header>span), with only the
+   medallion icon providing its own framing. ---- */
+#view .feature-module-header{
+  background: none;
+  box-shadow: none;
+  padding: 0;
+  margin-bottom: 10px;
+}
+#view .feature-module-label{
+  font-family: Georgia,"Times New Roman",serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  color: var(--hud-gold);
+  text-transform: uppercase;
+  text-shadow: none;
+}
+/* "Today" context badge removed per explicit request — Priorities/
+   Calendar carry no equivalent badge, and Main Quest is no longer
+   grouped under a "Today" heading anyway (see Quest Pane below). */
+#view .feature-module-context{ display: none; }
+#view .feature-module-body{
+  background: none;
+  background-image: none !important;
+  border: 0;
+  padding: 0;
+  /* v0.02.20's shared .home-panel/.feature-module-body rule bakes a
+     fake 1px inset "border" + inner glow into box-shadow (not a real
+     border, so the earlier `border:0` above never touched it) — the
+     exact source of the border the correction above didn't catch. */
+  box-shadow: none !important;
+}
+#view .feature-module-body::before,
+#view .feature-module-body::after{ display: none; }
+/* Crest: drop the CSS shield-shape frame (redundant now the medallion
+   icon carries its own ring) and let the medallion show at full size,
+   matching how every other widget's icon renders plainly. */
+#view .feature-crest{ width: 44px; height: 44px; }
+#view .feature-crest-shape,
+#view .feature-crest-shape::after{ display: none; }
+#view .feature-crest img{ width: 100%; height: 100%; margin: 0; }
+#view .feature-crest.muted img{ opacity: .5; }
+#view .feature-title{ color: var(--hud-text-primary); }
+#view .feature-title.muted{ color: var(--hud-text-muted); }
+#view .feature-subtitle{ color: var(--hud-text-secondary); }
+#view .feature-meta{ color: var(--hud-text-muted); }
+#view .feature-copy:hover, #view .feature-copy:focus-visible{ background: rgba(255,255,255,.05); }
+#view .feature-action-primary{
+  border-color: var(--hud-panel-border);
+  background: var(--hud-panel-well-bg);
+  color: var(--hud-gold);
+}
+#view .feature-action-primary:active{ background: rgba(255,255,255,.12); }
+#view .feature-action-primary:disabled{ color: var(--hud-text-muted); }
+#view .feature-actions-secondary{ border-top-color: rgba(255,255,255,.1); }
+#view .feature-actions-secondary button{ color: var(--hud-text-secondary); }
+#view .feature-actions-secondary span{ color: var(--hud-text-muted); }
+#view .feature-progress-node{ background: rgba(255,255,255,.12); border-color: var(--hud-panel-border); }
+#view .feature-status-badge{ background: rgba(63,161,92,.16); border-color: #3fa15c88; }
+
+/* ---- Weather Forecast modal (explicit direction, 2026-09-13): "open
+   weather pane needs changing to match the home style". Two dead ends
+   before finding the real live rules (both confirmed by matching the
+   live element against every loaded stylesheet, not guessed): (1)
+   v0.02.4.19's own .weather-forecast-modal.home-v2-modal-frame
+   selector never matches — that class isn't on the live element; (2)
+   even .forecast-current etc. alone lose to v0.02.5-home-baseline.css,
+   which carries a COMPLETE second override set, every selector
+   prefixed `.weather-forecast-modal ` for higher specificity, and that
+   file is the one actually live. Matching that exact prefix pattern
+   here, not the generic `body[data-theme="home"] .modal` other Home
+   modals share (out of scope — would reskin every modal, not just
+   Weather). Semantic running-conditions badges (.forecast-run-state
+   good/poor/mixed) keep their colour, untouched. */
+body[data-theme="home"] .modal.weather-forecast-modal{
+  border: 1px solid var(--hud-panel-border) !important;
+  background: var(--hud-panel-bg) !important;
+  color: var(--hud-text-primary) !important;
+}
+body[data-theme="home"] .modal.weather-forecast-modal .close{
+  background: var(--hud-panel-well-bg) !important;
+  border-color: var(--hud-panel-border) !important;
+  color: var(--hud-gold) !important;
+}
+.weather-forecast-shell{ color: var(--hud-text-primary) }
+.weather-forecast-modal .forecast-heading{ border-bottom-color: var(--hud-panel-border) !important }
+.weather-forecast-modal .forecast-heading span{ color: var(--hud-gold) !important }
+.weather-forecast-modal .forecast-heading h2{ color: var(--hud-text-primary) !important }
+
+.weather-forecast-modal .forecast-current{ background: var(--hud-panel-well-bg) !important; border-color: var(--hud-panel-border) !important }
+.weather-forecast-modal .forecast-current-main b{ color: var(--hud-text-primary) !important }
+.weather-forecast-modal .forecast-current-main strong{ color: var(--hud-text-secondary) !important }
+.weather-forecast-modal .forecast-current-main small{ color: var(--hud-text-muted) !important }
+
+.weather-forecast-modal .forecast-current-details{ border-left-color: var(--hud-panel-border) !important }
+.weather-forecast-modal .forecast-current-details span{ color: var(--hud-text-muted) !important }
+.weather-forecast-modal .forecast-current-details b{ color: var(--hud-text-primary) !important }
+
+.weather-forecast-modal .forecast-section-title span{ color: var(--hud-gold) !important }
+.weather-forecast-modal .forecast-section-title small{ color: var(--hud-text-muted) !important }
+
+.weather-forecast-modal .forecast-period{ background: var(--hud-panel-well-bg) !important; border-color: var(--hud-panel-border) !important }
+.weather-forecast-modal .forecast-period-name{ color: var(--hud-text-muted) !important }
+.weather-forecast-modal .forecast-period b{ color: var(--hud-text-primary) !important }
+.weather-forecast-modal .forecast-period small{ color: var(--hud-text-secondary) !important }
+
+.weather-forecast-modal .forecast-day-row{ background: var(--hud-panel-well-bg) !important; border-color: var(--hud-panel-border) !important }
+.weather-forecast-modal .forecast-day-row>strong{ color: var(--hud-gold) !important }
+.weather-forecast-modal .forecast-day-row>span:not(.forecast-run-state){ color: var(--hud-text-primary) !important }
+
+.weather-forecast-modal .forecast-source{ color: var(--hud-text-muted) !important }
+
+/* ---- forecast-current-details icons (2026-09-13, "make the same
+   changes to the other weather panes" — see the JS comment at
+   renderWeatherForecastHTML()). Hidden by default so the desktop 2x2
+   grid (styles.css .forecast-current-details, unchanged) stays exactly
+   as it was; shown and enlarged only at the same ≤390px tier that
+   already stacks these into single-column rows (v0.02.5 CSS), where
+   there's real room for an icon + bigger type. */
+.forecast-detail-icon{ display: none; }
+@media(max-width:390px){
+  .weather-forecast-modal .forecast-current-details span{ display: flex !important; align-items: center !important; justify-content: flex-start !important; gap: 7px !important; font-size: 13px !important; }
+  .weather-forecast-modal .forecast-current-details b{ font-size: 16px !important; margin-left: auto; }
+  .forecast-detail-icon{ display: block; width: 18px; height: 18px; object-fit: contain; flex: 0 0 auto; }
+  .forecast-detail-icon-glyph{
+    display: flex !important; align-items: center; justify-content: center;
+    color: var(--hud-gold) !important; font-size: 14px; font-weight: 700;
+  }
+}
+
+/* ---- Action-button standardization (explicit direction, 2026-09-13):
+   View Character / Resource Tracker / Resource History now match Find
+   a Quest's (.feature-action-primary) exact material — one consistent
+   action-button language across Home instead of three different
+   treatments. IDs used for Tracker/History rather than their actual
+   live class (.resources-v3-icon, from v0.02.4.16-resources-header-
+   fix.js — NOT the dead app.js base version's .home-section-tool),
+   since that class's own !important rules (v0.02.4.15/v0.02.6) fix it
+   at a 44x44 icon-only square with a transparent background; ID
+   selectors here beat those on specificity regardless of load order.
+   Icons were dropped from Tracker/History entirely (separate explicit
+   request) in favour of plain text, so width/height also convert from
+   the fixed icon square to auto-sized padding. */
+#view .hw-header-action,
+#view #resourceTrackerButton,
+#view #resourceHistoryButton{
+  background: var(--hud-panel-well-bg) !important;
+  border: 1px solid var(--hud-panel-border) !important;
+  color: var(--hud-gold) !important;
+  box-shadow: none !important;
+}
+#view #resourceTrackerButton,
+#view #resourceHistoryButton{
+  width: auto !important;
+  height: auto !important;
+  padding: 9px 13px !important;
+  border-radius: 5px !important;
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  white-space: nowrap;
+}
+#view .hw-header-action:hover,
+#view .hw-header-action:focus-visible,
+#view #resourceTrackerButton:hover,
+#view #resourceTrackerButton:focus-visible,
+#view #resourceHistoryButton:hover,
+#view #resourceHistoryButton:focus-visible{
+  color: var(--gold-accent-bright, #c98f3a) !important;
+  border-color: var(--hud-gold) !important;
+  outline: none;
+}
+
+/* ---- Resources header narrow-width fix (2026-09-13, found during a
+   Home page audit): converting Tracker/History from 44x44 icon squares
+   to auto-width text pills (above) fixed their own look but broke the
+   header's 3-column grid at ≤390px — that layout (v0.02.5 CSS) gives
+   the controls column a `minmax(0,1fr)` track sized ~50px at this
+   width, but .home-section-controls is a flex row with the default
+   min-width:auto, so it refuses to shrink below "TRACKER"+"HISTORY"'s
+   own content width (~145px) and overflows 90+px past its own track,
+   landing directly on top of the centered title/countdown column
+   (confirmed live via getBoundingClientRect — trackerRect and
+   titleRect genuinely overlapped, not just a visual impression).
+   Fixed by dropping to a single centered column at this width instead
+   of trying to shrink the buttons to fit a ~50px track that was never
+   going to hold two real words — title/countdown on their own row,
+   Tracker/History centered on the row below. */
+@media(max-width:390px){
+  #view .resources-section-header{
+    grid-template-columns: 1fr !important;
+    row-gap: 8px;
+    justify-items: center;
+  }
+  #view .resources-section-header > span:first-child{ display: none; }
+  #view .resources-section-header .home-section-controls{
+    grid-column: 1;
+    justify-content: center;
+  }
+}
+
+/* ---- Remaining Home popups → Classic HUD (2026-09-13, follow-up to
+   the Weather Forecast conversion above): "do the same for the other
+   pop up windows on the home page." Every other Home modal (Help,
+   Resource logging incl. Sleep, Resource History, Resource Tracker,
+   Movement, Profile & Setup, Daily Activity, Player Info, XP overview,
+   Bonus Development/Archive) renders through the ONE shared selector
+   Weather deliberately left alone — body[data-theme="home"] .modal in
+   v0.02.5-home-baseline.css §5 — confirmed live via getComputedStyle
+   on each (all returned the same unconverted cream rgb(248,244,232)
+   before this block). Converting that shared rule set directly here
+   rather than duplicating it per modal; same selectors as v0.02.5's,
+   so equal specificity + later load order in index.html is enough to
+   win, same as every other override in this file. Weather keeps its
+   own more-specific .modal.weather-forecast-modal block above
+   untouched — it already matches this same HUD material via its own
+   route and isn't affected by what happens here. */
+body[data-theme="home"] .modal{
+  background: var(--hud-panel-bg) !important;
+  border: 1px solid var(--hud-panel-border) !important;
+  color: var(--hud-text-primary) !important;
+  box-shadow: var(--hud-shadow) !important;
+}
+body[data-theme="home"] .modal h2{
+  color: var(--hud-gold) !important;
+  font-family: Georgia,"Times New Roman",serif !important;
+}
+body[data-theme="home"] .modal .close{
+  background: var(--hud-panel-well-bg) !important;
+  border-color: var(--hud-panel-border) !important;
+  color: var(--hud-gold) !important;
+}
+body[data-theme="home"] .modal .helper{ color: var(--hud-text-secondary) !important }
+body[data-theme="home"] .modal label,
+body[data-theme="home"] .modal .form-row label{ color: var(--hud-text-secondary) !important }
+body[data-theme="home"] .modal small{ color: var(--hud-text-muted) !important }
+body[data-theme="home"] .modal input,
+body[data-theme="home"] .modal textarea,
+body[data-theme="home"] .modal select{
+  background: var(--hud-panel-well-bg) !important;
+  border-color: var(--hud-panel-border) !important;
+  color: var(--hud-text-primary) !important;
+}
+body[data-theme="home"] .modal .modal-section{ border-top-color: var(--hud-panel-border) !important }
+body[data-theme="home"] .modal .modal-section h3{ color: var(--hud-gold) !important }
+body[data-theme="home"] .modal .tabs{ border-color: var(--hud-panel-border) !important }
+body[data-theme="home"] .modal .tabs button{
+  background: var(--hud-panel-well-bg) !important;
+  color: var(--hud-text-secondary) !important;
+}
+body[data-theme="home"] .modal .tabs button.active{
+  background: var(--hud-panel-border) !important;
+  color: var(--hud-text-primary) !important;
+}
+body[data-theme="home"] .modal .resource-entry-current b{ color: var(--hud-text-primary) !important }
+body[data-theme="home"] .modal .resource-entry-label{ color: var(--hud-gold) !important }
+/* Status/semantic colours (success, error, streak badges, forecast run
+   states, system reward stat colours, etc.) still deliberately left
+   alone here too — only the neutral shell/body text is converted. */
+
+/* ---- Sleep reason/quality controls (rendered inside the Home sleep
+   resource-logging modal, so in scope for the same pass): base chips
+   move to the dark well material; the positive/neutral/negative
+   ACTIVE states keep their semantic hue (same restraint as above) but
+   as a translucent tint over the dark well instead of a pastel-on-
+   white chip, so they read as HUD state rather than parchment. ---- */
+.sleep-quality-row{ /* layout unchanged */ }
+.sleep-quality-btn{
+  border: 1.5px solid var(--hud-panel-border);
+  background: var(--hud-panel-well-bg);
+  color: var(--hud-text-secondary);
+}
+.sleep-quality-btn.active.positive{ background: rgba(63,161,92,.22); border-color: #3fa15c; color: #7fd99a }
+.sleep-quality-btn.active.neutral{ background: rgba(217,172,92,.22); border-color: var(--hud-gold); color: var(--hud-gold) }
+.sleep-quality-btn.active.negative{ background: rgba(192,57,43,.22); border-color: #c0392b; color: #e58a7d }
+.sleep-reason-row,.sleep-medication-row{ color: var(--hud-text-primary) }
+.sleep-medication-row{ border-top-color: var(--hud-panel-border) }

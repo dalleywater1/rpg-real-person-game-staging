@@ -1,0 +1,93 @@
+/* RPG v0.02.4.13 — Today & Shared Controls Extension v1.1.
+   Companion to v0.02.4.13-today-controls-extension.js — see that file's
+   header for full scope. Equal CSS icon slots, object-fit:contain per the
+   spec ("source canvases follow each emblem silhouette; the CSS slot
+   establishes equal rendered dimensions"). */
+
+/* Side Quest reads lighter than Main Quest — smaller slot, slightly
+   reduced opacity, not a disabled/greyed treatment. */
+#view [data-row="2"] .home-today-left-icon{
+  width:46px!important;
+  height:46px!important;
+}
+#view [data-row="2"] .home-today-left-icon img{
+  width:38px!important;
+  height:38px!important;
+  opacity:.88;
+}
+
+/* Forward navigation arrow — single right-facing master, object-fit
+   keeps it centred in the existing "open next" button regardless of the
+   source canvas's own aspect ratio. Sized down from the old chevron's
+   78x52 box — the new artwork is bolder/more detailed and read as too
+   large at that size. */
+#view .v2-open-next{
+  width:42px!important;
+  min-width:42px!important;
+  height:42px!important;
+}
+#view .v2-open-next img{
+  width:42px!important;
+  height:42px!important;
+  object-fit:contain;
+}
+@media(max-width:580px){
+  #view .v2-open-next,
+  #view .v2-open-next img{
+    width:34px!important;
+    min-width:34px!important;
+    height:34px!important;
+  }
+}
+
+/* ------------------------------------------------------------
+   Daily Challenge Rotation control
+   ------------------------------------------------------------ */
+#view .challenge-head{
+  position:relative;
+  padding-right:40px;
+}
+#view .today-v2-rotation-btn{
+  position:absolute;
+  top:0;
+  right:0;
+  width:30px;
+  height:30px;
+  border-radius:7px;
+  border:1.5px solid #c9a86a;
+  background:#f3ecd9;
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  padding:4px;
+}
+#view .today-v2-rotation-btn:hover{background:#ece0c4}
+#view .today-v2-rotation-btn:focus-visible{outline:2px solid #2a85d4;outline-offset:2px}
+#view .today-v2-rotation-btn img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+#view .today-v2-rotation-note{
+  margin-top:8px;
+  font-size:10px;
+  font-style:italic;
+  color:#8fa7b5;
+}
+#view .today-v2-challenge-preview .challenge-content{opacity:.92}
+
+/* ------------------------------------------------------------
+   Help / Settings — real glyph artwork inside the existing shared
+   button shell from v0.02.4.11 (.v8-tool-css-glyph). Same size slot for
+   both, per "equal CSS icon slots... establishes equal rendered
+   dimensions and alignment."
+   ------------------------------------------------------------ */
+/* v0.02.4.11's ".v8-tool-css-glyph img{display:none}" was written to hide
+   only the old baked-art icon — it also matches this new glyph <img>
+   since it's a descendant selector. Un-hide it specifically. */
+.home-player-v8 .v8-frame-control-hotfix-active .v8-tool.v8-tool-css-glyph .v8-tool-glyph-img{
+  display:block!important;
+  width:60%!important;
+  height:60%!important;
+  object-fit:contain!important;
+}

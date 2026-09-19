@@ -1,0 +1,97 @@
+/* RPG v0.02.7 — Adventure: Call to the Lost Fortress (Astra "Safe
+   Overnight Handoff" §2). Establishes the initial major-campaign visual
+   standard: wide horizontal banner card, dark overlay, prominent title,
+   restrained frame — not a square icon tile. Dark-theme, matching the
+   rest of Adventure/Character/Training (not part of Home's cream
+   flattening). */
+
+.campaign-list{display:flex;flex-direction:column;gap:14px;margin:10px 0 20px}
+
+.campaign-banner-card{
+  /* aspect-ratio matches the banner art's own native 2172x724 (3:1)
+     canvas — these banners carry baked-in title text (e.g. "Call to
+     the Lost Fortress"), so background-size:cover on a mismatched
+     container ratio crops straight through the text instead of just
+     the scenery. Keep this in sync with however Vesper/Seraphine
+     export future campaign banners. */
+  position:relative;display:block;width:100%;aspect-ratio:3/1;min-height:110px;
+  background-size:cover;background-position:center;background-color:#0b0f16;
+  border:1px solid #9a7839;border-radius:10px;overflow:hidden;
+  padding:0;cursor:pointer;text-align:left;box-shadow:0 8px 24px rgba(0,0,0,.4);
+}
+.campaign-banner-card:hover{filter:brightness(1.08)}
+/* Stronger/earlier-starting scrim than the original .1->.85 fade: the
+   live title/category/progress overlaid below duplicates whatever
+   title text is baked into the banner art itself (e.g. this asset's
+   own "Call to the Lost Fortress" logotype sitting mid-image) — at the
+   old faint top gradient that baked text stayed legible and collided
+   with the live text. Darkening throughout recedes any baked art text
+   into the background so the live overlay reads as the one title. */
+.campaign-banner-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,8,14,.3) 0%,rgba(5,8,14,.82) 35%,rgba(5,8,14,.97) 100%)}
+.campaign-banner-copy{position:absolute;left:0;right:0;bottom:0;padding:16px 20px;color:#fff;text-align:left}
+.campaign-banner-type{display:block;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:#e6c46f;margin-bottom:4px;font-weight:700}
+.campaign-banner-copy h2{margin:0 0 6px;font-family:Georgia,"Times New Roman",serif;font-size:24px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8)}
+.campaign-banner-progress{font-size:12px;color:#e0dccb}
+
+.campaign-back{margin:10px 0;display:inline-block;color:#d8b56d}
+.campaign-page-banner{
+  position:relative;width:100%;aspect-ratio:3/1;min-height:110px;
+  background-size:cover;background-position:center;background-color:#0b0f16;
+  border:1px solid #9a7839;border-radius:10px 10px 0 0;overflow:hidden;
+}
+.campaign-page-banner .campaign-banner-copy{padding:20px 24px}
+.campaign-page-banner .campaign-banner-copy h2{font-size:28px}
+.campaign-body{border-top:0!important;border-radius:0 0 10px 10px!important;margin-top:-1px}
+.campaign-progress-line{font-size:13px;font-weight:700;color:#e7c676;margin-bottom:14px}
+.campaign-intro{font-size:13px;line-height:1.65;color:#dce4eb;margin:0 0 10px}
+.campaign-intro-highlight b{font-size:17px;color:#f3c85f}
+.campaign-primary-action{margin-top:8px;width:100%}
+
+@media(max-width:480px){
+  .campaign-banner-copy h2{font-size:19px}
+  .campaign-page-banner .campaign-banner-copy h2{font-size:21px}
+}
+
+/* Call to the Lost Fortress — specialist state UI (v0.0.5 Astra Update
+   Package §4). Reuses the dark-frame/gold-accent language already
+   established above rather than inventing a new visual system;
+   state-flow first, so these panels are functional/compact by design
+   — full narrative treatment is explicitly deferred until this
+   validates (§4 point 8). */
+.campaign-status-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.campaign-status-row b{font-family:Georgia,"Times New Roman",serif;font-size:16px;color:#f1f5f7}
+.campaign-run-tag{font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:10px;border:1px solid #584523}
+.campaign-run-tag.canonical{color:#e7c676;border-color:#8a6728}
+.campaign-run-tag.replay{color:#8fa8b6;border-color:#35404a}
+.campaign-distance-row{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline;font-size:12px;color:#dce8ed;margin-bottom:10px}
+.campaign-distance-row .helper{margin:0}
+
+.campaign-stage-list{display:flex;flex-direction:column;gap:2px;margin:6px 0 14px;padding:8px 10px;background:#0b131bf0;border:1px solid #2c414f;border-radius:6px;max-height:180px;overflow-y:auto}
+.campaign-stage-row{display:flex;align-items:center;gap:8px;font-size:11px;padding:3px 0;color:#5c6b75}
+.campaign-stage-row .campaign-stage-dot{width:7px;height:7px;border-radius:50%;background:#35404a;flex:0 0 auto}
+.campaign-stage-row.done{color:#8fd09a}
+.campaign-stage-row.done .campaign-stage-dot{background:#4fae63}
+.campaign-stage-row.current{color:#f1f5f7;font-weight:700}
+.campaign-stage-row.current .campaign-stage-dot{background:#e7c676;box-shadow:0 0 6px #e7c67699}
+
+.campaign-camp-panel{margin:0 0 14px}
+.campaign-camp-panel>.rpg-btn{width:100%}
+.camp-panel-head{display:flex;justify-content:space-between;align-items:center;font-size:11px;color:#8fa8b6;margin-bottom:8px}
+.camp-panel-head b{color:#e7c676;font-size:12px}
+.camp-action-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.camp-action-grid .rpg-btn{width:100%}
+
+.campaign-npc-panel{border-top:1px solid #2c414f;padding-top:12px;margin-top:12px}
+.campaign-npc-panel h4{margin:0 0 4px;color:#e7c676;font-size:13px}
+.campaign-disposition{font-size:11.5px;color:#a8bcc7;margin:0 0 8px}
+.campaign-disposition b{color:#dce8ed;text-transform:capitalize}
+.campaign-guide-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.campaign-guide-options .rpg-btn{width:100%;flex-direction:column;line-height:1.4}
+.campaign-guide-options .rpg-btn small{font-weight:400;text-transform:none;letter-spacing:0;opacity:.8}
+.campaign-quentin-outcomes{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.rpg-btn.small.danger{border-color:#7d3d39;color:#ff9b93}
+.rpg-btn.small.danger:hover,.rpg-btn.small.danger:focus-visible{border-color:#d96a61;color:#ffd0cc}
+
+.campaign-fragments{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:14px;padding:8px 10px;background:#0b131bf0;border:1px solid #2c414f;border-radius:6px;font-size:11.5px;color:#8fa8b6}
+.campaign-fragments b{color:#e7c676;font-size:13px}
+.unlock-tag{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:#8fd09a}
