@@ -1,0 +1,206 @@
+/* RPG v0.02.4.5 — Variant 8 Player Box layout/readability/frame-layering hotfix only */
+
+/* Approved layer order: marble rear -> inner lip -> live content -> decorative frame. */
+.home-player-v8 .player-status-panel.v8-player-box.v8-layout-hotfix-active{
+  position:relative!important;
+  isolation:isolate!important;
+  overflow:hidden!important;
+  background-color:#f2eee6!important;
+  background-image:url('assets/Variant - Marble Background.png')!important;
+  background-size:cover!important;
+  background-position:center!important;
+  background-clip:border-box!important;
+  padding:32px 48px 27px!important;
+}
+.home-player-v8 .player-status-panel.v8-player-box.v8-layout-hotfix-active::before{
+  content:""!important;
+  position:absolute!important;
+  inset:9px!important;
+  z-index:2!important;
+  pointer-events:none!important;
+  border:1px solid rgba(98,72,28,.32)!important;
+  border-radius:12px!important;
+  box-shadow:inset 0 0 0 3px rgba(8,20,38,.07),inset 0 0 12px rgba(13,25,42,.16)!important;
+  background:transparent!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-player-frame-overlay{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  z-index:20!important;
+  pointer-events:none!important;
+  object-fit:fill!important;
+  user-select:none!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-player-main,
+.home-player-v8 .v8-layout-hotfix-active .v8-player-divider,
+.home-player-v8 .v8-layout-hotfix-active .v8-vitals,
+.home-player-v8 .v8-layout-hotfix-active .v8-player-quip{position:relative!important;z-index:4!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-player-tools{z-index:12!important;top:28px!important;right:42px!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-tool{width:36px!important;height:36px!important;padding:1px!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-tool img{width:100%!important;height:100%!important;object-fit:contain!important}
+.home-player-v8 .v8-layout-hotfix-active #settingsButton img{filter:contrast(1.34) brightness(.92) saturate(1.08) drop-shadow(0 2px 2px #0007)!important}
+
+/* Upper region: Class/Level left, identity + XP + compact progression right. */
+.home-player-v8 .v8-layout-hotfix-active .v8-player-main{
+  display:grid!important;
+  grid-template-columns:150px minmax(0,1fr)!important;
+  gap:26px!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-player-identity{min-width:0!important;padding-right:78px!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-xp-copy{margin-top:16px!important;font-size:12px!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-xp-copy b{font-size:13px!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-xp-bar{height:24px!important;margin-top:5px!important}
+
+/* Progression is secondary and sits immediately beneath XP. */
+.home-player-v8 .v8-layout-hotfix-active .v8-player-progression{
+  position:relative!important;
+  z-index:4!important;
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:center!important;
+  gap:clamp(10px,2vw,28px)!important;
+  min-width:0!important;
+  margin:12px 0 0!important;
+  padding:0!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-progress-item{
+  display:flex!important;
+  justify-content:flex-start!important;
+  align-items:center!important;
+  gap:7px!important;
+  min-width:0!important;
+  text-align:left!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-progress-item img{width:34px!important;height:39px!important;object-fit:contain!important;flex:0 0 auto!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-progress-item>div{display:grid!important;gap:2px!important;min-width:0!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-progress-item span{font-size:8px!important;line-height:1.05!important;font-weight:900!important;letter-spacing:.07em!important;color:#645024!important;white-space:nowrap!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-progress-item b{font-size:11px!important;line-height:1.12!important;font-weight:900!important;color:#17283a!important;max-width:120px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+
+/* Divider separates progression above from Character statistics below. */
+.home-player-v8 .v8-layout-hotfix-active .v8-player-divider{
+  display:block!important;
+  width:min(94%,900px)!important;
+  height:12px!important;
+  margin:15px auto 7px!important;
+  object-fit:fill!important;
+  opacity:.94!important;
+}
+
+/* Character stats receive the broad lower row and greater visual prominence. */
+.home-player-v8 .v8-layout-hotfix-active .v8-vitals{
+  position:relative!important;
+  left:auto!important;
+  width:auto!important;
+  margin:8px 2% 0!important;
+  padding:0!important;
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:clamp(12px,2vw,30px)!important;
+  align-items:start!important;
+  min-width:0!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-vital{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  justify-items:center!important;
+  align-content:start!important;
+  gap:4px!important;
+  min-width:0!important;
+  text-align:center!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-vital>img{
+  width:clamp(52px,6vw,72px)!important;
+  height:auto!important;
+  aspect-ratio:1/1!important;
+  object-fit:contain!important;
+  filter:drop-shadow(0 2px 2px #0004)!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-vital>div{display:grid!important;gap:3px!important;justify-items:center!important;min-width:0!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-vital span{font-size:10px!important;line-height:1.05!important;font-weight:900!important;letter-spacing:.06em!important;color:#59451d!important;white-space:nowrap!important}
+.home-player-v8 .v8-layout-hotfix-active .v8-vital b{font-size:15px!important;line-height:1.1!important;font-weight:900!important;color:#13263a!important;white-space:nowrap!important}
+
+.home-player-v8 .v8-layout-hotfix-active .v8-player-quip{
+  margin:11px 24px 0!important;
+  padding-bottom:3px!important;
+  font-size:10px!important;
+  line-height:1.3!important;
+  font-weight:700!important;
+  color:#465564!important;
+}
+
+@media(max-width:760px){
+  .home-player-v8 .player-status-panel.v8-player-box.v8-layout-hotfix-active{padding:31px 34px 27px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-main{grid-template-columns:132px minmax(0,1fr)!important;gap:18px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-tools{top:26px!important;right:31px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-identity{padding-right:70px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-progression{gap:9px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-progress-item img{width:31px!important;height:36px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-progress-item span{font-size:7.4px!important}.home-player-v8 .v8-layout-hotfix-active .v8-progress-item b{font-size:10px!important;max-width:96px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vitals{gap:10px!important;margin-left:0!important;margin-right:0!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital>img{width:clamp(48px,8vw,62px)!important}
+}
+
+/* Intermediate widths: 3 + 2 Character-stat wrap, centered second row. */
+@media(max-width:620px){
+  .home-player-v8 .player-status-panel.v8-player-box.v8-layout-hotfix-active{padding:31px 27px 29px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-main{grid-template-columns:112px minmax(0,1fr)!important;gap:14px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-tools{top:24px!important;right:25px!important;gap:7px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-tool{width:32px!important;height:32px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-identity{padding-right:0!important;padding-top:6px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-name{padding-right:72px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-progression{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px 10px!important;margin-top:11px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-progress-item:nth-child(3){grid-column:1/-1!important;justify-self:center!important;width:min(62%,170px)!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-divider{margin-top:13px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vitals{grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:13px 8px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital{grid-column:span 2!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital:nth-child(4),
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital:nth-child(5){grid-column:span 3!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital>img{width:58px!important}
+}
+
+/* Narrow/mobile: readable reflow, never whole-panel scaling. */
+@media(max-width:390px){
+  .home-player-v8 .player-status-panel.v8-player-box.v8-layout-hotfix-active{padding:31px 21px 32px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-main{grid-template-columns:102px minmax(0,1fr)!important;gap:10px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-tools{top:22px!important;right:20px!important;gap:6px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-tool{width:30px!important;height:30px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-name{padding-right:66px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-xp-copy{font-size:11px!important}.home-player-v8 .v8-layout-hotfix-active .v8-xp-copy b{font-size:11px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-progression{grid-template-columns:1fr!important;gap:5px!important;margin-top:10px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-progress-item,
+  .home-player-v8 .v8-layout-hotfix-active .v8-progress-item:nth-child(3){grid-column:auto!important;justify-self:stretch!important;width:auto!important;justify-content:flex-start!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-progress-item img{width:29px!important;height:34px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-progress-item span{font-size:7.2px!important}.home-player-v8 .v8-layout-hotfix-active .v8-progress-item b{font-size:10px!important;max-width:125px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vitals{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:14px 10px!important;margin-top:9px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital{grid-column:auto!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital:nth-child(5){grid-column:1/-1!important;justify-self:center!important;width:50%!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital>img{width:57px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital span{font-size:9px!important}.home-player-v8 .v8-layout-hotfix-active .v8-vital b{font-size:14px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-quip{margin:10px 15px 0!important;font-size:9px!important}
+}
+@media(max-width:340px){
+  .home-player-v8 .v8-layout-hotfix-active .v8-player-quip{display:none!important}
+  .home-player-v8 .player-status-panel.v8-player-box.v8-layout-hotfix-active{padding-bottom:34px!important}
+}
+/* Final responsive corrections from v0.02.4.5 isolated render QA. */
+@media(max-width:760px){
+  .home-player-v8 .v8-layout-hotfix-active .v8-level-badge{top:101px!important}
+}
+@media(max-width:620px){
+  .home-player-v8 .v8-layout-hotfix-active .v8-level-badge{top:90px!important}
+}
+@media(max-width:390px){
+  .home-player-v8 .v8-layout-hotfix-active .v8-level-badge{top:83px!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital:nth-child(1),
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital:nth-child(2),
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital:nth-child(3),
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital:nth-child(4){grid-column:auto!important;width:auto!important;justify-self:stretch!important}
+  .home-player-v8 .v8-layout-hotfix-active .v8-vital:nth-child(5){grid-column:1/-1!important;width:50%!important;justify-self:center!important}
+}
+@media(max-width:320px){
+  .home-player-v8 .v8-layout-hotfix-active .v8-level-badge{top:77px!important}
+}

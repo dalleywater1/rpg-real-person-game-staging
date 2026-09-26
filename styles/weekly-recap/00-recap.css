@@ -1,0 +1,25 @@
+/* Weekly Recap (RPG-0061). Scoped to .recap-*; sits inside the Adventurer's Log page, so it reuses the
+   page's own .rpg-frame surfaces and adds only the tiles and lists. No !important. */
+.recap-card { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.recap-card__text { display: grid; gap: 2px; min-width: 0; }
+.recap-card__text span { color: #b9c9d0; font-size: 12px; overflow-wrap: anywhere; }
+.recap-page { display: grid; gap: 12px; min-width: 0; }
+.recap-controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.recap-switch { display: flex; gap: 6px; }
+.recap-range { margin: 0; color: #b9c9d0; font-size: 12px; }
+.recap-section { display: grid; gap: 8px; min-width: 0; }
+.recap-section__title { margin: 0; font-size: 14px; }
+.recap-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.recap-tile { display: grid; gap: 2px; padding: 8px 10px; background: rgba(255, 255, 255, .05); border-radius: 8px; min-width: 0; }
+.recap-tile__val { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.recap-tile__label { font-size: 12px; color: #d3dde0; }
+.recap-tile__note { font-size: 11px; color: #a8bbbd; }
+.recap-delta { font-size: 11px; color: #a8bbbd; }
+.recap-delta.is-up { color: #9dd8b0; }
+.recap-delta.is-down { color: #e0b98a; }
+.recap-note { margin: 0; color: #b9c9d0; font-size: 12px; overflow-wrap: anywhere; }
+.recap-ach { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.recap-ach li { display: flex; justify-content: space-between; gap: 8px; padding: 6px 8px; background: rgba(255, 255, 255, .05); border-radius: 6px; }
+.recap-ach__name { overflow-wrap: anywhere; }
+.recap-ach__rar { color: #e5c47e; font-size: 11px; white-space: nowrap; }
+@media (max-width: 21rem) { .recap-grid { grid-template-columns: 1fr; } }

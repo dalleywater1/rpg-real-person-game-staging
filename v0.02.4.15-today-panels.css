@@ -1,0 +1,178 @@
+/* RPG v0.02.4.15 — Today restructured into separate stacked panels (2026-09-04,
+   revised per home-definitive-spec.md which supersedes prior Today follow-ups).
+   Reverses the single tall .home-command-panel layout: "Today" is a centered
+   section header sitting above the stack (not a box that contains everything
+   in its own frame). Below it: Main Quest + Side Quests paired back-to-back
+   with no divider, then Priorities / Calendar / Daily Challenge / Daily Word
+   & Wisdom (merged into one box) / Bonus Puzzle, each separated by a divider.
+   Frameless, matching the rest of Home. Daily Word / Daily Wisdom / Bonus
+   Puzzle also moved back here from Personal Growth — see app.js renderHome()
+   and renderPersonalGrowth().
+   Inner content reuses existing base classes (.command-section,
+   .development-head, .word-detail, .wisdom-text, .challenge-content, etc.)
+   which are unscoped in styles.css, so they render correctly inside the new
+   .home-panel wrapper without any changes to styles.css itself. */
+
+#view .home-today-stack{display:flex;flex-direction:column;gap:14px;margin:8px 0}
+
+/* Phase 0 flat interim style (icon-system-audit.md): plain solid cream +
+   a simple thin border, no marble texture/gem ornament. Backgrounds get
+   redesigned only after the icon system is locked against this baseline. */
+#view .home-panel{
+  position:relative;
+  background:#f4f0e7;
+  border:1px solid #c9a86a;
+  border-radius:10px;
+  padding:16px 18px;
+  overflow:hidden;
+  margin:0;
+}
+
+/* Shared centered section header — "Today" and "Resources" both use this:
+   left spacer / centered title / right-grouped controls, in a 3-column grid
+   so the title is truly centered regardless of the controls' width. */
+#view .home-section-header-v2{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;margin:14px 0 12px;background:transparent;border:0;padding:0}
+#view .home-section-title{
+  grid-column:2;justify-self:center;appearance:none;-webkit-appearance:none;
+  font-family:Georgia,"Times New Roman",serif;font-size:17px;font-weight:700;
+  letter-spacing:.15em;color:#a9762f;text-transform:uppercase;
+  background:transparent;border:0;padding:0;text-align:center;cursor:default;
+}
+button.home-section-title{cursor:pointer}
+#view .home-section-controls{grid-column:3;justify-self:end;display:flex;align-items:center;gap:10px}
+#view .home-today-count{font-size:11px;color:#7a6a45;font-weight:600;white-space:nowrap}
+#view .home-settings-gear{
+  width:30px;height:30px;flex-shrink:0;border-radius:7px;
+  border:1.5px solid #c9a86a;background:#f3ecd9;color:#16233f;font-size:14px;
+  cursor:pointer;display:grid;place-items:center;
+}
+#view .home-settings-gear:hover{background:#ece0c4}
+#view .home-settings-gear:focus-visible{outline:2px solid #2a85d4;outline-offset:2px}
+#view .resources-v2-reset{font-size:11px;color:#7a6a45;white-space:nowrap}
+#view .resources-v3-icon{
+  width:44px;height:44px;flex-shrink:0;border-radius:9px;border:1.5px solid #c9a86a;
+  background:linear-gradient(160deg,#1a2030,#05070c);display:grid;place-items:center;
+  cursor:pointer;padding:0;
+}
+#view .resources-v3-icon img{width:30px;height:30px;object-fit:contain}
+#view .resources-v3-icon:hover{filter:brightness(1.15)}
+
+/* Main Quest + Priorities + Calendar share one grouped box (Lyra's Home
+   Upgrade Handoff 3.3) — internal divider between whichever sub-sections
+   are actually visible, no separate box per item. Side Quests keeps its
+   own separate box (below), with a larger header treatment. */
+#view .home-panel-todaygroup{display:flex;flex-direction:column}
+#view .home-todaygroup-block+.home-panel-inner-divider,
+#view .home-panel-todaygroup>.home-panel-inner-divider{margin:16px 0}
+#view .home-todaygroup-mainquest .quest-title-approved{font-size:24px}
+#view .home-todaygroup-mainquest .quest-title-link{font-size:20px}
+
+/* Side Quests header — larger icon, visually distinct from Main Quest */
+#view .home-panel-header-lg .home-panel-icon{width:36px;height:36px}
+#view .home-panel-header-lg>span{font-size:13px}
+
+#view .home-today-divider{height:1px;margin:0;background:linear-gradient(90deg,transparent,#c9a86a 15%,#c9a86a 85%,transparent)}
+#view .home-panel-inner-divider{height:1px;margin:14px 0;background:linear-gradient(90deg,transparent,#c9a86a60 15%,#c9a86a60 85%,transparent)}
+
+/* Activity / Delay / Complete — flat text buttons matching Accept
+   Challenge's style, replacing the old ribbon-banner artwork buttons
+   (icon-system-audit.md: converge all button styles to one language). */
+#view .home-quest-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
+#view .home-quest-actions .rpg-btn{width:100%}
+
+/* Empty-state text ("No Main Quest Assigned", "No Active Task") — calm and
+   plain, not the large italic serif it rendered as by default. */
+#view .empty-title{font-style:normal!important;font-family:inherit!important;font-size:15px!important;font-weight:500!important;color:#7a6a45!important}
+
+/* Generic small-panel header (icon + label + optional count + open arrow) */
+#view .home-panel-header{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+#view .home-panel-header>.home-panel-icon{width:28px;height:28px;object-fit:contain;flex-shrink:0}
+#view .home-panel-header>span{font-size:11px;letter-spacing:1.4px;color:#a9762f;font-weight:700;text-transform:uppercase}
+#view .home-panel-count{margin-left:2px;font-family:var(--font-micro,"Alegreya Sans",sans-serif);font-size:10px;color:#5b4a2a;font-weight:700;background:rgba(0,0,0,.06);border-radius:8px;padding:1px 7px}
+#view .home-panel-open{margin-left:auto;flex-shrink:0;border:0;background:transparent;padding:0;cursor:pointer;display:grid;place-items:center}
+#view .home-panel-arrow{font-family:Georgia,"Times New Roman",serif;font-size:15px;color:#a9762f;line-height:1}
+#view .home-panel-open:hover .home-panel-arrow{color:#8a5f22}
+
+/* Side Quests — checkable rows (ported from v0.02.4.8) */
+#view .today-v2-side-list{display:flex;flex-direction:column;gap:6px}
+#view .today-v2-side-row{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:7px;background:rgba(0,0,0,.03)}
+#view .today-v2-side-check{width:19px;height:19px;flex:0 0 19px;border-radius:5px;border:2px solid #c9a86a;accent-color:#3fa15c;cursor:pointer}
+#view .today-v2-side-title{flex:1;min-width:0;font-size:12.5px;font-weight:600;color:#16233f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#view .today-v2-side-xp{font-size:10.5px;font-weight:700;color:#5b4a2a;flex-shrink:0}
+#view .today-v2-side-empty{font-family:var(--font-micro,"Alegreya Sans",sans-serif);font-size:11.5px;color:#8a7a52;padding:4px 2px}
+/* Empty-state CTA (2026-09-11, Home internal-language rollout, item 2):
+   Side Quests used to just say "No active Side Quests today." with no
+   way forward, unlike Main Quest's own empty state — reuses the same
+   .feature-action-primary button look (v0.02.18) for one consistent
+   primary-action style across the system, just laid out full-width
+   block here since this empty state isn't inside a CSS grid. */
+#view .today-v2-side-cta{ display:block; width:100%; margin-top:8px; }
+
+/* Calendar — Today staggered above Tomorrow (not equal narrow columns,
+   per Lyra's handoff 3.3), larger icon/title/body text throughout. */
+#view .home-todaygroup-calendar .home-panel-icon{width:34px;height:34px}
+#view .home-todaygroup-calendar .home-panel-header>span{font-size:13px}
+#view .today-v2-schedule-stack{display:flex;flex-direction:column;gap:16px}
+#view .today-v2-schedule-block{min-width:0}
+#view .today-v2-schedule-col-label{font-size:11px;letter-spacing:.08em;font-weight:700;color:#a9762f;margin-bottom:8px;text-transform:uppercase}
+#view .today-v2-schedule-block.muted .today-v2-schedule-col-label{color:#9a8a6a}
+#view .today-v2-schedule-block.muted{opacity:.72}
+#view .today-v2-schedule-block .schedule-row{padding:6px 0}
+#view .today-v2-schedule-block .schedule-row strong{font-size:13px!important}
+#view .today-v2-schedule-block .schedule-row small{font-size:11px!important}
+#view .today-v2-schedule-block .schedule-time{font-size:11px!important}
+
+/* Daily Challenge rotation control + preview note (ported from v0.02.4.13).
+   No button frame/background — just the icon itself, matching the plain
+   glyph-only treatment used elsewhere, sized up slightly since it no
+   longer has a bordered slot to visually anchor it. */
+#view .home-panel-challenge .challenge-head{position:relative;padding-right:46px}
+#view .today-v2-rotation-btn{
+  position:absolute;top:0;right:0;width:38px;height:38px;
+  border:0;background:transparent;display:grid;place-items:center;
+  cursor:pointer;padding:0;
+}
+#view .today-v2-rotation-btn:hover{filter:brightness(1.15)}
+#view .today-v2-rotation-btn:focus-visible{outline:2px solid #2a85d4;outline-offset:2px}
+#view .today-v2-rotation-btn img{width:100%;height:100%;object-fit:contain}
+#view .today-v2-rotation-note{margin-top:8px;font-size:10px;font-style:italic;color:#8fa7b5}
+
+#view .home-panel-puzzle .home-panel-tools{margin:0}
+/* Bonus/Archive buttons keep their own dark navy background, but the
+   marble text-color correction assumes a light background and made the
+   label nearly unreadable (dark navy on dark navy) — restore light text. */
+#view .home-panel-puzzle .home-section-tool{color:#f3ecd9!important;text-shadow:0 1px 2px rgba(0,0,0,.6)}
+
+/* Word & Wisdom / Daily Challenge reuse .development-head/.challenge-content
+   text classes, which are styled for a dark background by default. The
+   marble/parchment text-color correction in styles.css only applies inside
+   .development-card (the old wrapper), which these panels no longer use —
+   so it's repeated here against the new panel classes. */
+#view .home-panel-wordwisdom,#view .home-panel-wordwisdom b,#view .home-panel-wordwisdom strong,#view .home-panel-wordwisdom span,
+#view .home-panel-challenge,#view .home-panel-challenge b,#view .home-panel-challenge strong,#view .home-panel-challenge span{
+  color:var(--marble-ink,#0b1728);
+}
+#view .home-panel-wordwisdom small,#view .home-panel-wordwisdom p,
+#view .home-panel-challenge small,#view .home-panel-challenge p{
+  color:#33475d;
+}
+
+/* Calendar's schedule rows have the same dark-background text colours —
+   correct those too so Today/Tomorrow entries stay legible. */
+#view .home-todaygroup-calendar .schedule-row strong{color:var(--marble-ink,#0b1728)}
+#view .home-todaygroup-calendar .schedule-row small{color:#33475d}
+#view .home-todaygroup-calendar .schedule-time{color:#1f5a86}
+#view .home-todaygroup-calendar .tag{color:#5b4a2a;border-color:#a9762f}
+#view .home-todaygroup-calendar .tag.task{color:#5a3d82;border-color:#7a53a6}
+#view .home-todaygroup-calendar .tag.quest{color:#8a5f1a;border-color:#a57824}
+#view .home-todaygroup-calendar .tag.activity{color:#1f6b40;border-color:#2f8050}
+
+@media(max-width:580px){
+  #view .home-panel{padding:12px 14px}
+}
+
+/* Home Settings modal (unprefixed — modal isn't nested under #view) */
+.home-settings-list{display:flex;flex-direction:column;gap:2px;margin-top:10px}
+.home-settings-row{display:flex;align-items:center;justify-content:space-between;padding:9px 2px;border-top:1px solid #2b3d49}
+.home-settings-row:first-child{border-top:0}
+.home-settings-row input[type=checkbox]{width:20px;height:20px;accent-color:#3fa15c;cursor:pointer}

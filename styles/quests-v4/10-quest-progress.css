@@ -1,0 +1,88 @@
+/* Quests v4 - progress bar, state chips, streak.
+
+   Semantic state is never carried by colour alone (handover section 22).
+   Every state chip carries a TEXT label plus a distinct SHAPE mark, and the
+   colour is only an accent on top:
+     ahead / completed   up-triangle / check     green
+     on track            check                   green
+     at risk             diamond                 amber
+     behind              down-triangle           red
+     paused              two bars                neutral
+   The shape is drawn in CSS (::before) from data-pace on a chip, or from
+   the .q-tile__state--<state> modifier on a front-page tile. */
+
+.q-progress { display: grid; gap: 5px; }
+.q-progress__row { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; font: 500 11.5px/1.2 var(--q-font-body); color: var(--q-text-secondary); }
+.q-progress__row b { font: 800 12px/1 var(--q-font-body); color: var(--q-text); font-variant-numeric: tabular-nums; }
+.q-track {
+  display: block;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--q-glass-soft);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.q-fill {
+  display: block;
+  width: var(--p, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--q-accent) 60%, #000000), var(--q-accent));
+  box-shadow: 0 0 8px var(--q-accent-soft);
+}
+/* slim variant: bar and percentage on one line (front-page tile) */
+.q-progress--slim { display: flex; align-items: center; gap: 8px; margin-top: 3px; }
+.q-progress--slim .q-track { flex: 1 1 auto; height: 5px; }
+.q-progress--slim b { flex: 0 0 auto; font: 800 10.5px/1 var(--q-font-body); color: var(--q-text); font-variant-numeric: tabular-nums; }
+
+/* ---------- chips ---------- */
+.q-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.q-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--q-edge);
+  background: var(--q-glass-soft);
+  font: 700 10px/1.1 var(--q-font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--q-text-secondary);
+  white-space: nowrap;
+}
+.q-chip::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.9; }
+.q-chip--plain::before { display: none; }
+.q-chip--good { color: var(--q-success); border-color: color-mix(in srgb, var(--q-success) 45%, var(--q-edge)); }
+.q-chip--warn { color: var(--q-warning); border-color: color-mix(in srgb, var(--q-warning) 45%, var(--q-edge)); }
+.q-chip--bad { color: var(--q-danger); border-color: color-mix(in srgb, var(--q-danger) 45%, var(--q-edge)); }
+.q-chip--accent { color: var(--q-accent); border-color: var(--q-accent-line); background: var(--q-accent-soft); }
+
+/* ---------- state shape marks (pace chips + tile state lines) ---------- */
+.q-chip[data-pace]::before,
+.q-tile__state::before {
+  content: "";
+  width: 9px;
+  height: 9px;
+  flex: 0 0 auto;
+  border-radius: 0;
+  background: currentColor;
+  opacity: 1;
+}
+.q-chip[data-pace="ahead"]::before,
+.q-tile__state--ahead::before { clip-path: polygon(50% 0, 100% 100%, 0 100%); }
+.q-chip[data-pace="on_track"]::before,
+.q-tile__state--on_track::before,
+.q-tile__state--completed::before { clip-path: polygon(0 55%, 14% 40%, 38% 62%, 86% 8%, 100% 24%, 38% 94%); }
+.q-chip[data-pace="at_risk"]::before,
+.q-tile__state--at_risk::before { clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%); }
+.q-chip[data-pace="behind"]::before,
+.q-tile__state--behind::before { clip-path: polygon(0 0, 100% 0, 50% 100%); }
+.q-chip[data-pace="paused"]::before {
+  background: linear-gradient(90deg, currentColor 0 34%, transparent 34% 66%, currentColor 66% 100%);
+}
+
+/* ---------- streak (Daily) ---------- */
+.q-streak { display: flex; align-items: baseline; gap: 8px; }
+.q-streak b { font: 700 30px/1 var(--q-font-display); color: var(--q-text); font-variant-numeric: tabular-nums; }
+.q-streak span { font: 700 10.5px/1.2 var(--q-font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--q-text-muted); }

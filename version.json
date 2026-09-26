@@ -1,0 +1,12 @@
+{
+  "version": "0.1.3",
+  "channel": "development",
+  "releaseLabel": "0.1.3",
+  "versionCode": 2,
+  "buildHash": "daadb8bc",
+  "date": "2026-09-21",
+  "environment": "staging",
+  "label": "RPG TEST",
+  "commit": "b0d673510bcc1ccc4d422c3ff3622335b1f55b75",
+  "builtAt": "2026-09-26T20:33:52Z"
+}

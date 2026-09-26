@@ -1,0 +1,134 @@
+/* Home v4 — design tokens (Jay's 2026-09-22 Home redesign direction).
+
+   Home becomes the NEUTRAL base of the dark-glass system that Training
+   (styles/training-v3/) and Quests (styles/quests-v4/) are themselves
+   built on — mirrors their token shape on purpose (same 4-tier glass,
+   same radii/space scale) so all three read as one component language,
+   with two deliberate differences:
+     1. Home has no single "--accent" re-scope. Training repoints
+        --accent at its sport; Quests repoints it at its quest type.
+        Home is the crossroads — it stays neutral. Category colour only
+        ever shows up on the small piece of content that came from that
+        system (an Overview row's icon/marker), never on a whole Home
+        widget shell. See --home-source-* below for exactly that.
+     2. A second, lighter glass tier (--home-glass-hero) exists
+        specifically for panels sitting directly over the scenic
+        artwork (currently just the Player HUD) rather than the flat
+        page background the other tiers assume. This is NOT a new
+        invention — it reuses the Player HUD's own already-measured,
+        AA-contrast-tested surface (rgb(8,20,32) at 50-58%, see
+        v0.02.15-home-widget-player-status.css's contrast-sampling
+        comment) as a token instead of a hardcoded literal, and matches
+        Training's own --tr-glass-hero (its Hero Header banner has the
+        exact same "glass over artwork" problem, independently landed
+        at .52 too).
+
+   Scoped to body[data-theme="home"] — the scope Home's background
+   system and the (now-superseded) Classic HUD tokens already used —
+   rather than a new wrapper div, so this composes with the existing
+   theme switch with no renderHome() markup change required. */
+body[data-theme="home"]{
+  --home-bg: #07111a;
+
+  --home-surface-1: #0b131b;
+  --home-surface-2: #0e1824;
+  --home-surface-3: #101c2a;
+
+  --home-border: #2c414f;
+  /* Cool-metal/glass border — identical value to Training's --tr-edge
+     and Quests' --q-edge on purpose: the same hairline everywhere is
+     part of what makes the three pages read as one material. */
+  --home-edge: rgba(155, 190, 210, 0.20);
+  --home-divider: rgba(165, 192, 207, 0.14);
+
+  /* Warm ivory text — the Player HUD's own Name colour (#fbf3da),
+     already AA-tested at 7.37:1 against the scenic-artwork surface;
+     reused here as the shared "important text on glass" token instead
+     of re-deriving a new warm white and re-testing contrast. */
+  --home-text: #fbf3da;
+  --home-text-secondary: #c7d3da;
+  --home-text-muted: #8a9dac;
+
+  /* Antique gold, RPG identity colour — the Classic HUD's own already
+     AA-tested --hud-gold value (8.31:1 on the Hero surface), carried
+     forward as Home's one shared identity accent rather than picked
+     fresh. Headings/important identity text only, never a fill and
+     never the per-source accent below. */
+  --home-gold: #d9ac5c;
+  --home-gold-line: rgba(217, 172, 92, 0.45);
+
+  --home-success: #67d89a;
+  --home-warning: #f0c467;
+  --home-danger: #ef7a7a;
+
+  --home-radius-sm: 8px;
+  --home-radius-md: 12px;
+  --home-radius-lg: 16px;
+
+  --home-space-1: 4px;
+  --home-space-2: 8px;
+  --home-space-3: 12px;
+  --home-space-4: 16px;
+  --home-space-5: 24px;
+
+  --home-font-display: Georgia,"Times New Roman",serif;
+
+  /* Glass surface system — same 4 tiers/values as Training and Quests
+     (rgba, not color-mix against --home-bg, so it still reads right
+     layered over the scenic wash, same reasoning as their own token
+     files). Strong = feature panels/popup shells; Main = the everyday
+     widget shell (Quests, Overview, Resources, Movement, Daily
+     Activities); Soft = rows/cells/chips within a widget; Hover =
+     interactive-row hover state. */
+  --home-glass-strong: rgba(7, 19, 29, 0.90);
+  --home-glass-main: rgba(9, 24, 36, 0.82);
+  --home-glass-soft: rgba(14, 35, 50, 0.66);
+  --home-glass-hover: rgba(18, 43, 60, 0.78);
+
+  /* Hero glass — for the Player HUD specifically (and anything else
+     that ever sits directly over the scenic artwork instead of the
+     flat page background). See the file-header note above: this is
+     the Player HUD's existing tested value as a token, not a new one. */
+  --home-glass-hero: rgba(8, 20, 32, 0.52);
+  --home-glass-hero-strong: rgba(8, 23, 33, 0.62);
+
+  /* Semantic stat colours — unchanged from the parchment-era tokens
+     (v0.02.21-home-parchment-tokens.css's --stat-hp/-stamina/-focus);
+     re-declared here only so home-v4 files never have to reach back
+     into that older file to use them. Values are identical on purpose
+     ("semantic-coloured" per the brief means keep these, not re-pick
+     them). */
+  --home-stat-hp: #d73b3f;
+  --home-stat-hp-light: #ef5a60;
+  --home-stat-stamina: #2aa9e8;
+  --home-stat-stamina-light: #54c8f4;
+  --home-stat-focus: #8b42d7;
+  --home-stat-focus-light: #ae64ed;
+
+  /* Sapphire XP — a true jewel-tone blue (deeper + more saturated than
+     the old sky-blue-leaning gradient), keeping the same 3-stop
+     highlight structure the bar's glossy overlay expects. */
+  --home-xp-1: #0d3f82;
+  --home-xp-2: #2f6fd6;
+  --home-xp-3: #7db6f5;
+
+  /* Per-source accents for Overview rows (§3 of the brief: "each row
+     can inherit the source colour... only the small icon/marker/glow
+     changes, the entire row does not become coloured"). These are
+     DELIBERATELY not full re-declarations of Training/Quests/Growth's
+     own token sets (Home doesn't render inside .training-v3/.quests-v4/
+     .pg-theme, so it can't read --tr-category-accent etc. directly) —
+     just enough of a marker colour per source family to read as "this
+     came from that system" at a glance. A Training-sourced row should
+     still prefer the session's OWN real category accent when the
+     calling code has it (e.g. a Strength calendar entry can pass
+     Strength's actual --tr-category-accent value through inline style
+     instead of this generic fallback) — --home-source-training exists
+     for when it doesn't (a plain "Training" row with no specific sport
+     attached, or as the fallback default). */
+  --home-source-training: #6fa8c9;      /* = Training's --tr-blue, sport-neutral */
+  --home-source-quest-main: #d3b36a;    /* = Quests' --q-main (warm gold) */
+  --home-source-quest-side: #dc946a;    /* = Quests' --q-side (soft coral) */
+  --home-source-growth: #d6bf82;        /* = Personal Growth's page accent */
+  --home-source-generic: var(--home-gold);
+}

@@ -1,0 +1,31 @@
+/* Quests v4 - circular icon language (QuestIconCircle, handover section 18).
+
+   The four category icons are gold medallions that are already circular
+   (transparent corners, star points touching the edge). They sit inside a
+   dark glass circle whose hairline and faint glow come from --q-accent:
+   the accent lives in CSS, never in the icon art. */
+
+.q-icon-ring {
+  --s: 44px;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: var(--s);
+  height: var(--s);
+  padding: 2px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 30%, rgba(24, 50, 70, 0.96), rgba(6, 14, 22, 0.97) 72%);
+  border: 1px solid var(--q-accent-line);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 12px var(--q-accent-soft);
+}
+.q-icon-ring img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+}
+.q-icon-ring--sm { --s: 32px; }
+.q-icon-ring--md { --s: 42px; }
+.q-icon-ring--lg { --s: 60px; border-width: 1.5px; box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 16px var(--q-accent-glow); }
+.q-icon-ring.is-active { border-color: var(--q-accent); box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.45), 0 0 14px color-mix(in srgb, var(--q-accent) 32%, transparent); }

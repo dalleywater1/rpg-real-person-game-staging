@@ -1,0 +1,31 @@
+/* Quests v4 - quest-type themes.
+
+   A category root can sit on a front-page tile, on a sub-page wrapper
+   (<div class="quests-v4 quest-side">) or on any component inside a page,
+   and everything beneath it re-tints from --q-accent alone. The four
+   colour values themselves live in 00-quest-tokens.css (--q-main / --q-side
+   / --q-daily / --q-quick); this file only points --q-accent at one of
+   them. Do NOT add per-category component CSS here or anywhere else: shared
+   components + one category token is the whole system.
+
+   --q-focal is the scene crop focus for the tile / hero artwork, tuned per
+   scene and checked at 320 / 375 / 580 (handover section 44). */
+
+.quest-main  { --q-accent: var(--q-main);  --q-focal: 46% 40%; }
+.quest-side  { --q-accent: var(--q-side);  --q-focal: 48% 46%; }
+.quest-daily { --q-accent: var(--q-daily); --q-focal: 36% 42%; }
+.quest-quick { --q-accent: var(--q-quick); --q-focal: 42% 50%; }
+
+/* ---------- density per quest type ----------
+   Main  : richest - hero + full glass modules (default component sizes)
+   Side  : compact glass rows
+   Daily : light status glass, less glow, soft cells instead of full cards
+   Quick : compact action tiles */
+.quest-side .q-row { padding: 8px 10px; }
+.quest-side .q-row__title { font-size: 13px; }
+
+.quest-daily .q-card { background: var(--q-glass-soft); box-shadow: none; }
+.quest-daily .q-card.q-glass--accent { box-shadow: 0 0 0 1px var(--q-accent-soft); }
+.quest-daily .q-btn--primary { box-shadow: 0 0 8px var(--q-accent-soft); }
+
+.quest-quick .q-action { min-height: 84px; }

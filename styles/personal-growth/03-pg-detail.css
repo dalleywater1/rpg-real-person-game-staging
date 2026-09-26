@@ -1,0 +1,134 @@
+/* Personal Growth: Habits, Hobbies, Detail, Reading Nook, Records and the activity feed
+   (RPG-0045..0053, 2026-09-25). Extends the design system in 00-02 with the few pieces those
+   pages need. Everything is scoped under .pg-theme like the rest, uses the same tokens and adds
+   no !important. Load order: after 02-pg-pages.css. */
+
+/* Children of the page grid may shrink below their content (a chip row or a long title inside a
+   shell must scroll or wrap, never widen the whole page). */
+.pg-theme .pg-page__inner > * { min-width: 0; }
+.pg-theme .pg-shell { min-width: 0; }
+
+/* ---- rows: Details sits next to Delete ---- */
+.pg-theme .pg-row__actions { display: inline-flex; flex-wrap: wrap; gap: var(--pg-space-2); }
+
+/* ---- lists grouped by category (Habits) ---- */
+.pg-theme .pg-listwrap { display: grid; gap: var(--pg-space-4); min-width: 0; }
+.pg-theme .pg-group-block { display: grid; gap: var(--pg-space-3); min-width: 0; }
+.pg-theme .pg-group-block__title {
+  display: flex; align-items: center; gap: var(--pg-space-2);
+  margin: 0; font-size: 1.0625rem; color: var(--pg-text-primary);
+}
+.pg-theme .pg-group-block__title .pg-meta { margin-left: auto; }
+
+/* ---- detail page ---- */
+.pg-theme .pg-detail { display: grid; gap: var(--pg-space-4); min-width: 0; }
+.pg-theme .pg-detail__block { display: grid; gap: var(--pg-space-3); min-width: 0; }
+.pg-theme .pg-detail__actions { display: flex; flex-wrap: wrap; gap: var(--pg-space-2); }
+.pg-theme .pg-detail__danger { border-color: rgba(255, 177, 183, .35); }
+.pg-theme .pg-detail-stats {
+  display: grid; gap: var(--pg-space-3);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+.pg-theme .pg-detail-stats > * { min-width: 0; }
+
+/* last four weeks, one small cell per day */
+.pg-theme .pg-heat { display: grid; grid-template-columns: repeat(14, minmax(0, 1fr)); gap: 3px; }
+.pg-theme .pg-heat__cell {
+  aspect-ratio: 1; border-radius: 4px; display: block;
+  background: var(--pg-tonal); border: 1px solid var(--pg-divider);
+}
+.pg-theme .pg-heat__cell.is-done { background: var(--pg-accent-soft); border-color: var(--pg-accent); }
+.pg-theme .pg-heat__cell.is-goal { background: var(--pg-accent); border-color: var(--pg-accent); }
+.pg-theme .pg-heat__cell.is-off { opacity: .35; border-style: dashed; }
+.pg-theme .pg-heat__legend { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .75rem; }
+.pg-theme .pg-heat__key {
+  display: inline-block; width: .8rem; height: .8rem; border-radius: 3px; vertical-align: -1px;
+  background: var(--pg-tonal); border: 1px solid var(--pg-divider);
+}
+.pg-theme .pg-heat__key.is-done { background: var(--pg-accent-soft); border-color: var(--pg-accent); }
+.pg-theme .pg-heat__key.is-goal { background: var(--pg-accent); border-color: var(--pg-accent); }
+.pg-theme .pg-heat__key.is-off { opacity: .35; border-style: dashed; }
+
+/* month calendar */
+.pg-theme .pg-cal__head { display: flex; align-items: center; justify-content: space-between; gap: var(--pg-space-2); }
+.pg-theme .pg-cal__head .pg-section__title { margin: 0; text-align: center; flex: 1; }
+.pg-theme .pg-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.pg-theme .pg-cal__dow { text-align: center; font-size: var(--pg-type-meta); color: var(--pg-text-muted); padding-bottom: 2px; }
+.pg-theme .pg-cal__blank { display: block; }
+.pg-theme .pg-cal__day {
+  position: relative; display: grid; place-items: center; align-content: center; gap: 0;
+  min-height: var(--pg-touch-min); padding: 0; min-width: 0;
+  border: 1px solid var(--pg-divider); border-radius: var(--pg-radius-control);
+  background: var(--pg-tonal); color: var(--pg-text-primary); font: inherit; cursor: pointer;
+}
+.pg-theme .pg-cal__day:disabled { opacity: .35; cursor: default; }
+.pg-theme .pg-cal__day.is-off:not(.is-done) { border-style: dashed; opacity: .6; }
+.pg-theme .pg-cal__day.is-done { background: var(--pg-accent-soft); border-color: var(--pg-accent); }
+.pg-theme .pg-cal__day.is-today { box-shadow: 0 0 0 2px rgba(229, 196, 126, .5); }
+.pg-theme .pg-cal__day:hover:not(:disabled) { border-color: var(--pg-accent); }
+.pg-theme .pg-cal__num { font-size: .9375rem; line-height: 1.1; }
+.pg-theme .pg-cal__val { font-size: .6875rem; line-height: 1; color: var(--pg-text-secondary); max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+
+/* recent entries */
+.pg-theme .pg-entries { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--pg-space-2); }
+.pg-theme .pg-entries li {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: var(--pg-space-3);
+  padding: var(--pg-space-2) var(--pg-space-3); background: var(--pg-tonal); border-radius: var(--pg-radius-control);
+}
+.pg-theme .pg-entries__date { color: var(--pg-text-secondary); min-width: 0; overflow-wrap: anywhere; }
+.pg-theme .pg-entries__val { font-weight: 700; }
+
+/* notes */
+.pg-theme .pg-textarea { min-height: 6rem; resize: vertical; font: inherit; }
+.pg-theme .pg-notes { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--pg-space-3); }
+.pg-theme .pg-note { display: grid; gap: var(--pg-space-2); padding: var(--pg-space-3); background: var(--pg-tonal); border-radius: var(--pg-radius-row); }
+.pg-theme .pg-note__text { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--pg-text-primary); }
+.pg-theme .pg-note__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--pg-space-2); }
+
+/* ---- Reading Nook ---- */
+.pg-theme .pg-books { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--pg-space-3); }
+.pg-theme .pg-book {
+  display: grid; gap: var(--pg-space-3); padding: var(--pg-space-4); min-width: 0;
+  background: var(--pg-tonal); border-radius: var(--pg-radius-row);
+}
+.pg-theme .pg-book__head { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--pg-space-3); min-width: 0; }
+.pg-theme .pg-book__title { margin: 0; font-size: 1.0625rem; overflow-wrap: anywhere; }
+.pg-theme .pg-book__by { margin: 0; color: var(--pg-text-secondary); overflow-wrap: anywhere; }
+.pg-theme .pg-book__kind { flex: none; }
+.pg-theme .pg-book__actions { display: flex; flex-wrap: wrap; gap: var(--pg-space-2); }
+.pg-theme .pg-shelf { display: grid; gap: var(--pg-space-2); }
+.pg-theme .pg-shelf__row {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: var(--pg-space-2) var(--pg-space-3);
+  width: 100%; padding: var(--pg-space-3); border: 0; border-radius: var(--pg-radius-control);
+  background: var(--pg-tonal); color: inherit; font: inherit; text-align: left; cursor: pointer; min-height: var(--pg-touch-min);
+}
+.pg-theme .pg-shelf__row:hover { background: var(--pg-accent-soft); }
+.pg-theme .pg-shelf__name { font-weight: 700; overflow-wrap: anywhere; }
+.pg-theme .pg-shelf__meta { color: var(--pg-text-secondary); font-size: var(--pg-type-meta); grid-column: 1 / -1; overflow-wrap: anywhere; }
+.pg-theme .pg-seg { display: flex; flex-wrap: wrap; gap: var(--pg-space-2); }
+
+/* ---- Records and the activity feed ---- */
+.pg-theme .pg-records { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--pg-space-2); }
+.pg-theme .pg-record {
+  display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--pg-space-3);
+  width: 100%; padding: var(--pg-space-3); border: 0; border-radius: var(--pg-radius-control);
+  background: var(--pg-tonal); color: inherit; font: inherit; text-align: left; min-height: var(--pg-touch-min);
+}
+button.pg-record { cursor: pointer; }
+button.pg-record:hover { background: var(--pg-accent-soft); }
+.pg-theme .pg-record__text { display: grid; gap: .125rem; min-width: 0; }
+.pg-theme .pg-record__title { font-weight: 700; overflow-wrap: anywhere; }
+.pg-theme .pg-record__meta { color: var(--pg-text-secondary); font-size: var(--pg-type-meta); overflow-wrap: anywhere; }
+.pg-theme .pg-record__val { font-weight: 700; color: var(--pg-text-gold); white-space: nowrap; }
+.pg-theme .pg-feed-day { margin: var(--pg-space-3) 0 var(--pg-space-1); font-size: var(--pg-type-meta); color: var(--pg-text-muted); text-transform: uppercase; letter-spacing: .04em; }
+
+@media (max-width: 22rem) {
+  .pg-theme .pg-detail-stats { grid-template-columns: 1fr; }
+  .pg-theme .pg-entries li { grid-template-columns: minmax(0, 1fr) auto; }
+  .pg-theme .pg-entries__val { grid-column: 1; }
+  .pg-theme .pg-record { grid-template-columns: auto minmax(0, 1fr); }
+  .pg-theme .pg-record__val { grid-column: 2; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pg-theme .pg-cal__day, .pg-theme .pg-shelf__row { transition: none; }
+}

@@ -1,0 +1,220 @@
+/* Inventory v1 — shared components (Phase B, RPG-0018).
+   Composes the tokens in 00-inv-tokens.css. Scoped to .inv-theme (a
+   wrapper div around the page root, same convention as .training-v3/
+   .quests-v4/.lib-theme — NOT body[data-theme], since Inventory's real
+   page id is 'storage', already used for the background/theme system
+   the same way every other section's own page id is). */
+
+.inv-theme{
+  font-family:var(--inv-font-ui); font-size:16px; line-height:1.5;
+  color:var(--inv-text); -webkit-text-size-adjust:100%;
+}
+.inv-theme *{box-sizing:border-box}
+.inv-page{max-width:900px; margin:0 auto; padding:20px 16px 40px; display:grid; gap:16px}
+
+/* ---------- header ---------- */
+.inv-header{display:flex; align-items:center; justify-content:space-between; gap:10px}
+.inv-header-left{display:flex; align-items:center; gap:10px; min-width:0}
+.inv-back{
+  display:inline-flex; align-items:center; justify-content:center; width:var(--inv-touch-min); height:var(--inv-touch-min);
+  border-radius:50%; border:1px solid var(--inv-edge); background:var(--inv-glass-soft); color:var(--inv-text);
+  font-size:1.1rem; cursor:pointer; flex:0 0 auto;
+}
+.inv-back:hover{background:var(--inv-glass-hover)}
+.inv-title{font-family:var(--inv-font-display); font-size:clamp(1.3rem,4vw,1.7rem); font-weight:700; color:var(--inv-text); margin:0; text-wrap:balance}
+.inv-eyebrow{font-family:var(--inv-font-ui); font-size:.76rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--inv-gold)}
+
+/* ---------- glass shell (the one panel primitive everything composes) ---------- */
+.inv-shell{
+  background:linear-gradient(180deg,rgba(255,255,255,.045),transparent 40%),var(--inv-glass-main);
+  border:1px solid var(--inv-edge); border-radius:var(--inv-radius-lg);
+  box-shadow:0 10px 26px rgba(0,0,0,.28); padding:16px 18px; display:grid; gap:12px;
+}
+.inv-shell--soft{background:var(--inv-glass-soft); box-shadow:none}
+.inv-section-title{font-family:var(--inv-font-display); font-size:1.02rem; font-weight:700; color:var(--inv-gold); letter-spacing:.02em}
+.inv-section-head{display:flex; align-items:baseline; justify-content:space-between; gap:10px}
+.inv-link{font-family:var(--inv-font-ui); font-size:.82rem; font-weight:700; color:var(--inv-gold); background:none; border:0; cursor:pointer; display:inline-flex; align-items:center; gap:4px}
+.inv-link:hover{text-decoration:underline}
+
+/* ---------- Gold Summary component (shared by Hub + All Items) ---------- */
+.inv-gold-summary{
+  display:flex; align-items:center; gap:14px; padding:12px 16px;
+  background:var(--inv-glass-main); border:1px solid var(--inv-edge); border-radius:var(--inv-radius-md);
+  box-shadow:0 8px 20px rgba(0,0,0,.22);
+}
+.inv-gold-summary__stat{display:flex; align-items:center; gap:8px; min-width:0}
+.inv-gold-summary__icon{width:32px; height:32px; border-radius:50%; flex:0 0 auto; display:grid; place-items:center; background:var(--inv-glass-soft); border:1px solid var(--inv-edge); font-size:1rem}
+.inv-gold-summary__icon--gold{border-color:var(--inv-accent-soft); color:var(--inv-gold)}
+.inv-gold-summary__num{font-family:var(--inv-font-ui); font-weight:700; font-size:1.05rem; color:var(--inv-text); font-variant-numeric:tabular-nums; line-height:1.1}
+.inv-gold-summary__label{font-family:var(--inv-font-ui); font-size:.72rem; color:var(--inv-text-muted); text-transform:uppercase; letter-spacing:.04em}
+.inv-gold-summary__divider{width:1px; align-self:stretch; background:var(--inv-divider)}
+/* Compact variant (≤320px tier) collapses to a single stacked line, no divider/icons duplicated. */
+@media(max-width:340px){
+  .inv-gold-summary{gap:10px; padding:10px 14px}
+  .inv-gold-summary__icon{width:26px; height:26px; font-size:.85rem}
+}
+
+/* ---------- category pills ---------- */
+.inv-categories{display:flex; gap:8px; flex-wrap:wrap}
+.inv-chip{
+  font-family:var(--inv-font-ui); font-size:.82rem; font-weight:700; padding:7px 14px; border-radius:var(--inv-radius-pill);
+  border:1px solid var(--inv-edge); background:transparent; color:var(--inv-text-secondary); cursor:pointer;
+  min-height:var(--inv-touch-min); display:inline-flex; align-items:center;
+}
+.inv-chip.is-active{background:var(--inv-accent); border-color:var(--inv-accent); color:#1c1305}
+
+/* ---------- resource/item row lists (Recently Acquired, Equipped, Quest & Special) ---------- */
+.inv-rows{display:grid; gap:8px}
+.inv-row{
+  display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:var(--inv-radius-md);
+  background:var(--inv-glass-soft); border:1px solid transparent; text-align:left; width:100%;
+  font-family:inherit; color:inherit; cursor:pointer;
+}
+.inv-row:hover{background:var(--inv-glass-hover)}
+.inv-row__icon{width:40px; height:40px; border-radius:50%; flex:0 0 auto; display:grid; place-items:center; background:var(--inv-glass-main); border:1px solid var(--inv-edge); font-size:1.1rem; overflow:hidden}
+.inv-row__icon img{width:100%; height:100%; object-fit:cover}
+.inv-row__body{min-width:0; flex:1; display:grid; gap:1px}
+.inv-row__title{font-weight:700; font-size:.94rem; color:var(--inv-text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.inv-row__sub{font-size:.8rem; color:var(--inv-text-muted)}
+.inv-row__meta{flex:0 0 auto; font-family:var(--inv-font-ui); font-size:.78rem; font-weight:700; color:var(--inv-gold); display:flex; align-items:center; gap:4px}
+.inv-empty{padding:12px 4px; color:var(--inv-text-muted); font-size:.9rem}
+
+/* Recently Acquired horizontal preview strip */
+.inv-strip{display:flex; gap:10px; overflow-x:auto; padding-bottom:2px; -webkit-overflow-scrolling:touch}
+.inv-strip::-webkit-scrollbar{height:0}
+
+/* ---------- Item Card (canonical, all states compose this ONE class) ----------
+   .inv-card is the outer shell (a plain div, never itself a button) so the
+   Favourite star can be a real sibling <button>, not nested inside the
+   card's own open-detail button -- nested interactive elements are invalid
+   HTML and would fire both handlers on one tap. .inv-card__go is the inner
+   button that actually opens Item Detail and owns the hover/focus state. */
+.inv-card{
+  position:relative; display:grid; gap:6px; padding:10px 10px 12px; border-radius:var(--inv-radius-md);
+  background:var(--inv-glass-soft); border:1px solid var(--inv-edge);
+}
+.inv-card:has(.inv-card__go:hover),.inv-card:has(.inv-card__go:focus-visible){border-color:var(--inv-accent)}
+.inv-card__go{
+  all:unset; display:grid; gap:6px; width:100%; cursor:pointer; text-align:left; box-sizing:border-box;
+}
+.inv-card__art{
+  position:relative; aspect-ratio:1/1; border-radius:var(--inv-radius-sm); overflow:hidden;
+  background:radial-gradient(circle at 40% 30%, rgba(255,255,255,.05), transparent 60%), var(--inv-glass-main);
+  display:grid; place-items:center; font-size:2.1rem;
+}
+.inv-card__art img{width:100%; height:100%; object-fit:contain}
+.inv-card__badge{position:absolute; top:6px; left:6px; font-family:var(--inv-font-ui); font-size:.66rem; font-weight:700; letter-spacing:.03em; text-transform:uppercase; padding:2px 7px; border-radius:var(--inv-radius-pill); background:var(--inv-accent); color:#1c1305}
+.inv-card__fav{position:absolute; top:4px; right:4px; width:28px; height:28px; border-radius:50%; border:0; background:rgba(7,17,26,.55); display:grid; place-items:center; color:var(--inv-text-muted); font-size:1rem; cursor:pointer}
+.inv-card__fav.is-favourite{color:var(--inv-gold)}
+.inv-card__qty{position:absolute; bottom:6px; right:6px; font-family:var(--inv-font-ui); font-size:.7rem; font-weight:700; padding:1px 6px; border-radius:var(--inv-radius-pill); background:rgba(7,17,26,.72); color:var(--inv-text); border:1px solid var(--inv-edge)}
+.inv-card__name{font-weight:700; font-size:.92rem; color:var(--inv-text); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+.inv-card__meta{display:flex; align-items:center; gap:6px; font-size:.74rem; color:var(--inv-text-muted); overflow:hidden; white-space:nowrap; text-overflow:ellipsis}
+.inv-card__meta span:last-child{overflow:hidden; text-overflow:ellipsis}
+.inv-card__rarity{font-weight:700}
+.inv-card__rarity--common{color:var(--inv-rarity-common)}
+.inv-card__rarity--uncommon{color:var(--inv-rarity-uncommon)}
+.inv-card__rarity--rare{color:var(--inv-rarity-rare)}
+.inv-card__rarity--epic{color:var(--inv-rarity-epic)}
+.inv-card__rarity--legendary{color:var(--inv-rarity-legendary)}
+.inv-card__state{font-family:var(--inv-font-ui); font-size:.72rem; font-weight:700; display:flex; align-items:center; gap:4px; margin-top:2px}
+/* Equipped: restrained gold underline, never a full-card glow. */
+.inv-card.is-equipped{border-color:var(--inv-accent-soft)}
+.inv-card.is-equipped .inv-card__state{color:var(--inv-gold)}
+.inv-card.is-equipped::after{content:""; position:absolute; left:10px; right:10px; bottom:0; height:2px; background:var(--inv-gold); border-radius:2px}
+/* Quest: a small narrative accent, not a separate card system. */
+.inv-card.is-quest .inv-card__state{color:var(--inv-rarity-epic)}
+/* Unknown/undiscovered: obscured art, no identity leak. */
+.inv-card.is-unknown{cursor:default}
+.inv-card.is-unknown .inv-card__art{background:radial-gradient(circle at 50% 40%, rgba(255,255,255,.03), transparent 70%), #05090d; filter:none}
+.inv-card.is-unknown .inv-card__art-glyph{color:var(--inv-text-muted); font-size:1.8rem}
+.inv-card.is-unknown .inv-card__name{color:var(--inv-text-muted)}
+
+.inv-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+@media(min-width:560px){ .inv-grid{grid-template-columns:repeat(3,minmax(0,1fr))} }
+
+/* ---------- Item Detail ---------- */
+.inv-detail-hero{display:grid; gap:14px; justify-items:center; text-align:center; padding:20px 16px}
+.inv-detail-art{
+  width:min(220px,70vw); aspect-ratio:3/4; border-radius:var(--inv-radius-lg); overflow:hidden;
+  background:radial-gradient(ellipse at 50% 30%, rgba(255,255,255,.06), transparent 65%), var(--inv-glass-main);
+  border:1px solid var(--inv-edge); display:grid; place-items:center; font-size:3.4rem;
+}
+.inv-detail-art img{width:100%; height:100%; object-fit:contain}
+.inv-detail-name{font-family:var(--inv-font-display); font-size:1.4rem; font-weight:700; color:var(--inv-text)}
+.inv-detail-meta{display:flex; align-items:center; gap:8px; font-size:.86rem; color:var(--inv-text-secondary)}
+.inv-detail-equipped-tag{display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:var(--inv-radius-pill); background:var(--inv-accent-soft); border:1px solid var(--inv-accent); color:var(--inv-gold); font-weight:700; font-size:.84rem}
+
+.inv-fact-row{display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding-block:5px; border-bottom:1px solid var(--inv-divider)}
+.inv-fact-row:last-child{border-bottom:0}
+.inv-fact-label{font-family:var(--inv-font-ui); font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--inv-text-muted)}
+.inv-fact-value{font-size:.92rem; font-weight:700; color:var(--inv-text); text-align:right}
+
+.inv-btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:6px; min-height:var(--inv-touch-min);
+  padding:10px 18px; border-radius:var(--inv-radius-md); font-family:var(--inv-font-ui); font-weight:700; font-size:.92rem;
+  border:1px solid var(--inv-gold); background:var(--inv-gold); color:#1c1305; cursor:pointer; width:100%;
+}
+.inv-btn:hover{filter:brightness(1.06)}
+.inv-btn--ghost{background:transparent; color:var(--inv-text); border-color:var(--inv-edge)}
+.inv-btn--ghost:hover{border-color:var(--inv-text-secondary)}
+
+/* ---------- search (All Items) ---------- */
+.inv-search{position:relative; display:flex; align-items:center}
+.inv-search input{
+  width:100%; min-height:var(--inv-touch-min); padding:0 14px 0 40px; border-radius:var(--inv-radius-pill);
+  border:1px solid var(--inv-edge); background:rgba(0,0,0,.22); color:var(--inv-text); font-size:.92rem;
+}
+.inv-search input::placeholder{color:var(--inv-text-muted)}
+.inv-search__icon{position:absolute; left:13px; color:var(--inv-text-muted); pointer-events:none; font-size:.9rem}
+
+@media(max-width:340px){
+  .inv-page{padding:16px 12px 32px}
+  .inv-grid{gap:8px}
+}
+
+/* ---------- Collection Card + Collection Detail (Phase D, RPG-0020) ---------- */
+.inv-collection-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px}
+.inv-collection-card{
+  display:grid; gap:8px; padding:14px; border-radius:var(--inv-radius-md); text-align:left; cursor:pointer;
+  background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 45%),var(--inv-glass-soft);
+  border:1px solid var(--inv-edge); font-family:inherit; color:inherit; width:100%;
+}
+.inv-collection-card:hover,.inv-collection-card:focus-visible{border-color:var(--inv-accent); outline:none}
+.inv-collection-emblem{
+  width:44px; height:44px; border-radius:50%; display:grid; place-items:center; font-size:1.3rem;
+  background:var(--inv-glass-main); border:1px solid var(--inv-accent-soft); color:var(--inv-gold);
+}
+.inv-collection-name{font-family:var(--inv-font-display); font-weight:700; font-size:1rem; color:var(--inv-text)}
+.inv-collection-progress-text{font-family:var(--inv-font-ui); font-size:.78rem; font-weight:700; color:var(--inv-text-muted)}
+.inv-pips{display:flex; gap:4px; flex-wrap:wrap}
+.inv-pip{width:9px; height:9px; border-radius:50%; background:var(--inv-glass-main); border:1px solid var(--inv-edge)}
+.inv-pip.is-filled{background:var(--inv-gold); border-color:var(--inv-gold)}
+
+.inv-detail-desc{color:var(--inv-text-secondary); font-size:.9rem; margin:0}
+.inv-progress-bar{height:8px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden}
+.inv-progress-bar > i{display:block; height:100%; border-radius:999px; background:linear-gradient(180deg,rgba(255,255,255,.5),transparent 55%),var(--inv-gold)}
+
+/* ---------- Filter / Sort panel (Phase D) — inline collapsible, same
+   dark-glass language as everything else, not a separate popup system. */
+.inv-toolbar{display:flex; align-items:center; gap:8px; flex-wrap:wrap}
+.inv-toolbar .inv-search{flex:1 1 180px}
+.inv-filter-toggle{
+  display:inline-flex; align-items:center; gap:6px; min-height:var(--inv-touch-min); padding:0 14px;
+  border-radius:var(--inv-radius-pill); border:1px solid var(--inv-edge); background:var(--inv-glass-soft);
+  color:var(--inv-text); font-family:var(--inv-font-ui); font-weight:700; font-size:.86rem; cursor:pointer;
+}
+.inv-filter-toggle.is-active{border-color:var(--inv-accent); color:var(--inv-gold)}
+.inv-filter-panel{display:none; gap:14px}
+.inv-filter-panel.is-open{display:grid}
+.inv-filter-group{display:grid; gap:6px}
+.inv-filter-group-label{font-family:var(--inv-font-ui); font-size:.72rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; color:var(--inv-text-muted)}
+.inv-filter-options{display:flex; gap:6px; flex-wrap:wrap}
+.inv-filter-pill{
+  font-family:var(--inv-font-ui); font-size:.8rem; font-weight:700; padding:6px 12px; border-radius:var(--inv-radius-pill);
+  border:1px solid var(--inv-edge); background:transparent; color:var(--inv-text-secondary); cursor:pointer; min-height:36px;
+}
+.inv-filter-pill.is-active{background:var(--inv-accent); border-color:var(--inv-accent); color:#1c1305}
+.inv-sort-select{
+  min-height:var(--inv-touch-min); padding:0 12px; border-radius:var(--inv-radius-md); border:1px solid var(--inv-edge);
+  background:rgba(0,0,0,.22); color:var(--inv-text); font-family:var(--inv-font-ui); font-size:.86rem;
+}

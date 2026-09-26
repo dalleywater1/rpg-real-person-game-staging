@@ -1,0 +1,77 @@
+/* Motion for the top of the ladder only (Legendary, Celestial). Compositor
+   friendly: only background-position, opacity and transform animate; the
+   heavy drop-shadow is never animated. Everything here is decorative, so
+   prefers-reduced-motion turns all of it off and leaves a static glow. */
+
+@keyframes ach-sheen {
+  0% { background-position: 130% 0; }
+  100% { background-position: -130% 0; }
+}
+@keyframes ach-breathe {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+@keyframes ach-twinkle {
+  0%, 100% { opacity: 0; transform: scale(0.6); }
+  50% { opacity: 0.9; transform: scale(1); }
+}
+
+/* aura behind the whole card */
+.ach-card.rarity-legendary::before,
+.ach-card.rarity-celestial::before {
+  content: "";
+  position: absolute;
+  inset: 4% 6% 6%;
+  z-index: -1;
+  border-radius: 40%;
+  background: radial-gradient(closest-side, var(--ach-r-glow), transparent 72%);
+  animation: ach-breathe 3.6s ease-in-out infinite;
+  pointer-events: none;
+}
+.ach-card.rarity-celestial::before { animation-duration: 2.8s; }
+
+/* light sweep travelling along the plaque border */
+.ach-card.rarity-legendary .ach-card__plaque,
+.ach-card.rarity-celestial .ach-card__plaque {
+  background:
+    linear-gradient(110deg, transparent 38%, rgba(255, 255, 255, 0.85) 50%, transparent 62%) 130% 0 / 260% 100% no-repeat,
+    linear-gradient(165deg, var(--ach-r) 0%, var(--ach-r-2) 48%, color-mix(in srgb, var(--ach-r-2) 55%, #000000) 100%);
+  animation: ach-sheen 5.2s linear infinite;
+}
+.ach-card.rarity-celestial .ach-card__plaque { animation-duration: 4.2s; }
+
+/* Celestial: small twinkles on the badge stage */
+.ach-card.rarity-celestial .ach-card__stage::before,
+.ach-card.rarity-celestial .ach-card__stage .ach-card__spark {
+  content: "";
+  position: absolute;
+  z-index: 2;
+  width: 10px;
+  height: 10px;
+  top: 14%;
+  left: 18%;
+  background: radial-gradient(circle, #ffffff 0 18%, transparent 62%);
+  animation: ach-twinkle 2.6s ease-in-out infinite;
+  pointer-events: none;
+}
+.ach-card.rarity-celestial .ach-card__stage::before { animation-delay: 0.4s; }
+.ach-card.rarity-celestial .ach-card__stage .ach-card__spark { top: 70%; left: 74%; animation-delay: 1.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ach-card.rarity-legendary::before,
+  .ach-card.rarity-celestial::before {
+    animation: none;
+    opacity: 0.8;
+    transform: none;
+  }
+  .ach-card.rarity-legendary .ach-card__plaque,
+  .ach-card.rarity-celestial .ach-card__plaque {
+    animation: none;
+    background: linear-gradient(165deg, var(--ach-r) 0%, var(--ach-r-2) 48%, color-mix(in srgb, var(--ach-r-2) 55%, #000000) 100%);
+  }
+  .ach-card.rarity-celestial .ach-card__stage::before,
+  .ach-card.rarity-celestial .ach-card__stage .ach-card__spark {
+    animation: none;
+    opacity: 0;
+  }
+}

@@ -1,0 +1,38 @@
+/* Home - Quick Quest block (Quick Quests V1, 2026-09-20)
+
+   A third block in the Home Quest Pane, under Daily Quest and Side Quests,
+   built from the same pieces those use: .home-panel-header, .hw-row and the
+   .feature-action-primary pill. Home is an execution surface for Quick
+   Quests: it shows the one active quest with its running timer and a
+   Complete button, or, when nothing is active, how many are waiting plus
+   two shortcuts. Only the timer, the tappable title and the two-button
+   action row are new. Colours come from the Home HUD tokens, so the block
+   matches its siblings; the violet Quick accent belongs to the Quests page. */
+
+#view .qq-home .qq-home-row { justify-content: space-between; gap: 10px; }
+#view .qq-home-open {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+#view .qq-home-open:focus-visible { outline: 2px solid var(--hud-gold, #d9b56a); outline-offset: 3px; border-radius: 4px; }
+#view .qq-home-open .hw-row-title { overflow-wrap: anywhere; }
+#view .qq-home-timer {
+  font: 800 24px/1.1 var(--font-micro, "Alegreya Sans", sans-serif);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: 0.05em;
+  color: var(--hud-gold, #d9b56a);
+}
+#view .qq-home-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+#view .qq-home-actions .feature-action-primary { flex: 1 1 auto; }

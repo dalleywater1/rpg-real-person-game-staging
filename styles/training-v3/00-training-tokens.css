@@ -1,0 +1,115 @@
+/* Training v3 — design tokens (Phase 2 of the Training CSS overhaul)
+
+   Every training-v3 component consumes these variables, never a
+   literal color/radius/space value — that's the whole point of this
+   layer: an 8-bit Training skin or another RPG theme can later replace
+   just this file without touching component CSS.
+
+   Values below are the app's OWN existing, already-shipped Training/
+   Running/Strength palette — the same navy/near-black + antique-gold +
+   cool-steel-blue language already live in Running, Strength, Routes
+   and the rest of Training today (v0.02.10-training-journal.css) —
+   not the illustrative hex codes from the brief. Starting from the
+   already-approved palette means Phase 1 migrations look visually
+   continuous with shipped surfaces instead of introducing an unreviewed
+   second color set on day one. Change any of these after screenshots;
+   nothing below is locked in. */
+.training-v3 {
+  --tr-bg: #07111a;
+
+  --tr-surface-1: #0b131b;
+  --tr-surface-2: #0e1824;
+  --tr-surface-3: #101c2a;
+
+  --tr-border: #2c414f;
+  --tr-border-strong: #584523;
+  --tr-divider: #1c2731;
+
+  --tr-text: #f4f7f8;
+  --tr-text-secondary: #b9c7ce;
+  --tr-text-muted: #82949e;
+
+  /* Semantic/accent set — gold is Training's own identity color
+     (mirrors --tr-category-accent's default below); the rest are
+     the state/chart colors already used across Running's route-color
+     system and Strength's PB rows, gathered here as tokens instead of
+     re-declared per component. */
+  --tr-gold: #e7c676;
+  --tr-gold-strong: #8a6728;
+  --tr-blue: #6fa8c9;
+  --tr-green: #7fae7f;
+  --tr-yellow: #e0b65b;
+  --tr-red: #d75b55;
+  --tr-purple: #9d68ed;
+
+  /* Semantic state (RPG Visual System Overhaul §3/§32/§43) — distinct
+     from the chart palette above (--tr-red/green/yellow are also used
+     as literal chart series colors, e.g. HR/elevation lines, so they
+     stay). These three are for status only (success/warning/danger)
+     and must always pair with an icon/text/border, never color alone. */
+  --tr-success: #67d89a;
+  --tr-warning: #f0c467;
+  --tr-danger: #ef7a7a;
+
+  --tr-radius-sm: 8px;
+  --tr-radius-md: 12px;
+  --tr-radius-lg: 16px;
+
+  --tr-space-1: 4px;
+  --tr-space-2: 8px;
+  --tr-space-3: 12px;
+  --tr-space-4: 16px;
+  --tr-space-5: 24px;
+
+  --tr-font-display: Georgia,"Times New Roman",serif;
+
+  /* Glass surface system (Visual System Overhaul §6) — three levels
+     only. Strong = hero overlays/feature panels/active-session summary;
+     Main = the everyday .tr-card surface; Soft = metric cells/chips/
+     internal rows. Kept as real rgba (not color-mix against --tr-bg)
+     so the same tokens still make sense layered over gateway artwork,
+     not just the flat page background. */
+  --tr-glass-strong: rgba(7, 19, 29, 0.90);
+  --tr-glass-main: rgba(9, 24, 36, 0.82);
+  --tr-glass-soft: rgba(14, 35, 50, 0.66);
+  --tr-glass-hover: rgba(18, 43, 60, 0.78);
+
+  /* Hero glass (Training Hero Header, 2026-09-20) — the see-through
+     dark-navy surface the player strip and Settings button use over
+     the banner artwork. Deliberately lighter than the three panel
+     levels above (those sit on the flat page background); here the
+     artwork has to stay visible through the glass. */
+  --tr-glass-hero: rgba(6, 16, 26, 0.52);
+  --tr-glass-hero-edge: rgba(170, 200, 215, 0.20);
+
+  /* Chart palette (Phase 12) — declared here, not per chart-card, so
+     every metric line/bar draws from the same set regardless of which
+     screen renders it. */
+  --tr-chart-hr: var(--tr-red);
+  --tr-chart-pace: var(--tr-gold);
+  --tr-chart-elevation: var(--tr-green);
+  --tr-chart-power: var(--tr-purple);
+
+  /* Category accent (Visual System Overhaul §2/§4) — default to gold
+     (Training's own identity, and every gateway/category not yet
+     themed in categories/*.css); each category page overrides just
+     this one variable, never a second full palette. Accent affects
+     glow/selection only (§46) — never a whole-page background. */
+  --tr-category-accent: var(--tr-gold);
+  --tr-category-accent-secondary: var(--tr-category-accent);
+
+  /* High-leverage global-token override (Visual System Overhaul,
+     2026-09-18): every pre-existing .rpg-btn.accent / any other
+     component already reading the app-wide --accent variable
+     automatically picks up this category's own accent while rendered
+     inside a .training-v3 page — zero markup changes needed across
+     every Strength/Running/Cycling/Swimming/Climbing/simple-gateway
+     "Start"/"Save"/primary-action button that already existed before
+     this pass. Scoped to .training-v3 only, so nothing outside
+     Training (Home, Quests, Character, ...) is affected. */
+  --accent: var(--tr-category-accent);
+  --tr-accent: var(--tr-category-accent);
+  --tr-accent-soft: color-mix(in srgb, var(--tr-category-accent) 14%, transparent);
+  --tr-accent-glow: color-mix(in srgb, var(--tr-category-accent) 26%, transparent);
+  --tr-edge: rgba(155, 190, 210, 0.20);
+}

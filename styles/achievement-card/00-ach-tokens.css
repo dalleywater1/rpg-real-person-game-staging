@@ -1,0 +1,87 @@
+/* Achievement presentation tokens (ASTRA Quests glass + Achievement CSS
+   handover, 2026-09-20 Part B).
+
+   Two INDEPENDENT variable systems drive one component:
+     - rarity   : .rarity-<name> class   -> --ach-r*   (border, glow, plate, title)
+     - category : [data-ach-cat="<name>"] -> --ach-c*   (rails, ornament, ambient tint)
+   Changing one never touches the other. No frame images are used anywhere:
+   every plaque, rail, ribbon and glow is built from CSS.
+
+   RARITY LADDER (normal): common, uncommon, rare, epic, legendary,
+   celestial. SPECIAL classifications sit outside that ladder and keep
+   their own blocks below: mythic, demonic (and secret). Do not fold them
+   into the ladder. */
+
+/* ---------- neutral defaults so an unknown or TBD rarity still renders ---------- */
+.ach-card,
+.ach-tile,
+.ach-featured-badge,
+.achievement-popup {
+  --ach-r: #96a3b0;
+  --ach-r-2: #5f6c79;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 16%, transparent);
+  --ach-r-soft: color-mix(in srgb, var(--ach-r) 12%, transparent);
+  --ach-r-title: color-mix(in srgb, var(--ach-r) 30%, #ffffff);
+  --ach-r-plate-bg: color-mix(in srgb, var(--ach-r) 14%, #0a1119);
+
+  --ach-c: #aab6c2;
+  --ach-c-soft: color-mix(in srgb, var(--ach-c) 14%, transparent);
+
+  /* Matches the dark charcoal square baked into most Thimble badge PNGs
+     (measured corner colour about rgb(24,26,29)) so the square edge does
+     not show inside the badge stage. */
+  --ach-stage-bg: #181a1d;
+  --ach-ink: #e9e2d0;
+  --ach-ink-muted: #9aa8b5;
+  --ach-flavour: #f0d28a;
+}
+
+/* ---------- RARITY: normal ladder ---------- */
+.rarity-common {
+  --ach-r: #c4b48a; --ach-r-2: #8d7d57;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 12%, transparent);
+}
+.rarity-uncommon {
+  --ach-r: #56c580; --ach-r-2: #2f8c57;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 20%, transparent);
+}
+.rarity-rare {
+  --ach-r: #4fa4f2; --ach-r-2: #2b6db6;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 28%, transparent);
+}
+.rarity-epic {
+  --ach-r: #b17cf2; --ach-r-2: #7546b9;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 34%, transparent);
+}
+.rarity-legendary {
+  --ach-r: #f2c04a; --ach-r-2: #b9821d;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 42%, transparent);
+}
+.rarity-celestial {
+  --ach-r: #a2deff; --ach-r-2: #6db8ef;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 50%, transparent);
+}
+
+/* ---------- RARITY: special classifications (outside the ladder) ---------- */
+.rarity-secret {
+  --ach-r: #a493c8; --ach-r-2: #6f5f94;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 22%, transparent);
+}
+.rarity-mythic {
+  --ach-r: #ff9ed8; --ach-r-2: #c25c9c;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 40%, transparent);
+}
+.rarity-demonic {
+  --ach-r: #e85d5d; --ach-r-2: #a32c2c;
+  --ach-r-glow: color-mix(in srgb, var(--ach-r) 46%, transparent);
+}
+
+/* ---------- CATEGORY (names match achievementCategoryGroup(), lower-cased) ---------- */
+[data-ach-cat="resources"] { --ach-c: #5fd1e9; }
+[data-ach-cat="sleep"]     { --ach-c: #8f92f2; }
+[data-ach-cat="training"]  { --ach-c: #f0a062; }
+[data-ach-cat="quests"]    { --ach-c: #dcb45e; }
+[data-ach-cat="character"] { --ach-c: #bd8ff2; }
+[data-ach-cat="adventure"] { --ach-c: #62cfa4; }
+[data-ach-cat="social"]    { --ach-c: #f092b8; }
+[data-ach-cat="meta"]      { --ach-c: #b1bcc7; }

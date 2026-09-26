@@ -1,0 +1,19 @@
+/* First steps card (Home) and the welcome tour list (RPG-0063 / 0064). Scoped to .ob-*; reuses the Home
+   page's .rpg-frame surfaces. No !important. */
+.ob-card { display: grid; gap: 8px; min-width: 0; margin-block: 8px; }
+.ob-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ob-head h3 { margin: 0; font-size: 14px; }
+.ob-count { font-size: 12px; color: #e5c47e; font-weight: 700; white-space: nowrap; }
+.ob-lede { margin: 0; font-size: 12px; color: #b9c9d0; }
+.ob-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ob-item { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 8px; padding: 8px; background: rgba(255, 255, 255, .05); border-radius: 8px; }
+.ob-box { width: 16px; height: 16px; border: 2px solid #e5c47e; border-radius: 4px; }
+.ob-text { display: grid; gap: 1px; min-width: 0; }
+.ob-text b { overflow-wrap: anywhere; }
+.ob-text small { color: #b9c9d0; font-size: 11px; overflow-wrap: anywhere; }
+.ob-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.ob-settings .ob-actions { margin-top: 6px; }
+.ob-tour-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.ob-tour-list li { display: flex; flex-wrap: wrap; gap: 4px 8px; }
+.ob-tour-list span { color: var(--pg-text-secondary, #ccd7d6); }
+@media (max-width: 21rem) { .ob-item { grid-template-columns: auto minmax(0, 1fr); } .ob-item .rpg-btn { grid-column: 1 / -1; } }

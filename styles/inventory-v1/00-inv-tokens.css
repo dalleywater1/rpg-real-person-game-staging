@@ -1,0 +1,75 @@
+/* Inventory v1 — design tokens (Aurelia's "The Player's Vault", frozen
+   2026-09-22 — see docs/handovers/inventory-v1/).
+
+   Mirrors training-v3/quests-v4/home-v4's token shape exactly (same
+   4-tier glass, same radii/space scale, same warm-ivory/antique-gold
+   language) so Inventory reads as one more room in the same dark-glass
+   building, not a new visual system.
+
+   Freeze annotation #2 (VISUAL_FREEZE_NOTES.md): the jewel/teal accent
+   shown on Aurelia's review board is TEST-ONLY. "Use the existing V3
+   active/focus token first... only introduce a replacement shared token
+   if Aurelia explicitly freezes it after direct comparison." There is no
+   single literal "--v3-active-focus" variable in this codebase to import
+   — the actual existing mechanism is the shared warm-antique-gold accent
+   every dark-glass section already carries as its own default identity
+   colour (Training's --tr-gold, Quests' --q-gold, Home's --home-gold,
+   all effectively the same hue family). --inv-accent below follows that
+   same convention instead of the board's teal — gold, not invented. */
+.inv-theme{
+  --inv-bg: #07111a;
+  --inv-surface-1: #0b131b;
+  --inv-surface-2: #0e1824;
+  --inv-surface-3: #101c2a;
+
+  --inv-border: #2c414f;
+  --inv-edge: rgba(155, 190, 210, 0.20);
+  --inv-divider: rgba(165, 192, 207, 0.14);
+
+  --inv-text: #f5f4ef;
+  --inv-text-secondary: #c7d3da;
+  --inv-text-muted: #83939b;
+
+  /* Antique gold — Inventory's one shared identity accent (see file
+     header). Headings, currency, Equipped state, Legendary rarity,
+     important ornament only — never a default border/fill. */
+  --inv-gold: #d9ac5c;
+  --inv-accent: var(--inv-gold);
+  --inv-accent-soft: color-mix(in srgb, var(--inv-accent) 16%, transparent);
+  --inv-accent-glow: color-mix(in srgb, var(--inv-accent) 28%, transparent);
+
+  --inv-success: #67d89a;
+  --inv-warning: #f0c467;
+  --inv-danger: #ef7a7a;
+
+  /* Rarity palette (master handover §17) — Common/Uncommon/Rare/Epic/
+     Legendary only; Legendary reuses the identity gold rather than a
+     6th hue, so "legendary" and "important RPG accent" stay one colour
+     family, not two competing golds. */
+  --inv-rarity-common: #8fadb6;
+  --inv-rarity-uncommon: #7fae7f;
+  --inv-rarity-rare: #6fa8c9;
+  --inv-rarity-epic: #a98bd4;
+  --inv-rarity-legendary: var(--inv-gold);
+
+  --inv-radius-sm: 8px;
+  --inv-radius-md: 12px;
+  --inv-radius-lg: 16px;
+  --inv-radius-pill: 999px;
+
+  --inv-space-1: 4px;
+  --inv-space-2: 8px;
+  --inv-space-3: 12px;
+  --inv-space-4: 16px;
+  --inv-space-5: 24px;
+
+  --inv-font-display: Georgia,"Times New Roman",serif;
+  --inv-font-ui: var(--font-micro, "Alegreya Sans", system-ui, sans-serif);
+
+  --inv-glass-strong: rgba(7, 19, 29, 0.90);
+  --inv-glass-main: rgba(9, 24, 36, 0.82);
+  --inv-glass-soft: rgba(14, 35, 50, 0.66);
+  --inv-glass-hover: rgba(18, 43, 60, 0.78);
+
+  --inv-touch-min: 44px;
+}

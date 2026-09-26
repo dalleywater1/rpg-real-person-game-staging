@@ -1,0 +1,80 @@
+/* Quests v4 - button family (same shape language as Training .tr-btn-*).
+
+   Primary   pill, dark glass, category accent edge + soft glow
+   Secondary pill, dark glass, neutral border, no glow until interaction
+   Ghost     text-weight action in the accent colour
+   Danger    semantic red, never the category colour (destructive actions)
+   Icon-only circular utility button (close, +, i, more), neutral until
+             active, then the category accent
+
+   All of it is CSS; no button artwork. */
+
+.q-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 38px;
+  padding: 9px 20px;
+  border-radius: var(--q-radius-lg);
+  border: 1px solid var(--q-border);
+  background: var(--q-glass-main);
+  color: var(--q-text-secondary);
+  font: 700 11.5px/1.1 var(--q-font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  appearance: none;
+}
+.q-btn:hover,
+.q-btn:focus-visible { border-color: var(--q-accent-line); color: var(--q-text); }
+.q-btn:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.q-btn:disabled { opacity: 0.5; cursor: default; box-shadow: none; }
+
+.q-btn--primary {
+  color: var(--q-text);
+  border-color: var(--q-accent-line);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--q-accent) 13%, var(--q-glass-main)), var(--q-glass-main));
+  box-shadow: 0 0 10px var(--q-accent-soft);
+}
+.q-btn--primary:hover,
+.q-btn--primary:focus-visible { background: linear-gradient(180deg, color-mix(in srgb, var(--q-accent) 20%, var(--q-glass-hover)), var(--q-glass-hover)); }
+
+.q-btn--ghost { background: transparent; border-color: transparent; color: var(--q-accent); }
+.q-btn--ghost:hover,
+.q-btn--ghost:focus-visible { border-color: var(--q-accent-line); }
+
+.q-btn--danger { color: var(--q-danger); border-color: color-mix(in srgb, var(--q-danger) 40%, var(--q-border)); background: transparent; }
+.q-btn--danger:hover,
+.q-btn--danger:focus-visible { border-color: var(--q-danger); color: var(--q-danger); }
+.q-btn--danger:focus-visible { outline-color: var(--q-danger); }
+/* the confirming button of a destructive dialog: still red, a little heavier */
+.q-btn--danger.q-btn--strong { background: color-mix(in srgb, var(--q-danger) 14%, var(--q-glass-main)); border-color: color-mix(in srgb, var(--q-danger) 60%, var(--q-border)); }
+
+.q-btn--sm { min-height: 30px; padding: 6px 14px; font-size: 10.5px; }
+.q-btn--block { display: flex; width: 100%; }
+.q-btn-row { display: flex; flex-wrap: wrap; align-items: center; gap: var(--q-space-2); }
+.q-btn-row > .q-btn--primary { flex: 1 1 auto; }
+.q-btn-row--split > .q-btn { flex: 1 1 0; }
+
+/* ---------- circular icon-only button ---------- */
+.q-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--q-edge);
+  background: rgba(8, 25, 37, 0.88);
+  color: var(--q-text-secondary);
+  font: 500 20px/1 var(--q-font-body);
+  cursor: pointer;
+  appearance: none;
+}
+.q-icon-btn:hover,
+.q-icon-btn:focus-visible,
+.q-icon-btn.is-active { border-color: var(--q-accent); color: var(--q-text); box-shadow: 0 0 10px var(--q-accent-soft); }
+.q-icon-btn:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }

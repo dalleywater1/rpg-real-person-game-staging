@@ -1,0 +1,89 @@
+/* Quests v4 - toasts and the System Reward card (handover sections 36 and 40).
+
+   #toast and #systemRewardHost are ONE app-wide element each, shared with
+   every page, and they live outside the Quests page wrapper. So these rules
+   are scoped to body[data-theme="quests"] (set by setPage()): on the Quests
+   page they wear the glass, everywhere else they are untouched. Because
+   they sit outside .quests-v4 the tokens are not in scope here, so the
+   values below are literals that mirror 00-quest-tokens.css.
+
+   toast(msg, type) marks the toast with data-type = success | error |
+   warning | info, so the icon and colour say what happened; the words are
+   always there too. The icon is compact and never a big category glow. */
+
+body[data-theme="quests"] #toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: min(92vw, 420px);
+  padding: 10px 16px 10px 12px;
+  text-align: left;
+  color: #f5f4ef;
+  font: 500 13.5px/1.35 "Alegreya Sans", system-ui, sans-serif;
+  border-radius: 14px;
+  border: 1px solid rgba(165, 192, 207, 0.28);
+  background: linear-gradient(180deg, rgba(15, 36, 50, 0.94), rgba(6, 18, 29, 0.96));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04), 0 10px 28px rgba(0, 0, 0, 0.5);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+body[data-theme="quests"] #toast::before {
+  content: "i";
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid #83939b;
+  color: #bec8cc;
+  font: 800 12px/1 "Alegreya Sans", system-ui, sans-serif;
+}
+body[data-theme="quests"] #toast[data-type="success"] { border-color: rgba(103, 216, 154, 0.45); }
+body[data-theme="quests"] #toast[data-type="success"]::before { content: "\2713"; border-color: #67d89a; color: #67d89a; }
+body[data-theme="quests"] #toast[data-type="error"] { border-color: rgba(239, 122, 122, 0.5); }
+body[data-theme="quests"] #toast[data-type="error"]::before { content: "!"; border-color: #ef7a7a; color: #ef7a7a; }
+body[data-theme="quests"] #toast[data-type="warning"] { border-color: rgba(240, 196, 103, 0.5); }
+body[data-theme="quests"] #toast[data-type="warning"]::before { content: "!"; border-color: #f0c467; color: #f0c467; }
+body[data-theme="quests"] #toast .toast-action {
+  margin-left: 4px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(232, 185, 79, 0.6);
+  background: transparent;
+  color: #e8bf72;
+  font: 700 11px/1 "Alegreya Sans", system-ui, sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* System Reward card: the reward / XP result popup. Same glass, restrained
+   green success accent, no gold corner ornaments and no blue gem. Sizes and
+   positioning are left to the shared rules. */
+body[data-theme="quests"] .system-reward-card {
+  background: linear-gradient(180deg, rgba(15, 36, 50, 0.94), rgba(6, 18, 29, 0.96));
+  border: 1px solid rgba(103, 216, 154, 0.38);
+  border-radius: 14px;
+  box-shadow:
+    inset 0 2px 0 rgba(103, 216, 154, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 12px 34px rgba(0, 0, 0, 0.55),
+    0 0 18px rgba(103, 216, 154, 0.12);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+body[data-theme="quests"] .system-reward-card::before,
+body[data-theme="quests"] .system-reward-card::after { display: none; }
+body[data-theme="quests"] .system-reward-gem {
+  border-radius: 50%;
+  transform: translateX(-50%);
+  border: 2px solid rgba(190, 240, 214, 0.85);
+  background: radial-gradient(circle at 35% 30%, #a6f2c9, #2f9c69 58%, #0c3b29);
+  box-shadow: 0 0 12px rgba(103, 216, 154, 0.45);
+}
+body[data-theme="quests"] .system-reward-kicker { color: #67d89a; }
+body[data-theme="quests"] .system-reward-xp { color: #f0c56a; text-shadow: 0 0 10px rgba(240, 197, 106, 0.32); }
+body[data-theme="quests"] .system-reward-label { color: #f5f4ef; border-top-color: rgba(165, 192, 207, 0.22); }
+/* the shared rules set these at 8px in the mono face with !important, too small to read */
+body[data-theme="quests"] .system-reward-detail { color: #83939b; font-family: "Alegreya Sans", system-ui, sans-serif; font-size: 12px !important; }
+body[data-theme="quests"] .system-reward-stats { font-family: "Alegreya Sans", system-ui, sans-serif; font-size: 12px !important; }

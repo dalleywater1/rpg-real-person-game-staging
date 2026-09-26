@@ -1,0 +1,63 @@
+/* Training v3 — Training Hero Header (Astra handover "Training Hero
+   Header Compaction Pass", 2026-09-20)
+
+   ONE compact banner shared by every specialist page: the category
+   artwork is the banner background, icon + name + tagline sit centred
+   inside it, the player strip lies along its bottom edge in translucent
+   dark glass, an optional Settings button sits in its top-right corner,
+   and only a slim Back row stays above it. This replaces the earlier tall
+   stack (back row, 16:10 art card, identity block, separate player box)
+   so the first functional pane starts sooner.
+
+   Art, icon, name, tagline and accent are the only per-category
+   differences; --tr-hero-focus (set in a categories css file when a scene
+   needs it) only nudges which part of the artwork the banner crops to.
+   Surfaces read from --tr-glass-hero / --tr-glass-hero-edge so the
+   artwork stays visible through them. */
+
+.tr-hero{display:flex;flex-direction:column;gap:var(--tr-space-1)}
+
+/* ---------- Back row (slim, above the banner) ---------- */
+.tr-hero__nav{display:flex;align-items:center;min-height:32px}
+.tr-hero__back{display:inline-flex;align-items:center;gap:6px;min-height:32px;padding:0 8px 0 0;background:transparent;border:0;border-radius:var(--tr-radius-sm);color:var(--tr-text-secondary);font-family:var(--tr-font-display);font-size:12px;letter-spacing:.03em;cursor:pointer}
+.tr-hero__back:hover,.tr-hero__back:focus-visible{color:var(--tr-text)}
+.tr-hero__back:focus-visible{outline:2px solid color-mix(in srgb, var(--tr-category-accent) 70%, transparent);outline-offset:2px}
+
+/* ---------- Banner ---------- */
+.tr-hero__banner{position:relative;isolation:isolate;display:flex;flex-direction:column;overflow:hidden;min-height:190px;min-height:clamp(184px,52vw,224px);background:var(--tr-bg);border:1px solid var(--tr-edge);border-radius:var(--tr-radius-lg);box-shadow:0 8px 22px rgba(0,0,0,.35)}
+.tr-hero__art{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:50% 42%;object-position:var(--tr-hero-focus,50% 42%)}
+/* One soft scrim behind the identity block plus a gentle top/bottom fade:
+   keeps title and tagline readable on any scene without turning the whole
+   banner into a dark slab. */
+.tr-hero__veil{position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(ellipse 72% 58% at 50% 56%,rgba(3,9,15,.68) 0%,rgba(3,9,15,.44) 55%,rgba(3,9,15,0) 100%),linear-gradient(180deg,rgba(3,9,15,.30) 0%,rgba(3,9,15,.04) 30%,rgba(3,9,15,.14) 68%,rgba(3,9,15,.28) 100%)}
+
+/* ---------- Identity (centred) ---------- */
+.tr-hero__identity{flex:1 1 auto;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:12px var(--tr-space-4) 8px;text-align:center}
+.tr-hero__medallion{display:grid;place-items:center;width:52px;height:52px;margin-bottom:3px;border-radius:50%;background:rgba(6,16,26,.62);border:2px solid var(--tr-category-accent);box-shadow:0 0 0 3px rgba(3,9,15,.34),0 0 14px color-mix(in srgb, var(--tr-category-accent) 30%, transparent);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.tr-hero__medallion img{width:28px;height:28px;object-fit:contain}
+.tr-hero__title{margin:0;max-width:100%;font-family:var(--tr-font-display);font-size:20px;font-weight:400;line-height:1.1;letter-spacing:.09em;color:color-mix(in srgb, var(--tr-category-accent) 30%, var(--tr-text));text-shadow:0 1px 2px rgba(0,0,0,.85),0 2px 10px rgba(0,0,0,.6)}
+.tr-hero__subtitle{margin:0;max-width:100%;font-size:11px;line-height:1.35;color:#e6edf0;text-wrap:balance;text-shadow:0 1px 2px rgba(0,0,0,.85),0 1px 6px rgba(0,0,0,.55)}
+
+/* ---------- Settings (optional, top-right corner of the banner) ---------- */
+.tr-hero__settings{position:absolute;top:var(--tr-space-2);right:var(--tr-space-2);z-index:1;width:36px;height:36px;background:var(--tr-glass-hero);border-color:var(--tr-glass-hero-edge);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font-size:16px}
+.tr-hero__settings:focus-visible{outline:2px solid color-mix(in srgb, var(--tr-category-accent) 70%, transparent);outline-offset:2px}
+
+/* ---------- Player strip (full width, bottom edge of the banner) ---------- */
+.tr-hero__player{flex:0 0 auto;display:flex;align-items:center;gap:10px;min-height:40px;padding:6px var(--tr-space-3);background:var(--tr-glass-hero);border-top:1px solid var(--tr-glass-hero-edge);-webkit-backdrop-filter:blur(8px) saturate(1.15);backdrop-filter:blur(8px) saturate(1.15)}
+.tr-hero__portrait{flex:0 0 auto;width:28px;height:28px;border-radius:50%;object-fit:cover;border:1px solid rgba(220,235,245,.34)}
+.tr-hero__player-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px;font-weight:700;color:var(--tr-text)}
+.tr-hero__player-level{flex:0 0 auto;padding:3px 10px;border-radius:999px;background:rgba(3,9,15,.38);border:1px solid color-mix(in srgb, var(--tr-category-accent) 55%, var(--tr-glass-hero-edge));font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--tr-text)}
+
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  .tr-hero__player,.tr-hero__settings{background:rgba(6,16,26,.78)}
+}
+
+@media(max-width:340px){
+  .tr-hero__banner{min-height:176px}
+  .tr-hero__identity{padding:10px var(--tr-space-3) 6px}
+  .tr-hero__medallion{width:46px;height:46px}
+  .tr-hero__medallion img{width:25px;height:25px}
+  .tr-hero__title{font-size:17px}
+  .tr-hero__subtitle{font-size:10.5px}
+  .tr-hero__player{padding:5px var(--tr-space-2);gap:8px}
+}

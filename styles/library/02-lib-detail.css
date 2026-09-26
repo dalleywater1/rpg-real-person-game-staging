@@ -1,0 +1,71 @@
+/* Library: item detail-page components (LibraryDetailShell), Phase 1B/1C.
+   The content pattern shared by every Library item detail page (Bench
+   Press today, Echo, and whatever real item page is built after them) --
+   a row of small labelled facts, plus an optional row of tags per
+   involvement/category level. Composes .lib-shell for the panel itself
+   (01-lib-components.css) rather than duplicating it; this file only adds
+   what goes INSIDE one. Same tokens, same scope (.lib-theme), no new ones
+   introduced. Load order: after 01-lib-components.css. */
+
+.lib-detail__facts {
+  display: grid;
+  gap: var(--lib-space-2);
+}
+
+.lib-detail__fact {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--lib-space-3);
+  padding-block: var(--lib-space-1);
+  border-bottom: 1px solid var(--lib-divider);
+}
+.lib-detail__fact:last-child { border-bottom: 0; }
+
+.lib-detail__fact-label,
+.lib-detail__row-label {
+  font-family: var(--lib-font-heading);
+  font-size: var(--lib-type-meta);
+  font-weight: 600;
+  color: var(--lib-text-muted);
+  text-transform: uppercase;
+  letter-spacing: .03em;
+}
+
+.lib-detail__fact-value {
+  font-size: var(--lib-type-body);
+  font-weight: 700;
+  color: var(--lib-text-primary);
+  text-align: right;
+}
+
+/* A labelled row of tags (muscle involvement, etc.) — label stays put,
+   tags wrap beneath it on narrow widths rather than truncating. */
+.lib-detail__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--lib-space-2) var(--lib-space-3);
+}
+.lib-detail__row-label { flex: 0 0 auto; }
+
+.lib-detail__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lib-space-2);
+}
+
+/* ---- Codex browsing and Discoveries filtering (RPG-0040 / RPG-0044) ---- */
+.lib-theme .lib-filters {
+  display: flex; gap: var(--lib-space-2); overflow-x: auto; padding: .25rem .25rem .5rem; margin-inline: -.25rem;
+  overscroll-behavior-inline: contain; scrollbar-width: thin;
+}
+.lib-theme .lib-chip {
+  flex: 0 0 auto; min-height: var(--lib-touch-min); padding: .35rem .95rem;
+  border: 1px solid var(--lib-control-border); border-radius: var(--lib-radius-pill);
+  background: rgba(10, 27, 35, .6); color: var(--lib-text-primary); font: inherit; font-weight: 700; cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-theme .lib-chip[aria-pressed="true"] { background: rgba(255, 255, 255, .16); border-color: var(--lib-accent); color: var(--lib-text-gold); }
+.lib-theme .lib-chip:hover { background: rgba(255, 255, 255, .1); }
+.lib-theme .lib-page__inner > * { min-width: 0; }

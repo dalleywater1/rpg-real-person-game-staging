@@ -1,0 +1,61 @@
+/* Quests v4 - responsive rules. Container queries on the page root
+   (.quests-v4, container name "quests"), not viewport media queries, so
+   the layout follows the width it is actually given. Real range in the
+   app: 320px phone column up to the 580px #appShell cap (that cap is
+   also what "desktop" means for this app). The 2x2 front page is kept at
+   every width; only sizing and density change.
+
+   Popups live outside the page container (they are fixed-position children
+   of #modalRoot), so their rules use viewport media queries instead. */
+
+/* ---------- narrow: 320px phones (root content width <= 330px) ---------- */
+@container quests (max-width: 330px) {
+  .q-title { font-size: 21px; }
+  .q-head--scene { padding: 12px; }
+  .q-tile { min-height: 222px; }
+  .q-tile__desc { display: none; }
+  .q-tile__icon { --s: 38px; top: 8px; left: 8px; }
+  .q-tile__go { top: 8px; right: 8px; width: 24px; height: 24px; font-size: 14px; }
+  .q-tile__plate { margin: 0 6px 6px; padding: 8px 9px; }
+  .q-tile__title { font-size: 11.5px; }
+  .q-tile__line { font-size: 12px; }
+  .q-stats { gap: 6px; }
+  .q-tabs { gap: 2px; padding: 3px; }
+  .q-tab { padding: 8px 7px; font-size: 9.5px; letter-spacing: 0.03em; }
+  .q-stat span { font-size: 9px; letter-spacing: 0.05em; }
+  .q-btn { padding: 9px 14px; }
+  .q-hero__panel { margin: 0 6px 6px; padding: 10px; gap: 8px; }
+  .q-hero__title { font-size: 15.5px; }
+  .q-card { padding: 12px; }
+  .q-action { min-height: 86px; padding: 10px; }
+  .q-entry { grid-template-columns: 44px minmax(0, 1fr); gap: 10px; }
+  .q-field-row { grid-template-columns: 1fr; }
+}
+
+/* ---------- wide: the 580px shell ---------- */
+@container quests (min-width: 480px) {
+  .q-title { font-size: 26px; }
+  .q-head--scene { padding: 20px; }
+  .q-tile__icon { --s: 52px; top: 12px; left: 12px; }
+  .q-tile__go { top: 12px; right: 12px; width: 28px; height: 28px; }
+  .q-tile__plate { margin: 0 10px 10px; padding: 12px 14px; gap: 4px; }
+  .q-tile__title { font-size: 14px; }
+  .q-tile__desc { font-size: 11.5px; }
+  .q-tile__line { font-size: 13.5px; }
+  .q-tile__meta { font-size: 11.5px; }
+  .q-hero__panel { margin: 0 12px 12px; padding: 16px; gap: 12px; }
+  .q-hero__title { font-size: 20px; }
+  .q-card { padding: 16px; }
+  .q-action-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .q-stat b { font-size: 20px; }
+}
+
+/* ---------- popups ---------- */
+@media (max-width: 420px) {
+  .q-modal { border-radius: 12px; }
+  .q-modal__head { padding: 12px 12px 10px 14px; }
+  .q-modal__body { padding: 12px 14px; gap: 12px; }
+  .q-modal__foot { padding: 10px 14px 12px; }
+  .q-modal__foot .q-btn { flex: 1 1 auto; }
+  .q-modal .q-field-row { grid-template-columns: 1fr; }
+}

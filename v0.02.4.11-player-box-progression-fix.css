@@ -1,0 +1,71 @@
+/* RPG v0.02.4.11 — Player Box Streak/Today/Next Reward fix (2 revisions).
+   Phase 1 follow-up: this was never in the original hotfix scope.
+
+   Rev 1 root cause (confirmed via devtools): .v8-player-progression was
+   sizing to fit-content (208px) instead of stretching to its parent
+   .v8-player-identity column (286px), starving each of the 3 items to
+   ~56px — rendered as single-letter labels ("S", "T").
+
+   Rev 2: the rev-1 fix (allowing label/value text to wrap) overcorrected —
+   "0 days" / "0 / 3" now wrapped mid-phrase onto their own lines (3 lines
+   per item instead of 2). Root cause: the row was CSS Grid with 3 equal
+   1fr columns, forcing each item into a fixed share of the width whether
+   or not its content needed more. Switched to a flex row that wraps at
+   the ITEM level instead (matching the approved reference's IconPill
+   layout) — each item keeps its label+value on one line each via
+   white-space:nowrap, and if the row is too narrow the whole item drops
+   to the next line rather than its text wrapping mid-word.
+
+   Frame-gap bug from the first follow-up does not reproduce in this
+   codebase (verified at multiple corners/zoom levels/viewports); its
+   class names (.player-box__*) don't exist anywhere in this repo. The
+   "disconnected frame segments" report in the second follow-up also did
+   not reproduce under the same checks — flagged back rather than
+   "fixed" against a symptom that isn't present. */
+.home-player-v8 .v8-layout-hotfix-active .v8-player-progression{
+  display:flex!important;
+  flex-wrap:wrap!important;
+  width:100%!important;
+  justify-content:space-between!important;
+  row-gap:10px!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-progress-item{
+  flex:0 1 auto!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-progress-item span{
+  white-space:nowrap!important;
+}
+.home-player-v8 .v8-layout-hotfix-active .v8-progress-item b{
+  white-space:nowrap!important;
+  overflow:visible!important;
+  text-overflow:clip!important;
+  max-width:none!important;
+}
+
+/* ------------------------------------------------------------
+   Help / Settings — the diamond-notched corners are baked into
+   Variant 8 - Help.png / Settings.png, not CSS. At 38-44px that
+   ornamentation reads as clutter. Replaced with a plain CSS button
+   (rounded square, single gold border) + a text glyph, matching the
+   approved reference. The image is hidden, not deleted, so this is
+   a one-line revert (v0248CssToolGlyphs guard) if art is preferred later.
+   ------------------------------------------------------------ */
+.home-player-v8 .v8-frame-control-hotfix-active .v8-tool.v8-tool-css-glyph{
+  border-radius:7px!important;
+  border:2px solid #c9a86a!important;
+  background:#f3ecd9!important;
+  box-shadow:0 2px 4px rgba(0,0,0,.25)!important;
+}
+.home-player-v8 .v8-frame-control-hotfix-active .v8-tool.v8-tool-css-glyph:hover{
+  background:#ece0c4!important;
+}
+.home-player-v8 .v8-frame-control-hotfix-active .v8-tool.v8-tool-css-glyph img{
+  display:none!important;
+}
+.home-player-v8 .v8-frame-control-hotfix-active .v8-tool-glyph{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:60%;
+  font-weight:700;
+  color:#16233f;
+  line-height:1;
+}

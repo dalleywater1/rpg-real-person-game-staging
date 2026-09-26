@@ -1,0 +1,121 @@
+/* Quests v4 - Quick Quests V1: queue rows, active card and timer, saved
+   presets, and the pieces that only the Quick Quest dialogs use.
+
+   Everything here reuses the existing family (.q-row, .q-check, .q-btn,
+   .q-card, .q-chip, questsModal) and only adds what those do not cover.
+   Colours come from the tokens: the violet Quick accent is --q-accent on a
+   .quest-quick root, completed states are --q-success (green is semantic,
+   never the Quick identity), overdue is --q-warning as words plus colour.
+   Plain px sizes only, so this file has no container-unit fallbacks. */
+
+/* ---------- queue rows ---------- */
+.qq-check { position: relative; padding: 0; cursor: pointer; appearance: none; -webkit-appearance: none; }
+.qq-check::before { content: ""; position: absolute; inset: -9px; }   /* 40px touch target around a 22px circle */
+.qq-check:hover,
+.qq-check:focus-visible { border-color: var(--q-accent); box-shadow: 0 0 8px var(--q-accent-soft); }
+.qq-check:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+
+.qq-row__body {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  padding: 4px 0;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  background: none;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.qq-row__body:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.qq-row.is-late { border-color: color-mix(in srgb, var(--q-warning) 34%, var(--q-edge)); }
+.qq-late { color: var(--q-warning); font-weight: 700; }
+.qq-row__more { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 0 32px; }
+
+.qq-group + .qq-group { margin-top: var(--q-space-3); }
+.qq-group__title {
+  margin: 0 0 6px;
+  font: 800 10.5px/1 var(--q-font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--q-text-muted);
+}
+
+/* ---------- active card ---------- */
+.qq-active .q-card__title { margin: 2px 0; }
+.qq-titlebtn {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--q-accent) 45%, transparent);
+  text-underline-offset: 3px;
+}
+.qq-titlebtn:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 3px; border-radius: 4px; }
+
+.qq-timer {
+  margin: var(--q-space-3) 0;
+  text-align: center;
+  font: 800 34px/1 var(--q-font-body);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: 0.04em;
+  color: var(--q-text);
+  text-shadow: 0 0 16px var(--q-accent-glow);
+}
+.q-modal .qq-timer { margin-top: 0; font-size: 30px; }
+.qq-tile-timer { color: var(--q-accent); font-weight: 800; font-variant-numeric: tabular-nums lining-nums; }
+
+/* ---------- saved presets ---------- */
+.qq-preset { grid-template-columns: minmax(0, 1fr) auto; padding: 6px 8px 6px 10px; }
+.qq-preset__use {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 4px 0;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.qq-preset__use:hover .qq-plus,
+.qq-preset__use:focus-visible .qq-plus { border-color: var(--q-accent); box-shadow: 0 0 8px var(--q-accent-soft); }
+.qq-preset__use:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.qq-plus {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--q-accent-line);
+  color: var(--q-accent);
+  font: 700 15px/1 var(--q-font-body);
+}
+.qq-preset__remove { width: 30px; height: 30px; font-size: 18px; }
+
+/* ---------- dialog pieces ---------- */
+.qq-more-toggle { align-self: flex-start; margin: 0 0 var(--q-space-2); }
+.qq-more-toggle + #qqMore { display: block; }
+#qqMore[hidden] { display: none; }
+.qq-status { margin: 0 0 var(--q-space-3); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.qq-times { margin: 0; font: 700 16px/1.3 var(--q-font-body); font-variant-numeric: tabular-nums lining-nums; color: var(--q-text); }
+.qq-times--long { font-weight: 500; font-size: 13px; color: var(--q-text-secondary); }
+.qq-notes { margin-top: var(--q-space-3); }
+.qq-notes p { margin: 2px 0 0; font: 500 13px/1.45 var(--q-font-body); color: var(--q-text-secondary); white-space: pre-wrap; overflow-wrap: anywhere; }
+.qq-conflict__name { margin: 0; font: 700 16px/1.3 var(--q-font-display); color: var(--q-text); overflow-wrap: anywhere; }
+.qq-conflict__time { margin: 2px 0 var(--q-space-3); font: 800 22px/1.2 var(--q-font-body); font-variant-numeric: tabular-nums lining-nums; color: var(--q-accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .qq-check,
+  .qq-plus { transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+}

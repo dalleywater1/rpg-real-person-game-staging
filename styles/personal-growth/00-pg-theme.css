@@ -1,0 +1,194 @@
+/* Personal Growth: theme tokens and semantic mappings.
+   Handover: ASTRA_PERSONAL_GROWTH_MASTER_HANDOVER (2026-09-21), section 3.
+   Docs: docs/PERSONAL_GROWTH.md.
+
+   Everything is scoped to .pg-theme, which is set on the page root and on
+   the dialog backdrop, so no rule here can reach Home, Training, Quests or
+   any other section. Load order: this file, then 01-pg-components.css,
+   then 02-pg-pages.css.
+
+   Fonts reuse the application's real font variables (styles.css :root):
+   display = Cinzel, ui = Alegreya, micro = Alegreya Sans. Body text and
+   controls use Alegreya Sans, titles use Alegreya, the page hero uses
+   Cinzel. The global body font is a legacy monospace, so this scope always
+   sets its own family. */
+
+.pg-theme {
+  color-scheme: dark;
+
+  /* World and glass */
+  --pg-bg-deep: #07151d;
+  --pg-bg-mid: #102b30;
+  --pg-glass-fill: rgba(16, 38, 47, .88);
+  --pg-glass-fill-strong: rgba(10, 27, 35, .96);
+  --pg-glass-solid: #10262f;
+  --pg-glass-border: rgba(177, 202, 210, .24);
+  --pg-glass-highlight: rgba(255, 255, 255, .06);
+  --pg-divider: rgba(177, 202, 210, .16);
+  --pg-tonal: rgba(255, 255, 255, .045);
+  --pg-shadow-soft: 0 6px 20px rgba(0, 0, 0, .22);
+  --pg-shadow-deep: 0 18px 48px rgba(0, 0, 0, .40);
+
+  /* Warm matte reading inset (opt in, never the default surface) */
+  --pg-ivory: #eee7d8;
+  --pg-ivory-soft: #e2dacb;
+  --pg-ivory-border: #b8ac95;
+  --pg-ivory-shadow: inset 0 1px 0 rgba(255, 255, 255, .35);
+  --pg-ink: #24312e;
+  --pg-ink-secondary: #46534d;
+  --pg-field-bg: #0b2029;
+  --pg-control-border: #718c96;
+
+  /* Text */
+  --pg-text-primary: #f5f1e8;
+  --pg-text-secondary: #ccd7d6;
+  --pg-text-muted: #a8bbbd;
+  --pg-text-gold: #e5c47e;
+  --pg-text-success: #9dd8b0;
+  --pg-text-danger: #ffb1b7;
+
+  /* Accents. Category colour never replaces success or error semantics. */
+  --pg-accent-green: #98d4ad;
+  --pg-accent-blue: #8ec9e8;
+  --pg-accent-purple: #c6aff0;
+  --pg-accent-pink: #edb1d0;
+  --pg-accent-orange: #edb083;
+  --pg-accent-gold: #e5c47e;
+  --pg-accent-green-soft: rgba(152, 212, 173, .14);
+  --pg-accent-blue-soft: rgba(142, 201, 232, .14);
+  --pg-accent-purple-soft: rgba(198, 175, 240, .14);
+  --pg-accent-pink-soft: rgba(237, 177, 208, .14);
+  --pg-accent-orange-soft: rgba(237, 176, 131, .14);
+  --pg-accent-gold-soft: rgba(229, 196, 126, .14);
+  --pg-accent: var(--pg-accent-green);
+  --pg-accent-soft: var(--pg-accent-green-soft);
+  --pg-on-accent: #10232a;
+  --pg-focus: #b6e8ff;
+  --pg-focus-on-warm: #155b78;
+
+  /* Shape and spacing */
+  --pg-radius-control: .75rem;
+  --pg-radius-row: 1rem;
+  --pg-radius-panel: 1.5rem;
+  --pg-radius-pill: 999px;
+  --pg-space-1: .25rem;
+  --pg-space-2: .5rem;
+  --pg-space-3: .75rem;
+  --pg-space-4: 1rem;
+  --pg-space-6: 1.5rem;
+  --pg-space-8: 2rem;
+  --pg-space-12: 3rem;
+
+  /* Type */
+  --pg-font-body: var(--font-micro, "Alegreya Sans", system-ui, sans-serif);
+  --pg-font-heading: var(--font-ui, "Alegreya", Georgia, serif);
+  --pg-font-display: var(--font-display, "Cinzel", Georgia, serif);
+  --pg-type-meta: .875rem;
+  --pg-type-body: 1rem;
+  --pg-type-section: 1.25rem;
+  --pg-type-title: clamp(1.75rem, 4vw, 2.5rem);
+  --pg-line-body: 1.5;
+
+  /* Sizes. The handover starts these in rem (icon 3rem and 5rem, touch 2.75rem).
+     They are capped in CSS pixels here on purpose: a touch target is measured
+     in CSS pixels, and when a user enlarges text to 200 percent a pure rem
+     value doubles (88px targets, 96px icons) and squeezes a 320px row until the
+     page scrolls sideways. Text and spacing still scale with rem. */
+  --pg-icon-row: min(3rem, 56px);
+  --pg-icon-hero: min(5rem, 96px);
+  --pg-content-max: 75rem;
+  --pg-reading-max: 65ch;
+  --pg-touch-min: 44px;
+
+  /* Effects */
+  --pg-blur: 8px;
+  --pg-motion-fast: 140ms;
+  --pg-motion-normal: 220ms;
+
+  font-family: var(--pg-font-body);
+  font-size: var(--pg-type-body);
+  line-height: var(--pg-line-body);
+  color: var(--pg-text-primary);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.pg-theme *,
+.pg-theme *::before,
+.pg-theme *::after {
+  box-sizing: border-box;
+}
+
+/* Resets. They are wrapped in :where() so they carry ZERO specificity: a
+   component class such as .pg-btn--primary always beats them, instead of the
+   reset silently overriding its colour, size or margin. */
+
+/* Form controls do not inherit type by default. */
+.pg-theme :where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.pg-theme :where(h1, h2, h3, h4, p, ul, ol, dl, dd, figure) {
+  margin: 0;
+  padding: 0;
+}
+
+.pg-theme :where(ul, ol) {
+  list-style: none;
+}
+
+/* Section accents. Set --pg-accent and its soft tint together. These come
+   after .pg-theme so a modifier on the same element wins. */
+.pg-accent-green  { --pg-accent: var(--pg-accent-green);  --pg-accent-soft: var(--pg-accent-green-soft); }
+.pg-accent-blue   { --pg-accent: var(--pg-accent-blue);   --pg-accent-soft: var(--pg-accent-blue-soft); }
+.pg-accent-purple { --pg-accent: var(--pg-accent-purple); --pg-accent-soft: var(--pg-accent-purple-soft); }
+.pg-accent-pink   { --pg-accent: var(--pg-accent-pink);   --pg-accent-soft: var(--pg-accent-pink-soft); }
+.pg-accent-orange { --pg-accent: var(--pg-accent-orange); --pg-accent-soft: var(--pg-accent-orange-soft); }
+.pg-accent-gold   { --pg-accent: var(--pg-accent-gold);   --pg-accent-soft: var(--pg-accent-gold-soft); }
+
+/* Tracker categories keep the hue family they had before the overhaul:
+   wellbeing lavender, learning blue, hobbies mauve, personal care rose,
+   home and routine sage, social terracotta, personal goals teal-gold. Two
+   categories share pink because the handover palette has six accents. */
+.pg-cat-wellbeing     { --pg-accent: var(--pg-accent-purple); --pg-accent-soft: var(--pg-accent-purple-soft); }
+.pg-cat-learning      { --pg-accent: var(--pg-accent-blue);   --pg-accent-soft: var(--pg-accent-blue-soft); }
+.pg-cat-hobbies       { --pg-accent: var(--pg-accent-pink);   --pg-accent-soft: var(--pg-accent-pink-soft); }
+.pg-cat-personalCare  { --pg-accent: var(--pg-accent-pink);   --pg-accent-soft: var(--pg-accent-pink-soft); }
+.pg-cat-homeRoutine   { --pg-accent: var(--pg-accent-green);  --pg-accent-soft: var(--pg-accent-green-soft); }
+.pg-cat-social        { --pg-accent: var(--pg-accent-orange); --pg-accent-soft: var(--pg-accent-orange-soft); }
+.pg-cat-personalGoals { --pg-accent: var(--pg-accent-gold);   --pg-accent-soft: var(--pg-accent-gold-soft); }
+
+/* Text is exposed to assistive technology only. */
+.pg-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard focus: an outline, never only a shadow or a background. */
+.pg-theme :focus-visible {
+  outline: 3px solid var(--pg-focus);
+  outline-offset: 2px;
+}
+
+/* Forced colours: shadows and background images drop out, so state has to be
+   carried by borders, outlines and text, which is how the components are
+   built. These map the tokens onto system colours. */
+@media (forced-colors: active) {
+  .pg-theme {
+    --pg-glass-border: CanvasText;
+    --pg-divider: GrayText;
+    --pg-control-border: ButtonBorder;
+    --pg-focus: Highlight;
+    --pg-focus-on-warm: Highlight;
+  }
+}

@@ -1,0 +1,89 @@
+/* Quests v4 - design tokens (ASTRA Quests Glass handovers 2026-09-20).
+
+   Mirrors the Training v3 token set on purpose (same navy/near-black
+   glass, same radii and spacing) so Training and Quests read as one
+   component language. Two things differ from Training:
+     1. the accent source is the QUEST TYPE (Main/Side/Daily/Quick), not
+        the sport, and
+     2. the heading gold is a touch warmer (antique gold).
+
+   One variable drives every component: --q-accent. A category root
+   (.quest-main / .quest-side / .quest-daily / .quest-quick, see
+   16-quest-themes.css) points it at one of the four category tokens
+   below; everything else derives from it. Change the four category
+   values here to re-colour the whole Quests area, nothing else moves.
+
+   The category palette is settled (Jay, 2026-09-20): Main antique gold,
+   Side soft coral, Daily soft sky blue, Quick soft lavender. Green is
+   NOT a category colour: it is reserved for semantic success/completion
+   (--q-success), so a completed Quick Quest reads as a violet Quick
+   Quest with a green completed state. Aurelia can tune the four values
+   below; nothing else needs to move. */
+
+:where(.quests-v4) { --q-accent: var(--q-main); } /* fallback only, zero specificity */
+
+.quests-v4 {
+  --q-bg: #060d15;
+  --q-surface-1: #0b131b;
+  --q-surface-2: #0e1824;
+  --q-surface-3: #101c2a;
+
+  --q-edge: rgba(155, 190, 210, 0.20);   /* thin neutral glass border (= --tr-edge) */
+  --q-border: #2c414f;
+  --q-border-strong: rgba(185, 210, 224, 0.32);
+  --q-divider: rgba(165, 192, 207, 0.14);
+
+  --q-text: #f5f4ef;
+  --q-text-secondary: #bec8cc;
+  --q-text-muted: #83939b;
+
+  /* antique gold: warmer than Training's #e7c676. Headings + separators
+     only, never a fill, never the per-category accent. */
+  --q-gold: #e8bf72;
+  --q-heading: var(--q-gold);
+  --q-rule: rgba(214, 166, 84, 0.34);
+
+  /* category palette: the ONLY place these hex values live */
+  --q-main: #d3b36a;    /* antique gold / warm amber */
+  --q-side: #dc946a;    /* soft coral / apricot */
+  --q-daily: #7eafe0;   /* soft sky blue */
+  --q-quick: #a98bd4;   /* soft lavender / violet */
+
+  --q-success: #67d89a;
+  --q-warning: #f0c467;
+  --q-danger: #ef7a7a;
+  --q-on-accent: #0a1119;                /* text on an accent-filled surface */
+
+  --q-radius-sm: 8px;
+  --q-radius-md: 12px;
+  --q-radius-lg: 16px;
+
+  --q-space-1: 4px;
+  --q-space-2: 8px;
+  --q-space-3: 12px;
+  --q-space-4: 16px;
+  --q-space-5: 24px;
+
+  --q-font-display: Georgia, "Times New Roman", serif;
+  --q-font-body: var(--font-micro, "Alegreya Sans", system-ui, sans-serif);
+
+  /* three glass levels, same as Training: strong = hero/feature panels
+     and popup shells, main = the everyday card, soft = rows/cells/chips */
+  --q-glass-strong: rgba(7, 19, 29, 0.90);
+  --q-glass-main: rgba(9, 24, 36, 0.82);
+  --q-glass-soft: rgba(14, 35, 50, 0.66);
+  --q-glass-hover: rgba(18, 43, 60, 0.78);
+}
+
+/* Derived accent set. Declared for the page root AND every category root
+   in ONE rule, so each element resolves the derived values from its own
+   --q-accent (a front-page tile carries .quest-side inside a page root
+   that may carry another accent). --accent is re-pointed so any shared
+   control that reads --accent inherits the quest colour. */
+:is(.quests-v4, .quest-main, .quest-side, .quest-daily, .quest-quick) {
+  --accent: var(--q-accent);
+  --q-accent-soft: color-mix(in srgb, var(--q-accent) 14%, transparent);
+  --q-accent-glow: color-mix(in srgb, var(--q-accent) 26%, transparent);
+  --q-accent-line: color-mix(in srgb, var(--q-accent) 62%, var(--q-border));
+  --q-accent-wash: color-mix(in srgb, var(--q-accent) 9%, var(--q-glass-soft));
+}

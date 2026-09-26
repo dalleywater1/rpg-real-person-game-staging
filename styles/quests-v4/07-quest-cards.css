@@ -1,0 +1,130 @@
+/* Quests v4 - glass modules: card, Main Quest hero, stat cell, facts, empty
+   state, small type roles. The card is the "richer glass module" used by
+   Main Quest; Side, Daily and Quick reuse it at lighter density (see
+   16-quest-themes.css). */
+
+.q-card {
+  display: grid;
+  gap: 10px;
+  padding: 14px;
+  border-radius: var(--q-radius-lg);
+  background: var(--q-glass-main);
+  border: 1px solid var(--q-edge);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 6px 18px rgba(0, 0, 0, 0.30);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.q-card__head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+/* a whole card that is one button (Main Quest list cards) */
+button.q-card { appearance: none; width: 100%; text-align: left; color: inherit; font: inherit; cursor: pointer; }
+button.q-card:hover,
+button.q-card:focus-visible { border-color: var(--q-accent-line); background: var(--q-glass-hover); }
+button.q-card:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.q-card__body { min-width: 0; flex: 1 1 auto; }
+.q-card__title { margin: 0; font: 700 15px/1.25 var(--q-font-display); letter-spacing: 0.02em; color: var(--q-text); overflow-wrap: anywhere; }
+.q-card__sub { margin: 0; font: 500 12.5px/1.4 var(--q-font-body); color: var(--q-text-secondary); }
+.q-card__foot { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+
+.q-kicker { font: 800 10px/1.1 var(--q-font-body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--q-accent); }
+.q-meta { font: 500 11.5px/1.3 var(--q-font-body); color: var(--q-text-muted); }
+.q-note { margin: 0; font: 500 11.5px/1.4 var(--q-font-body); color: var(--q-text-muted); }
+.q-countdown { color: var(--q-text-secondary); font-weight: 700; }
+.q-countdown.is-overdue { color: var(--q-danger); }
+
+/* ---------- Main Quest hero (richer than the other three) ---------- */
+.q-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  isolation: isolate;
+  min-height: 290px;
+  min-height: clamp(258px, 76cqw, 340px);
+  padding-top: 110px;
+  padding-top: clamp(96px, 30cqw, 150px);   /* art peek above the glass panel */
+  overflow: hidden;
+  border-radius: var(--q-radius-lg);
+  border: 1px solid var(--q-accent-line);
+  box-shadow: 0 0 0 1px var(--q-accent-soft), 0 0 16px var(--q-accent-soft), 0 8px 22px rgba(0, 0, 0, 0.45);
+}
+.q-hero__art { position: absolute; inset: 0; z-index: -2; }
+.q-hero__art img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: var(--q-focal, 50% 40%); }
+.q-hero__shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgba(6, 13, 21, 0.18) 0%, rgba(6, 13, 21, 0) 34%, rgba(6, 13, 21, 0.55) 72%);
+}
+.q-hero--compact { min-height: 240px; min-height: clamp(214px, 64cqw, 290px); padding-top: 96px; padding-top: clamp(84px, 26cqw, 130px); }
+.q-hero__panel { display: grid; gap: 10px; margin: 0 8px 8px; padding: 12px; }
+.q-hero__panel > .q-btn:not(.q-btn--block) { justify-self: start; }
+.q-hero__top { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.q-hero__text { min-width: 0; }
+.q-hero__title {
+  margin: 2px 0 0;
+  font: 700 17px/1.2 var(--q-font-display);
+  letter-spacing: 0.02em;
+  color: var(--q-text);
+  overflow-wrap: anywhere;
+}
+/* next milestone line inside the hero */
+.q-next { display: grid; gap: 1px; padding-top: 8px; border-top: 1px solid var(--q-rule); }
+.q-next small { font: 800 9.5px/1.2 var(--q-font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--q-text-muted); }
+.q-next span { font: 600 13px/1.35 var(--q-font-body); color: var(--q-text); overflow-wrap: anywhere; }
+
+/* ---------- metric cells (Active / Drafts / Templates / History) ---------- */
+.q-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.q-stat {
+  display: grid;
+  gap: 3px;
+  justify-items: center;
+  padding: 10px 4px;
+  text-align: center;
+  border-radius: 12px;
+  background: var(--q-glass-soft);
+  border: 1px solid var(--q-edge);
+}
+.q-stat b { font: 700 17px/1 var(--q-font-display); color: var(--q-text); font-variant-numeric: tabular-nums; }
+.q-stat span { font: 700 10px/1.2 var(--q-font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--q-text-muted); }
+button.q-stat { appearance: none; font: inherit; color: inherit; cursor: pointer; }
+button.q-stat:hover,
+button.q-stat:focus-visible { border-color: var(--q-accent-line); background: var(--q-glass-hover); }
+button.q-stat:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.q-stat.is-accent { border-color: var(--q-accent-line); }
+.q-stat.is-accent b { color: var(--q-accent); }
+
+/* ---------- label/value facts (Main Quest overview) ---------- */
+.q-fact { display: grid; gap: 3px; }
+.q-fact small,
+.q-fact-grid small { display: block; font: 800 9.5px/1.2 var(--q-font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--q-text-muted); }
+.q-fact p { font: 500 13px/1.5 var(--q-font-body); color: var(--q-text-secondary); overflow-wrap: anywhere; }
+.q-fact-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.q-fact-grid b { display: block; margin-top: 2px; font: 700 13px/1.3 var(--q-font-body); color: var(--q-text); }
+
+/* small circular glyph badge (recurring goal lead) */
+.q-glyph {
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--q-accent-line);
+  background: rgba(6, 14, 22, 0.6);
+  font: 700 13px/1 var(--q-font-body);
+  color: var(--q-accent);
+}
+
+/* ---------- empty state: same glass, short message + one action ---------- */
+.q-empty {
+  display: grid;
+  gap: 8px;
+  justify-items: center;
+  padding: 16px 14px;
+  text-align: center;
+  border-radius: 12px;
+  border: 1px dashed var(--q-edge);
+  background: var(--q-glass-soft);
+  color: var(--q-text-secondary);
+  font: 500 12.5px/1.4 var(--q-font-body);
+}

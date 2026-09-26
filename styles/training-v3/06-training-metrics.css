@@ -1,0 +1,15 @@
+/* Training v3 — metric system (Phase 8)
+   Responsive rules live here (data-count driven), not per screen. Not
+   wired into a live Training surface yet — Running/Strength's own
+   .running-stat-row/.rpg-route-info already cover this need today and
+   stay untouched through Gate 1; this is the ready replacement for
+   Gate 3. */
+.tr-metrics{display:grid;gap:var(--tr-space-2);text-align:center}
+.tr-metrics[data-count="2"]{grid-template-columns:repeat(2,1fr)}
+.tr-metrics[data-count="3"]{grid-template-columns:repeat(3,1fr)}
+.tr-metrics[data-count="4"]{grid-template-columns:repeat(4,1fr)}
+.tr-metric{display:flex;flex-direction:column;gap:2px}
+.tr-metric-value{font-size:15px;color:var(--tr-gold);font-family:var(--tr-font-display);font-variant-numeric:tabular-nums}
+.tr-metric-label{font-size:8.5px;color:var(--tr-text-muted);text-transform:uppercase;letter-spacing:.03em}
+.tr-metric-meta{font-size:9px;color:var(--tr-text-secondary)}
+@media(max-width:340px){.tr-metrics[data-count="4"]{grid-template-columns:repeat(2,1fr)}}

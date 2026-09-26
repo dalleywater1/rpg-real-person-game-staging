@@ -1,0 +1,25 @@
+/* Connections / Integrations panel (v0.02.32). Works both inside the default
+   modal and inside a Training-scoped modal, so it uses plain colours plus
+   var(--accent) rather than the --tr-* tokens. */
+.integrations-panel,.tr-int-open{font-family:var(--font-micro),system-ui,sans-serif}
+.integrations-panel{display:grid;gap:10px;margin:10px 0}
+.int-card{border:1px solid rgba(155,190,210,.22);border-radius:12px;padding:12px;background:rgba(9,24,36,.72)}
+.int-head{display:flex;align-items:center;gap:10px}
+.int-card .connection-shield{width:44px;height:44px;min-width:44px}
+.int-shield{display:grid;place-items:center;width:46px;height:46px}
+.int-title{display:flex;flex-direction:column;gap:5px;min-width:0}
+.int-title b{font-size:15px;color:#f4f7f8}
+.int-pill{display:inline-block;align-self:flex-start;font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:3px 9px;border-radius:999px;border:1px solid rgba(155,190,210,.3);color:#b9c7ce;white-space:nowrap}
+.int-pill-ok{color:#67d89a;border-color:rgba(103,216,154,.5);background:rgba(103,216,154,.08)}
+.int-pill-warn{color:#f0c467;border-color:rgba(240,196,103,.5);background:rgba(240,196,103,.08)}
+.int-pill-error{color:#ef7a7a;border-color:rgba(239,122,122,.5);background:rgba(239,122,122,.08)}
+.int-pill-muted{color:#93a4ae}
+.int-line{margin:9px 0 2px;font-size:12.5px;line-height:1.45;color:#b9c7ce}
+.int-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.int-list{margin:4px 0 10px 18px;padding:0;font-size:13px;color:#dbe6ec}
+.tr-int-open{display:grid;gap:8px;width:100%;background:transparent;border:0;padding:0;color:inherit;text-align:left;cursor:pointer;position:relative}
+.tr-int-open>i{position:absolute;right:0;top:-30px;font-style:normal;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.04em}
+.tr-int-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tr-int-name{display:flex;align-items:center;gap:8px;min-width:0}
+.tr-int-name .connection-shield{width:28px;height:28px;min-width:28px}
+.tr-int-name b{font-size:13px;color:#f4f7f8}

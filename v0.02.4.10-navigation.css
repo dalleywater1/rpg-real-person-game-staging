@@ -1,0 +1,629 @@
+/* MASTER BUILD PHASE A (RPG-0093, 2026-09-25) — Jay's modular navigation:
+   the bar is now 3 . Home . 3 (six movable slots + a fixed Home) and the
+   wheel holds six. The dock maths below is the same fixed-position
+   system generalised from 4 slots to 6 (slot offset = --nav-dock-inner-gap
+   + tier x --nav-dock-step, tiers 0/1/2 per side, set by app.js), with
+   three viewport tiers re-derived so the outermost medallion clears the
+   screen edge: <=359px (320 tier), 360-460px (375 tier), >=461px (base /
+   ~580). Below 461px the bar is icon-first (labels hidden, --nav-label-h
+   and --nav-gap collapse to 0) because seven text labels cannot fit; the
+   wheel keeps its labels. The rail is OptionB3 art: the approved Option B
+   cap + Home cradle cut unchanged, only the flat run lengthened
+   (scripts/build-nav-rail-3x3.py). Older comments below describe the
+   original 4-slot derivations and are kept for history.
+
+   RPG v0.02.4.10 — Global Navigation stylesheet.
+   REWRITTEN 2026-09-10 for the Home V3 Global Navigation production
+   handover: configurable 4-slot dock (Home fixed centre) + transparent
+   6-item wheel, replacing the old single 10-item ring + heavy opaque
+   backdrop + ornate arcane-disc background. The old ring CSS in
+   styles.css (`.radial-destination`, `.radial-nav-trigger`, `.radial-
+   arcane-disc`, `.radial-ring`, `.nav-hud`, and the "COMBINED
+   NAVIGATION HOTFIX" block that forced `.radial-backdrop` opaque via
+   !important) was permanently removed 2026-09-10 per the Final
+   Integration + Cleanup handover §5/§24 — it targeted markup this
+   file's renderGlobalNavigation() no longer emits, so leaving it in
+   place only risked the old dark-overlay behaviour returning through a
+   future CSS load-order change.
+
+   Material language (locked, same principle as Weather/Hero HUD):
+   translucent navy support surfaces, restrained antique-gold structural
+   lines, scenery stays visible, ornament concentrated on the
+   interactive controls (dock/wheel medallions + Home) rather than a
+   big background panel. Navigation is allowed *more* control ornament
+   than Weather since it's a primary control surface, not a passive
+   readout — hence the visible gold ring on every medallion here, where
+   Weather dropped its keyline entirely. */
+
+.global-radial-nav{
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  pointer-events: none;
+  --nav-bottom: max(14px, env(safe-area-inset-bottom));
+  --nav-dock-medallion: 48px;
+  /* Wheel medallions keep the pre-Phase-A sizes (52/46/42): the six wheel
+     positions have plenty of room, and the bar is the only tight place. */
+  --nav-wheel-medallion: 52px;
+  /* Home's DOCKED size, corrected 2026-09-10 (second pass) against
+     Aurelia's explicit ratio: "roughly 1.25-1.4x the shortcut medallion
+     diameter, not something approaching twice their visual mass." A
+     same-size Home first overlapped its neighbours outright (97px);
+     the very next fix over-corrected toward ~1.4-1.6x while chasing
+     "bigger." 68px here is exactly 1.3x this tier's 52px shortcut
+     medallion. Open (wheel-centre) size stays generous — no neighbour
+     to crowd there. */
+  --nav-home-size-docked: 64px;
+  --nav-home-size: 84px;
+  /* 70px->80px (2026-09-10, alongside the label font-size bump below):
+     the bigger 12px labels made "INVENTORY"/"CHARACTER" ~69px wide each
+     — at the old 70px step (neighbour-to-neighbour centre distance)
+     they touched with 0px gap. --nav-dock-inner-gap (Home's own
+     clearance) is untouched; only this outer-tier spacing changed. */
+  --nav-dock-step: 58px;
+  /* Distance from Home's centre to its NEAREST dock neighbour's centre
+     (index 1/2) — independent from --nav-dock-step, which only governs
+     neighbour-to-neighbour spacing (index 0-1, 2-3) on the same side.
+     Value = docked-home-radius + dock-medallion-radius + 6px gap,
+     i.e. calc(34 + 26 + 6) at this tier. */
+  --nav-dock-inner-gap: 58px;
+  --nav-wheel-radius: min(30vw, 25vh, 140px);
+  /* Home is centre-anchored (top + translate(-50%,-50%)) rather than
+     bottom-anchored like the dock slots (bottom:var(--nav-bottom), no
+     vertical transform) — centre-anchoring is what lets the same `top`
+     property transition smoothly to --nav-center-y on open. That means
+     matching dock-slot's BOTTOM edge takes explicitly subtracting half
+     of Home's own *whole button* height (medallion + gap + the invisible
+     label-spacer), not just half the medallion — first attempt at this
+     formula only accounted for the medallion and left Home's medallion
+     hanging 5.5px lower than the shortcuts' (2026-09-10, "same level as
+     the others from the base"). --nav-label-h below is the dock label's
+     own measured rendered height at this tier (font-size 8.5px -> ~9.5px
+     line height), kept in sync with the small-element font-size rules
+     further down this file. */
+  --nav-label-h: 13px;
+  --nav-gap: 3px;
+  --nav-rest-y: calc(100% - var(--nav-bottom) - (var(--nav-home-size-docked) + var(--nav-gap) + var(--nav-label-h))/2);
+  /* The base constant covers the dock rail's own height (~60px) plus a
+     real clearance margin above it, measured live: the wheel's bottom-
+     most item extends `radius + medallion-half + label + gap` below the
+     wheel centre, not just `radius` — a 46px margin here put the bottom
+     wheel item's label 9px *into* the dock rail. Re-verify this margin
+     any time --nav-dock-medallion or the wheel item's own vertical
+     footprint changes.
+     90px here (base/580 tier) per the Final Integration + Cleanup
+     handover (2026-09-10) clearance fix, corrected again 2026-09-10
+     (same date, later pass): fixing the diagonal-item centring bug
+     above (.nav-wheel-item) revealed the wheel's true footprint was
+     bigger than previously measured — the old flex-column button box
+     had been pulling the 180°/bottom item's label inward toward centre
+     by the same offset that pushed the 0°/top item out, which
+     artificially inflated every tier's measured clearance. Real
+     clearance after that fix was 5px here (was reported ~15.5px), 2px
+     at 460/340 tier below (was reported ~11px/14.5px) — all three
+     tiers' offsets are raised again here to land back around the same
+     ~15px target, now measured against the corrected geometry rather
+     than the bug. */
+  --nav-center-y: calc(100% - var(--nav-bottom) - var(--nav-home-size)/2 - var(--nav-wheel-radius) - 90px);
+}
+
+/* Full-screen dismissal layer — interaction only, never visual. "Do not
+   attach opacity, blur, dark tint, gradient... that causes it to
+   visibly obscure Home" (handover §7). Fully transparent at all times;
+   only its pointer-events/hit-area toggle with .open. */
+.radial-backdrop{
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  border: 0;
+  /* The old styles.css "COMBINED NAVIGATION HOTFIX" rule that forced
+     this same class's background opaque via !important is gone as of
+     2026-09-10 (see file header). !important kept defensively anyway —
+     this property must never lose to a future rule by cascade order. */
+  background: transparent !important;
+  pointer-events: none;
+}
+.global-radial-nav.open .radial-backdrop{ pointer-events: auto; }
+
+/* ---------- Closed dock ---------- */
+/* One continuous rail spanning the dock's footprint — Home's own
+   larger, opaque medallion sits above it (z-index) and visually
+   "terminates" the rail behind itself, per the handover's exact
+   phrasing, rather than the rail being cut into two separate pieces.
+   The container itself stays transparent/unstyled (geometry, hit-target
+   and safe-area anchor only). Stylized Frame + 50% Fill Integration
+   handover (2026-09-10) supersedes the single combined NAV_DOCK_RAIL_*
+   art with two separate layers, matching the wheel's own fill/frame
+   split: .nav-dock-rail-fill (NAV_DOCK_FILL_*, opaque navy #081721 SVG,
+   opacity set here in CSS to .5 rather than baked in, so it's tunable
+   .45-.55 without repainting art) UNDER .nav-dock-rail-outline
+   (NAV_DOCK_OUTLINE_*, gold stroke only, transparent centre, full
+   opacity). One navy rail surface, not two — the old combined art's
+   own baked-in fill-opacity is gone, so there's nothing to double-
+   stack against. */
+/* Retired 2026-09-10 (Jay: carry the Option B rail forward to
+   375/580) — display:none unconditionally, not just at one tier.
+   Left in place/inert rather than deleted: its own fill/outline
+   children still exist below (unused while this stays hidden) so a
+   revert to the old rail is a one-line change if Option B is ever
+   rejected, not a rebuild. */
+.nav-dock-rail{
+  position: fixed;
+  left: 50%;
+  bottom: var(--nav-bottom);
+  transform: translate(-50%, 0);
+  width: calc((var(--nav-dock-inner-gap) + var(--nav-dock-step)) * 2 + var(--nav-dock-medallion) + 28px);
+  height: calc(var(--nav-dock-medallion) + 22px);
+  z-index: 1001;
+  pointer-events: none;
+  display: none;
+}
+.nav-dock-rail-fill,
+.nav-dock-rail-outline{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 18px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.nav-dock-rail-fill{ opacity: .5; background-image: url('assets/Home/V3/Navigation/NAV_DOCK_FILL_324.svg?v=0.1.2.1'); }
+.nav-dock-rail-outline{ opacity: 1; background-image: url('assets/Home/V3/Navigation/NAV_DOCK_OUTLINE_324.svg?v=0.1.2.1'); }
+
+/* Option B rail, "finished frames" package (2026-09-10) — supersedes
+   both the earlier flat-line 262x58 construction proof AND the
+   original 18px .nav-dock-rail at every tier (2026-09-10, Jay: "the
+   closed-state frame is suitable to carry forward to 375/580,
+   preserving the verified 320 setup"). Canvas is 66px tall at every
+   tier; only the width (262/288/324, matching each tier's dock span)
+   and background-image change. Anchor verified per tier, not assumed:
+   dome-peak column trace and the ring's gold pixels at y=33 both land
+   exactly on width/2 for 288 and 324 too (peak 144/162, ring span
+   115-173/133-191, diameter ~58px — the cradle piece is a fixed-size
+   asset that doesn't rescale with the wider stretches around it,
+   confirmed rather than assumed from the modular breakdown's own
+   claim). So the same anchor technique as 320 — centring this whole
+   element on Home's medallion centre — generalises with no extra
+   per-tier math: only width/background-image differ below, the
+   bottom: calc() stays identical since --nav-home-size-docked and
+   --nav-label-h already vary correctly per tier via their own media
+   queries. Fill SVG has no baked opacity (solid navy) so
+   .nav-dock-rail-optionb-fill sets it in CSS. Base rule here is the
+   580-tier (324) art; 460px/340px media queries below override width
+   + both background-images for 375/320. The old .nav-dock-rail is
+   display:none unconditionally now (see its own rule above) — it's
+   fully retired, not just hidden at one tier. */
+.nav-dock-rail-optionb{
+  position: fixed;
+  left: 50%;
+  bottom: calc(var(--nav-bottom) + var(--nav-home-size-docked)/2 + var(--nav-gap) + var(--nav-label-h) - 33px);
+  transform: translateX(-50%);
+  width: 412px;
+  height: 66px;
+  z-index: 1001;
+  pointer-events: none;
+  display: block;
+}
+.nav-dock-rail-optionb-fill,
+.nav-dock-rail-optionb-outline{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.nav-dock-rail-optionb-fill{ opacity: .5; background-image: url('assets/Home/V3/Navigation/OptionB3/OPTION_B3_FILL_412.svg?v=0.1.3.1'); }
+.nav-dock-rail-optionb-outline{ background-image: url('assets/Home/V3/Navigation/OptionB3/OPTION_B3_FRAME_412_2x.png?v=0.1.3.1'); }
+/* Fill-scale, base/580 tier (2026-09-10, carrying the verified 320
+   setup forward). The cradle ring is a fixed-size asset (~58px
+   diameter, confirmed unchanged across all three widths) while Home's
+   own docked size grows per tier (68px here) — already bigger than
+   the ring before any scaling, unlike at 320/375 where Home is
+   smaller than the ring. So Home gets no extra scale-up at this tier
+   (1.0); only the shortcuts (52px, well under the ring) scale, same
+   1.05 factor as 320/375 for visual consistency. Same artwork-layer-
+   only technique as 320 (img/fallback, never .nav-medallion or the
+   button) to leave hit targets untouched. Re-verify visually if this
+   reads as under-filled — flagged as a candidate value, not a
+   measured-perfect one the way 320's was. */
+.nav-dock-slot .nav-medallion img,
+.nav-dock-slot .nav-medallion .radial-icon-fallback{ transform: scale(1.05); }
+.nav-dock-slot{
+  position: fixed;
+  left: 50%;
+  bottom: var(--nav-bottom);
+  /* --dock-side (-1/1) and --dock-tier (0=inner, adjacent to Home /
+     1=outer, adjacent to another slot) come from the render call —
+     see app.js. Inner slots sit at --nav-dock-inner-gap from Home's
+     centre; outer slots sit one more --nav-dock-step past that. Kept
+     as two separate distances (not one uniform step) specifically
+     because Home is bigger than a regular slot and needs more
+     clearance than slot-to-slot spacing alone provides. */
+  transform: translate(calc(-50% + var(--dock-side) * (var(--nav-dock-inner-gap) + var(--dock-tier) * var(--nav-dock-step))), 0);
+  z-index: 1003;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* Hit area = one step wide, and extended upward (the bottom edge stays
+     anchored), so six adjacent slots tile without overlapping and each
+     stays a comfortable target even when the medallion is small. */
+  width: var(--nav-dock-step);
+  padding-top: 8px;
+  gap: var(--nav-gap);
+  appearance: none;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+}
+.nav-home-compass{
+  position: fixed;
+  left: 50%;
+  top: var(--nav-rest-y);
+  transform: translate(-50%, -50%);
+  z-index: 1004;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nav-gap);
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  touch-action: manipulation;
+  transition: top .24s cubic-bezier(.2,.75,.2,1);
+}
+/* Not just var(--nav-center-y) (2026-09-10, "center nav button when
+   open is not on center") — Home is a flex column (medallion above its
+   invisible label-spacer, same structure that caused the wheel-item
+   diagonal-centring bug fixed earlier this session), so `top` +
+   translate(-50%,-50%) centres the WHOLE button box, and the medallion
+   itself sits (gap + label-h)/2 above that box centre. --nav-rest-y
+   already builds this offset in deliberately (matching Home's medallion
+   bottom to the dock slots' when closed); --nav-center-y has no such
+   correction, so the medallion landed above the wheel's true centre by
+   that same amount — confirmed via live measurement (7-9px depending on
+   tier) before this fix, 0px after. Push the button centre down by the
+   offset so the MEDALLION, not the box, lands exactly on centre. */
+.global-radial-nav.open .nav-home-compass{ top: calc(var(--nav-center-y) + (var(--nav-label-h) + var(--nav-gap))/2); }
+
+/* ---------- Shared medallion look (dock + wheel + Home) ---------- */
+/* Frame/background removed 2026-09-10 ("remove the extra medallion
+   frame/background and let each PNG fill the existing icon slot") —
+   the supplied art already bakes in its own navy face + gold ring, so
+   a second CSS-drawn circle (navy fill + gold border + shadow) behind
+   it was a redundant, undersized "frame within a frame": the art sat
+   at 90% inside a CSS ring that was itself the same size as the
+   button, so the CSS ring's own navy fill showed as a visible margin
+   around the art rather than the art defining the medallion's edge.
+   `.nav-medallion` is now layout-only (size for hit-target/spacing,
+   centering) — no visible paint of its own in the normal case. The
+   runtime PNGs were re-cropped to their own alpha bounding box and
+   re-centred at a uniform ~94% canvas fill (was 74-96%, wildly
+   inconsistent per icon) specifically so a single img-sizing rule
+   below works consistently across all 11 without per-icon tuning.
+   Approved button dimensions (width/height below) are unchanged. */
+.nav-medallion{
+  position: relative;
+  width: var(--nav-dock-medallion);
+  height: var(--nav-dock-medallion);
+  display: grid;
+  place-items: center;
+  transition: filter .15s ease, transform .15s ease;
+}
+.nav-medallion img{ width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 2px 4px rgba(0,0,0,.55)); }
+.nav-medallion-home{
+  width: var(--nav-home-size-docked);
+  height: var(--nav-home-size-docked);
+  transition: width .24s cubic-bezier(.2,.75,.2,1), height .24s cubic-bezier(.2,.75,.2,1);
+}
+/* Wheel medallions use the wheel size, not the (smaller) bar size. */
+.nav-wheel-item .nav-medallion{ width: var(--nav-wheel-medallion); height: var(--nav-wheel-medallion); }
+/* Home grows to its full, richest size only once it's the wheel's sole
+   focal point — no neighbours left to overlap there (wheel radius is
+   108-140px, far beyond any collision risk). */
+.global-radial-nav.open .nav-medallion-home{
+  width: var(--nav-home-size);
+  height: var(--nav-home-size);
+}
+.nav-medallion-home img{ width: 100%; height: 100%; }
+.nav-medallion-home .radial-icon-fallback{ font-size: calc(var(--nav-home-size-docked) * .52); }
+.global-radial-nav.open .nav-medallion-home .radial-icon-fallback{ font-size: calc(var(--nav-home-size) * .52); }
+/* Interaction states (Stylized Frame + 50% Fill Integration handover,
+   2026-09-10, §14) are glows on the art itself, not a re-coloured
+   frame — there's no separate CSS-drawn border left to recolour since
+   the medallion frame removal earlier this session. Hover/active both
+   pair a sapphire glow with a brighter gold one, matching the
+   "restrained sapphire glow, brighter gold" spec; active/current is the
+   stronger of the two per "richer blue emphasis" for the current page's
+   control specifically. */
+.nav-dock-slot:hover .nav-medallion img,
+.nav-wheel-item:hover .nav-medallion img,
+.nav-home-compass:hover .nav-medallion img{
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.55)) drop-shadow(0 0 5px rgba(77,199,255,.55)) brightness(1.06);
+}
+.nav-dock-slot.active .nav-medallion img,
+.nav-wheel-item.active .nav-medallion img{
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,.55)) drop-shadow(0 0 8px rgba(77,199,255,.7)) drop-shadow(0 0 6px rgba(218,181,91,.75)) brightness(1.08);
+}
+/* Pressed: slightly darker/deeper, no displacement beyond the existing
+   press-scale (scale alone was already the feedback; this just adds
+   the "deeper interior" the spec asks for). */
+.nav-dock-slot:active .nav-medallion,
+.nav-wheel-item:active .nav-medallion,
+.nav-home-compass:active .nav-medallion{ transform: scale(.94); }
+.nav-dock-slot:active .nav-medallion img,
+.nav-wheel-item:active .nav-medallion img,
+.nav-home-compass:active .nav-medallion img{ filter: brightness(.9); }
+.nav-dock-slot:focus-visible .nav-medallion,
+.nav-wheel-item:focus-visible .nav-medallion,
+.nav-home-compass:focus-visible .nav-medallion{ outline: 2px solid #4bbcff; outline-offset: 2px; border-radius: 50%; }
+.radial-icon-fallback{ display: none; place-items: center; width: 100%; height: 100%; font-weight: 900; color: #e8c988; }
+.asset-missing .nav-medallion img{ display: none; }
+/* Fallback letter still needs a circle to read against arbitrary
+   scenery behind it, since there's no baked-art ring to stand in for
+   one in this degraded case — the old frame styling lives on here,
+   scoped to asset-missing only. */
+.asset-missing .nav-medallion{
+  border-radius: 50%;
+  background: rgb(8 23 33 / 68%);
+  border: 1.5px solid rgba(216, 181, 109, .65);
+  box-shadow: 0 3px 8px rgba(0,0,0,.5), inset 0 0 10px rgba(3,13,23,.6);
+}
+.asset-missing .radial-icon-fallback{ display: grid; }
+
+small{ all: unset; }
+/* Bumped 8.5px->12px (2026-09-10, "all text needs to be bigger") —
+   max-width widened to match so the longer labels (CHARACTER, Quest
+   Board) don't start ellipsis-truncating at the larger size.
+   --nav-label-h below (and its two per-tier overrides) MUST be
+   re-measured and kept in sync any time this font-size changes — it's
+   what keeps Home's medallion bottom-aligned with the dock slots'. */
+.nav-dock-slot small,
+.nav-wheel-item small,
+.nav-home-label-spacer{
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .02em;
+  color: #f3ecd8;
+  text-shadow: -1px -1px 0 #020407, 1px -1px 0 #020407, -1px 1px 0 #020407, 1px 1px 0 #020407, 0 2px 4px #000;
+  white-space: nowrap;
+  max-width: 56px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Dock labels are short, fixed words (LOG/TRAINING/INVENTORY/
+   CHARACTER, matching the approved composition's all-caps dock row) —
+   uppercase is applied here rather than baked into the label string, so
+   the same `label`/`dockLabel` text can still render in normal case on
+   the wheel (Quest Board, Rewards, etc., matching the composition's
+   title-case wheel labels). Home dropped its own visible caption
+   entirely 2026-09-10 — "the compass itself represents Home," not a
+   second text line underneath it. */
+.nav-dock-slot small{ text-transform: uppercase; letter-spacing: .03em; font-size: 9px; }
+/* Home still needs an INVISIBLE label of the exact same size, though —
+   without one, its button had no bottom "reserved" for label text the
+   way every dock slot does, so its medallion hung 12px lower than the
+   others despite sharing the same `bottom` anchor (2026-09-10, "the
+   middle circle should be on the same level as the others from the
+   base and raise above them" — confirmed via direct measurement, not
+   just eyeballed). `visibility:hidden` keeps the layout box without
+   rendering anything, so Home's medallion bottom now lines up exactly
+   with the shortcuts' medallion bottoms at every tier automatically,
+   with no hardcoded pixel offset to keep in sync by hand. */
+.nav-home-label-spacer{ visibility: hidden; }
+
+/* ---------- Open wheel ---------- */
+.nav-wheel{
+  position: fixed;
+  left: 50%;
+  top: var(--nav-center-y);
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  z-index: 1002;
+  pointer-events: none;
+}
+/* Stylized open-wheel background (Jay, 2026-09-10 — authorized to
+   integrate directly, bypassing Aurelia review for this pass).
+   Supersedes the single combined NAV_WHEEL_LINES_* ring+spoke vector
+   from the Final Integration + Cleanup pass with three stacked layers,
+   back to front:
+     1. .nav-wheel-backing  — NAV_WHEEL_BACKING_50.svg, navy circle
+        baked at 50% fill-opacity in the SVG itself (the container/
+        controls stay fully opaque — nothing here applies opacity:.5
+        to anything but this one decorative layer).
+     2. .nav-wheel-spokes   — NAV_WHEEL_SPOKES.svg, three gold lines
+        crossing at centre (six radial spokes toward the destination
+        directions).
+     3. .nav-wheel-stylized — NAV_WHEEL_STYLIZED.png, the ornamental
+        outer ring/framework.
+   All three share identical square bounds, sized off the same live
+   --nav-wheel-radius the destination medallions themselves use, so
+   they track the 216/240/280px settled diameter (320/375/580,
+   including the height-dependent 340-460px bracket) without any
+   separate per-tier math. Home (z-index 1004, a sibling of .nav-wheel
+   z-index 1002) paints above all three by stacking order alone,
+   concealing the spoke intersection structurally rather than needing
+   its own cutout. Wheel item buttons are appended after these three in
+   the DOM, so default stacking already puts them on top too. */
+/* Sized *2.6, not *2 (2026-09-10, "the icons sit on the outside of the
+   circle, they should be inside it"): both art files draw their own
+   visible ring ~92% inset from their canvas edge (NAV_WHEEL_BACKING_50
+   is a literal r=46-of-100 circle; NAV_WHEEL_STYLIZED's content bbox
+   measured the same way), while the destination medallions sit with
+   their CENTRE at a full 1.0x --nav-wheel-radius (plus their own half-
+   width beyond that) — at the old *2 sizing the drawn ring landed
+   visibly inside the medallions instead of around them. *2.6 pushes
+   the art's own drawn edge back out past the medallions' outer edge
+   without moving the medallions/hit-targets/Home transition at all —
+   only these three decorative layers change size. */
+.nav-wheel-backing,
+.nav-wheel-spokes,
+.nav-wheel-stylized{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: calc(var(--nav-wheel-radius) * 2.6);
+  height: calc(var(--nav-wheel-radius) * 2.6);
+  transform: translate(-50%, -50%);
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+.nav-wheel-backing{ background-image: url('assets/Home/V3/Navigation/Stylized/NAV_WHEEL_BACKING_50.svg?v=0.1.2.1'); }
+.nav-wheel-spokes{ background-image: url('assets/Home/V3/Navigation/Stylized/NAV_WHEEL_SPOKES.svg?v=0.1.2.1'); }
+.nav-wheel-stylized{ background-image: url('assets/Home/V3/Navigation/Stylized/NAV_WHEEL_STYLIZED.png?v=0.1.2.1'); }
+.global-radial-nav.open .nav-wheel-backing,
+.global-radial-nav.open .nav-wheel-spokes,
+.global-radial-nav.open .nav-wheel-stylized{ opacity: 1; }
+/* Deliberately NOT display:flex;flex-direction:column with the label
+   in-flow (2026-09-10, "the diagonal icons... are slightly off centre
+   ... off the diagonal lines"): when the label shared the button's own
+   box, the box's centre — the exact point translate(-50%,-50%) anchors
+   to the spoke at radius/bearing — sat below the medallion's own
+   visual centre by roughly half the label's height+gap. That fixed,
+   screen-space-vertical offset happens to point straight along the
+   spoke for the 0°/180° (top/bottom) items, so nobody paying attention
+   there sees anything, but for the four diagonal items (60/120/240/
+   300°) it doesn't run along the spoke and reads as the icon sitting
+   off to one side of the line — confirmed by measuring the medallion's
+   own centre (not the button's) against its item's true bearing: exact
+   0°/180° for top/bottom, off by ~3° for every diagonal item, at every
+   tier. The button's box is now sized to match the medallion exactly
+   (no label inside it), so translate(-50%,-50%) centres the MEDALLION
+   itself on the spoke for every angle; the label moves out of flow
+   (absolute, below) so it can't reintroduce the offset. */
+.nav-wheel-item{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--nav-wheel-medallion);
+  height: var(--nav-wheel-medallion);
+  appearance: none;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(0px - var(--nav-wheel-radius))) rotate(calc(-1 * var(--angle))) scale(.85);
+  transition: opacity .18s ease, transform .2s ease;
+}
+.nav-wheel-item small{
+  font-size: 12px;
+  max-width: 92px;
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  transform: translateX(-50%);
+  margin-top: 3px;
+}
+.global-radial-nav.open .nav-wheel-item{
+  opacity: 1;
+  pointer-events: auto;
+  transform: translate(-50%, -50%) rotate(var(--angle)) translateY(calc(0px - var(--nav-wheel-radius))) rotate(calc(-1 * var(--angle))) scale(1);
+}
+
+/* Reserve room at the bottom of the page for the dock (was a much
+   taller reservation under the old full-width HUD bar; the new dock is
+   just a compact rail). */
+#view{ padding-bottom: calc(96px + env(safe-area-inset-bottom)) !important; }
+
+@media(max-width:460px){
+  /* 375 tier (360-460px). Six slots: outermost medallion edge sits at
+     inner-gap + 2 x step + medallion/2 = 52 + 94 + 21 = 167px from the
+     centre, inside the 180px half-width of the narrowest viewport this
+     tier serves (360px). Home 58 docked (1.38x the 42px slot). Icon-first:
+     dock labels and Home's invisible label-spacer are gone, so the label
+     height and the label gap collapse to 0 and every bottom-alignment
+     formula above still holds with no per-tier pixel offsets. */
+  .global-radial-nav{ --nav-dock-medallion: 42px; --nav-wheel-medallion: 46px; --nav-home-size-docked: 58px; --nav-home-size: 76px; --nav-dock-step: 47px; --nav-dock-inner-gap: 52px; --nav-wheel-radius: min(32vw, 24vh, 122px); --nav-label-h: 0px; --nav-gap: 0px; --nav-center-y: calc(100% - var(--nav-bottom) - var(--nav-home-size)/2 - var(--nav-wheel-radius) - 83px); }
+  .nav-dock-slot small, .nav-home-label-spacer{ display: none; }
+  .nav-wheel-item small{ font-size: 11px; max-width: 100px; }
+  .nav-dock-rail-optionb{ width: 352px; }
+  .nav-dock-rail-optionb-fill{ background-image: url('assets/Home/V3/Navigation/OptionB3/OPTION_B3_FILL_352.svg?v=0.1.3.1'); }
+  .nav-dock-rail-optionb-outline{ background-image: url('assets/Home/V3/Navigation/OptionB3/OPTION_B3_FRAME_352_2x.png?v=0.1.3.1'); }
+  .nav-dock-slot .nav-medallion img,
+  .nav-dock-slot .nav-medallion .radial-icon-fallback{ transform: scale(1.05); }
+  .global-radial-nav:not(.open) .nav-home-compass .nav-medallion img,
+  .global-radial-nav:not(.open) .nav-home-compass .nav-medallion .radial-icon-fallback{ transform: scale(1.02); }
+  #view{ padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important; }
+}
+@media(max-width:359px){
+  /* 320 tier (<=359px). Outermost medallion edge = 45 + 2 x 40 + 18 =
+     143px from the centre, inside the 160px half-width of a 320px screen
+     (17px clear); the 304px rail ends 8px short of the edge. The button
+     hit area is one step (40px) wide and reaches 8px above the medallion,
+     so targets stay ~44px tall even though the medallion is 36px. */
+  .global-radial-nav{ --nav-dock-medallion: 36px; --nav-wheel-medallion: 42px; --nav-home-size-docked: 50px; --nav-home-size: 70px; --nav-dock-step: 40px; --nav-dock-inner-gap: 45px; --nav-wheel-radius: min(34vw, 22vh, 108px); --nav-center-y: calc(100% - var(--nav-bottom) - var(--nav-home-size)/2 - var(--nav-wheel-radius) - 79px); }
+  .nav-wheel-item small{ font-size: 10px; max-width: 88px; }
+  .nav-dock-rail-optionb{ width: 304px; }
+  .nav-dock-rail-optionb-fill{ background-image: url('assets/Home/V3/Navigation/OptionB3/OPTION_B3_FILL_304.svg?v=0.1.3.1'); }
+  .nav-dock-rail-optionb-outline{ background-image: url('assets/Home/V3/Navigation/OptionB3/OPTION_B3_FRAME_304_2x.png?v=0.1.3.1'); }
+  /* Artwork-layer-only scale (see the history note above): the <img> /
+     fallback glyph, never .nav-medallion or the button, so hit targets are
+     untouched. */
+  .nav-dock-slot .nav-medallion img,
+  .nav-dock-slot .nav-medallion .radial-icon-fallback{ transform: scale(1.05); }
+  .global-radial-nav:not(.open) .nav-home-compass .nav-medallion img,
+  .global-radial-nav:not(.open) .nav-home-compass .nav-medallion .radial-icon-fallback{ transform: scale(1.06); }
+  #view{ padding-bottom: calc(76px + env(safe-area-inset-bottom)) !important; }
+}
+@media(max-height:430px) and (orientation:landscape){
+  .global-radial-nav{ --nav-dock-medallion: 38px; --nav-home-size-docked: 52px; --nav-home-size: 64px; --nav-dock-step: 46px; --nav-dock-inner-gap: 50px; --nav-wheel-radius: min(20vw, 26vh, 100px); --nav-label-h: 0px; --nav-gap: 0px; }
+  .nav-dock-slot small, .nav-home-label-spacer{ display: none; }
+}
+/* ---------- Loot badge + text-label placeholder medallions ---------- */
+/* Count badge (Assay §4.1 / Lyra §8.3): drawn in CSS, never baked into art;
+   hidden at 0, "9+" above 9. Sits on the medallion's top-right so it works
+   on a dock slot, a wheel item and the Home compass alike. */
+.nav-badge{
+  position: absolute;
+  top: -4px;
+  right: -5px;
+  z-index: 2;
+  box-sizing: border-box;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 999px;
+  border: 1.5px solid #081721;
+  background: #e2574c;
+  color: #fff;
+  font: 800 10px/13px system-ui, -apple-system, 'Segoe UI', sans-serif;
+  text-align: center;
+  letter-spacing: 0;
+  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,.6);
+}
+.nav-badge[hidden]{ display: none; }
+.nav-home-compass .nav-badge{ top: -2px; right: -2px; }
+/* NAV_STORE / NAV_ACHIEVEMENTS art has not been delivered yet (Lyra):
+   render a plain text-label medallion rather than invent icon art. When
+   the PNGs arrive, give the item an `icon` in RADIAL_NAV_ITEMS and this
+   path is no longer used. */
+.nav-placeholder .radial-icon-fallback{
+  display: grid;
+  font-size: calc(var(--nav-dock-medallion) * .21);
+  letter-spacing: .02em;
+  line-height: 1;
+  text-align: center;
+  font-weight: 800;
+}
+.nav-placeholder .nav-medallion{ overflow: visible; }
+.nav-wheel-item.nav-placeholder .radial-icon-fallback{ font-size: calc(var(--nav-wheel-medallion) * .2); }
+@media(prefers-reduced-motion:reduce){
+  .nav-home-compass, .nav-wheel-item, .nav-wheel-backing, .nav-wheel-spokes, .nav-wheel-stylized, .nav-medallion{ transition: none !important; }
+}

@@ -1,0 +1,31 @@
+/* Training v3 — row/list system (Phase 9)
+   One row architecture for Recent Training, Records, History, Plans.
+   Not wired into a live Training surface yet — the existing
+   .training-history-row/.training-record-row stay untouched through
+   Gate 1 (both are shared by Running and Strength today; changing
+   them would be an incidental Running/Strength redesign). Ready for
+   Gate 3 to adopt. */
+.tr-list{display:flex;flex-direction:column;gap:2px}
+.tr-row{display:grid;grid-template-columns:auto minmax(0,1fr) auto auto;align-items:center;gap:var(--tr-space-2);padding:var(--tr-space-2) 0;border-bottom:1px solid var(--tr-divider)}
+.tr-row:last-child{border-bottom:0}
+.tr-row-icon{width:32px;height:32px;object-fit:contain}
+.tr-row-main{min-width:0;display:flex;flex-direction:column;gap:2px}
+.tr-row-title{color:var(--tr-text);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tr-row-meta{color:var(--tr-text-muted);font-size:8.5px}
+.tr-row-value{color:var(--tr-gold);font-size:11px;font-family:var(--tr-font-display);white-space:nowrap}
+.tr-row-status{font-size:11px}
+.tr-row-chevron{color:var(--tr-text-muted);font-size:12px}
+/* Gate 3 adoption (Training Prototype Packet, 2026-09-18) — Recent
+   Training's rows are real <button> elements (tappable, not just
+   display), so .tr-row needs a button reset here rather than assuming
+   a div. */
+button.tr-row{appearance:none;background:none;width:100%;font:inherit;text-align:left;cursor:pointer}
+/* Connections (locked Training Home section 4) — compact status row,
+   reuses the same .tr-card shell as Recent Training above it. */
+.training-home-connection-row{appearance:none;display:flex;align-items:center;gap:var(--tr-space-3);width:100%;background:none;border:0;padding:var(--tr-space-2) 0;cursor:pointer;text-align:left;font:inherit}
+.training-home-connection-copy{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.training-home-connection-copy b{color:var(--tr-text);font-size:11px}
+.training-home-connection-copy small{color:var(--tr-text-muted);font-size:8.5px}
+.training-home-connection-row .connection-shield{width:32px;height:32px}
+.training-home-connection-row i{color:var(--tr-gold);font-style:normal;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+.training-home-connection-row.is-error .training-home-connection-copy small{color:var(--tr-red,#c46a5e)}

@@ -1,0 +1,14 @@
+/* In-app reminder banner and the Reminders settings rows (RPG-0071). Scoped to .notif-*. No !important. */
+.notif-banner {
+  position: fixed; left: 50%; transform: translateX(-50%); top: 8px; z-index: 950;
+  width: min(560px, calc(100vw - 16px)); box-sizing: border-box;
+  display: flex; align-items: center; gap: 8px; padding: 10px 12px;
+  background: rgba(10, 27, 35, .97); border: 1px solid #e5c47e; border-radius: 12px; color: #f5f1e8;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .45);
+}
+.notif-banner[hidden] { display: none; }
+.notif-banner__text { display: grid; gap: 2px; min-width: 0; flex: 1; }
+.notif-banner__text span { color: #ccd7d6; font-size: 12px; overflow-wrap: anywhere; }
+.notif-row { display: grid; gap: 4px; padding: 8px 0; border-top: 1px solid rgba(177, 202, 210, .16); }
+@media (prefers-reduced-motion: no-preference) { .notif-banner { animation: notifIn .18s ease-out; } }
+@keyframes notifIn { from { opacity: 0; transform: translate(-50%, -8px); } to { opacity: 1; transform: translate(-50%, 0); } }

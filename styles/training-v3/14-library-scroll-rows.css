@@ -1,0 +1,152 @@
+/* Training library card rows scroll sideways instead of squeezing (Jay 2026-09-25, screenshot of Strength > Workouts).
+   `.training-library-grid` used to be five equal columns, so on a phone each workout card was about 55 px wide and its buttons and
+   title overlapped the next card. It is now a scrolling bar: fixed-width cards in one row, a visible thin scrollbar, snap points,
+   and a peek of the next card so it reads as scrollable. Covers every row that uses the class: Favourite / Saved / Premade / Recent
+   workouts, RPG templates, gear (shoes, bikes) and saved climbing problems. Keyboard: cards' buttons are focusable and the
+   browser scrolls a focused button into view; the row itself stays a plain scroll container (no scroll trap). */
+.training-library-grid{
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: stretch;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 2px 10px;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 24px;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217,172,92,.60) rgba(255,255,255,.08);
+}
+.training-library-grid::-webkit-scrollbar{ height: 6px; }
+.training-library-grid::-webkit-scrollbar-track{ background: rgba(255,255,255,.08); border-radius: 999px; }
+.training-library-grid::-webkit-scrollbar-thumb{ background: rgba(217,172,92,.60); border-radius: 999px; }
+.training-library-grid::-webkit-scrollbar-thumb:hover{ background: rgba(217,172,92,.85); }
+
+.training-library-grid > .training-library-card{
+  flex: 0 0 172px;
+  width: 172px;
+  min-width: 0;
+  scroll-snap-align: start;
+  grid-template-rows: none;/* the old fixed 80px art row is not needed for a single glyph */
+  grid-auto-rows: auto;
+  gap: 4px;
+  padding: 10px 8px 8px;
+  box-sizing: border-box;
+}
+/* an empty-state message spans the whole bar instead of being one narrow column */
+.training-library-grid > .helper,
+.training-library-grid > p{ flex: 1 1 100%; min-width: 0; white-space: normal; }
+
+.training-library-card strong{
+  min-height: 2.6em;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  text-align: center;
+  line-height: 1.25;
+}
+.wl-card-meta{ text-align: center; margin: 0 0 6px; }
+.wl-card-actions{ width: 100%; gap: 6px; }
+.wl-card-actions .text-btn, .training-library-card .text-btn{ min-height: 34px; overflow-wrap: anywhere; }
+.wl-card-actions .text-btn{ min-width: 0; }
+.wl-card-actions-secondary .text-btn{ min-width: min-content; }/* at 200% text SCHEDULE keeps its own width and drops to its own line instead of running out of the button */
+/* three small buttons (Copy / Schedule / Delete) wrap instead of overrunning the card */
+.wl-card-actions-secondary{ flex-wrap: wrap; }
+.wl-card-actions-secondary .text-btn{ flex: 1 1 calc(50% - 6px); }
+.wl-card-actions-secondary .text-btn.danger{ flex: 1 1 100%; }
+/* the favourite star stays inside the card corner */
+.wl-card-fav{ top: 4px; right: 4px; width: 26px; height: 26px; line-height: 24px; font-size: 16px; }
+
+@media (max-width: 340px){
+  .training-library-grid > .training-library-card{ flex-basis: 156px; width: 156px; }
+}
+
+/* ---- specialist tab rail: keep the "more this way" cues honest (v0.02.60-scroll-bars.js sets the classes) ---- */
+.running-tab-rail{ scroll-padding-inline: 24px; }
+.running-tab-rail-wrap::after{ transition: opacity .15s; }
+.running-tab-rail-wrap.is-at-end::after{ opacity: 0; }
+.running-tab-rail-wrap.is-scrolled::before{
+  content: ''; position: absolute; top: 0; left: 0; bottom: 2px; width: 22px; z-index: 1;
+  background: linear-gradient(270deg, transparent, #0b131bcc 70%); pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce){ .running-tab-rail-wrap::after{ transition: none; } }
+
+/* ============================================================
+   EXERCISES: scrolling bars (Jay 2026-09-25)
+   1. The list of exercises for a body zone is a vertical scroll box that now holds EVERY exercise for the zone (it used to stop at
+      8). It has a visible thin gold scrollbar, plus soft "more above / more below" shadows made in CSS so the cue still shows on
+      phones whose scrollbar is an overlay that hides itself. The shadows use background-attachment:local covers, so the container
+      is given its own solid well colour for them to match.
+   2. The ten body-zone chips are one scrolling bar instead of wrapping into three rows, with edge fades (classes from
+      v0.02.60-scroll-bars.js) and the selected chip kept in view.
+   No scroll trap: no overscroll containment on the vertical list, so a swipe past its end carries on scrolling the page.
+   ============================================================ */
+.exercise-library-results{
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217,172,92,.60) rgba(255,255,255,.08);
+  -webkit-overflow-scrolling: touch;
+  scroll-padding-block: 8px;
+  background-color: #0a131c;
+  background-image:
+    linear-gradient(#0a131c 30%, rgba(10,19,28,0)),
+    linear-gradient(rgba(10,19,28,0), #0a131c 70%),
+    linear-gradient(rgba(217,172,92,.30), rgba(217,172,92,0)),
+    linear-gradient(rgba(217,172,92,0), rgba(217,172,92,.30));
+  background-position: center top, center bottom, center top, center bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 24px, 100% 24px, 100% 16px, 100% 16px;
+  background-attachment: local, local, scroll, scroll;
+}
+.exercise-library-results::-webkit-scrollbar{ width: 8px; }
+.exercise-library-results::-webkit-scrollbar-track{ background: rgba(255,255,255,.08); border-radius: 999px; }
+.exercise-library-results::-webkit-scrollbar-thumb{ background: rgba(217,172,92,.60); border-radius: 999px; }
+.exercise-library-results::-webkit-scrollbar-thumb:hover{ background: rgba(217,172,92,.85); }
+/* room for a real list on the Exercises tab and the Builder (the Search All modal and Recent keep their own caps) */
+.mg-results .exercise-library-results{ max-height: 46vh; max-height: min(52dvh, 440px); }
+.exercise-library-results button:focus-visible{ outline-offset: -2px; }
+
+.mg-zone-chips{
+  align-self: stretch;/* the parent column centres its items, which sized this bar to its full 773 px and clipped half the chips (review finding) */
+  min-width: 0;
+  max-width: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 2px 8px;
+  scroll-snap-type: x proximity;
+  scroll-padding-inline: 24px;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(217,172,92,.60) rgba(255,255,255,.08);
+  -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 22px), transparent 100%);
+          mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 22px), transparent 100%);
+}
+.mg-zone-chips.is-scrolled{
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 22px, #000 calc(100% - 22px), transparent 100%);
+}
+.mg-zone-chips.is-at-end{
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 22px, #000 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 22px, #000 100%);
+}
+.mg-zone-chips:not(.is-scrolled).is-at-end{ -webkit-mask-image: none; mask-image: none; }
+.mg-zone-chips::-webkit-scrollbar{ height: 6px; }
+.mg-zone-chips::-webkit-scrollbar-track{ background: rgba(255,255,255,.08); border-radius: 999px; }
+.mg-zone-chips::-webkit-scrollbar-thumb{ background: rgba(217,172,92,.60); border-radius: 999px; }
+.mg-zone-chip{ flex: 0 0 auto; scroll-snap-align: center; }
+/* keep the bar centred when every chip fits, without clipping the first chips when it overflows (justify-content:center would) */
+.mg-zone-chips > .mg-zone-chip:first-child{ margin-left: auto; }
+.mg-zone-chips > .mg-zone-chip:last-child{ margin-right: auto; }
+
+/* the list's small round buttons keep their look but get a 44 px tall hit area (vertical only, so side-by-side buttons never overlap) */
+.exercise-result-row .exercise-fav-btn,
+.exercise-result-row .exercise-detail-btn,
+.exercise-result-row .exercise-add-btn{ position: relative; }
+.exercise-result-row .exercise-fav-btn::after,
+.exercise-result-row .exercise-detail-btn::after,
+.exercise-result-row .exercise-add-btn::after{ content: ""; position: absolute; left: 0; right: 0; top: -9px; bottom: -9px; }
