@@ -1,0 +1,54 @@
+/* RPG v0.02.4.9 — Home Resources panel content redesign (Phase 2C).
+   Reversible by setting HOME_RESOURCES_V2_HOTFIX=false in the paired .js file.
+   The single-column layout, icon-as-trigger, Food/Mind split, and
+   overflow/danger fill logic already matched spec — this only thickens the
+   bars and overlays the label/value text inside them, and adds the reset
+   countdown. No data, target, or modal changes. */
+
+#view .resources-v2-active .resource-list-row .segmented-resource-bar{height:34px!important}
+#view .resources-v2-active .resource-bar-wrap,
+#view .resources-v2-active .resource-bar-button{min-height:34px}
+
+#view .resources-v2-head-hidden{display:none!important}
+
+#view .resources-v2-bar-overlay{
+  position:absolute;
+  inset:0;
+  z-index:4;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 10px;
+  pointer-events:none;
+}
+#view .resources-v2-bar-overlay span{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.04em;
+  color:#fff;
+  text-shadow:
+    -1px -1px 0 rgba(0,0,0,.85),
+    1px -1px 0 rgba(0,0,0,.85),
+    -1px 1px 0 rgba(0,0,0,.85),
+    1px 1px 0 rgba(0,0,0,.85),
+    0 2px 4px rgba(0,0,0,.5);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#view .resources-v2-bar-overlay span:first-child{text-transform:uppercase}
+
+#view .resources-v2-active .resource-row-main .resource-row-head:not(.sub){margin-bottom:2px}
+#view .resources-v2-active .resource-row-head:not(.sub) strong{font-size:11px;color:#e5c574}
+
+#view .resources-v2-reset{
+  font-size:10px;
+  color:#9db0bb;
+  white-space:nowrap;
+}
+
+@media(max-width:580px){
+  #view .resources-v2-active .resource-list-row .segmented-resource-bar{height:30px!important}
+  #view .resources-v2-bar-overlay span{font-size:9.5px}
+}

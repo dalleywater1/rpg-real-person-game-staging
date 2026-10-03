@@ -1,0 +1,114 @@
+[
+  {
+    "filename": "running-divider-2x.png",
+    "width": 64,
+    "height": 24,
+    "bytes": 144,
+    "centerAlpha": 0,
+    "sha256": "e91ceaca5a745d670981023a449bf755defb041635472ded193a03f7cd04e202"
+  },
+  {
+    "filename": "weather-bottom-2x.png",
+    "width": 32,
+    "height": 8,
+    "bytes": 174,
+    "centerAlpha": 220,
+    "sha256": "600d775f412d9833f4cfb9aa84add0f29e7c2211b03821874176c0b6f628c921"
+  },
+  {
+    "filename": "weather-bottom-left-2x.png",
+    "width": 8,
+    "height": 8,
+    "bytes": 194,
+    "centerAlpha": 221,
+    "sha256": "b1a2972d5d54a0692c0be75ec82916ed00a6aa3299ffb45e723af8a94699f119"
+  },
+  {
+    "filename": "weather-bottom-right-2x.png",
+    "width": 8,
+    "height": 8,
+    "bytes": 192,
+    "centerAlpha": 222,
+    "sha256": "227ad4333ce7fc7fc1aa36ccdd3974c55917fc2c1a0bbd8052e293edd90393ac"
+  },
+  {
+    "filename": "weather-left-2x.png",
+    "width": 8,
+    "height": 32,
+    "bytes": 182,
+    "centerAlpha": 220,
+    "sha256": "480187ed9d24e39b9af3ef1c6455b70cf2610ecea63b4859052536329571b3b1"
+  },
+  {
+    "filename": "weather-native-size-proofs.png",
+    "width": 800,
+    "height": 630,
+    "bytes": 307024,
+    "centerAlpha": 255,
+    "sha256": "45d2cd656582405135f60df62ccd4cfc09034cefb24ad5b2b49ed4675ffe6435"
+  },
+  {
+    "filename": "weather-proof-frame-320-2x.png",
+    "width": 240,
+    "height": 166,
+    "bytes": 1483,
+    "centerAlpha": 0,
+    "sha256": "a7f1001941ec702fdcc6844e95feb1b04ecb4e91a9eb129ee23ba3e166667792"
+  },
+  {
+    "filename": "weather-proof-frame-375-2x.png",
+    "width": 261,
+    "height": 166,
+    "bytes": 967,
+    "centerAlpha": 0,
+    "sha256": "f9e01484fd0bca817224ed31d5a7c8fb87c32ece30dd973d02b086e3e9875653"
+  },
+  {
+    "filename": "weather-proof-frame-580-2x.png",
+    "width": 369,
+    "height": 166,
+    "bytes": 1089,
+    "centerAlpha": 0,
+    "sha256": "8f3ced35a09bd961a255b6f9293d96b3b0c5b1d488907ad1150a57d1e7d8df2e"
+  },
+  {
+    "filename": "weather-right-2x.png",
+    "width": 8,
+    "height": 32,
+    "bytes": 178,
+    "centerAlpha": 220,
+    "sha256": "2d0d17a670c7ef1e59d274c2324b02e8fefa8a7389067700031041775c788cd7"
+  },
+  {
+    "filename": "weather-shell-2x.png",
+    "width": 48,
+    "height": 48,
+    "bytes": 553,
+    "centerAlpha": 0,
+    "sha256": "fbe9c7b9533d22d78599986296922d93f9bc1588bffdc164c4e4efecc8ebee31"
+  },
+  {
+    "filename": "weather-top-2x.png",
+    "width": 32,
+    "height": 8,
+    "bytes": 197,
+    "centerAlpha": 220,
+    "sha256": "94ce7fd4ea1759a331e7509ce43e9624c3f431e46fd310a76e0da8e2428e1f6a"
+  },
+  {
+    "filename": "weather-top-left-2x.png",
+    "width": 8,
+    "height": 8,
+    "bytes": 176,
+    "centerAlpha": 220,
+    "sha256": "52c191f719c8f9f2c1be4291a3c6022736e654976eb046a41ed05b03f4240aa5"
+  },
+  {
+    "filename": "weather-top-right-2x.png",
+    "width": 8,
+    "height": 8,
+    "bytes": 182,
+    "centerAlpha": 220,
+    "sha256": "b1cdd344396ebdbea53cebd6e48d02487ccee7ac7d6a0b93e6f04c1db6474b13"
+  }
+]

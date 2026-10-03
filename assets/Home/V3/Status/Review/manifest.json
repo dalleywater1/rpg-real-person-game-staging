@@ -1,0 +1,86 @@
+[
+  {
+    "file": "STATUS_BUFF_20.png",
+    "width": 20,
+    "height": 20,
+    "cornerAlpha": 0,
+    "sha256": "05cc320a3d1f0c85a1bb36430bd567b6bb05fe18b5359857616f09cd1c887412"
+  },
+  {
+    "file": "STATUS_BUFF_40.png",
+    "width": 40,
+    "height": 40,
+    "cornerAlpha": 0,
+    "sha256": "dcbb359d3374706c9b33ffc9646ddc72c72fc33ab9a82ce3bf5b3e91a1ed082b"
+  },
+  {
+    "file": "STATUS_BUFF_64.png",
+    "width": 64,
+    "height": 64,
+    "cornerAlpha": 0,
+    "sha256": "2da9b7aad9cd84c422c22b7387f2e0fbb1449d2d75284b52d8c929e6f5d1418c"
+  },
+  {
+    "file": "STATUS_BUFF_MASTER.png",
+    "width": 1254,
+    "height": 1254,
+    "cornerAlpha": 0,
+    "sha256": "3285fca09a56309438338a75aa14949b17bbd528a73bb54a9c9688363fd4b400"
+  },
+  {
+    "file": "STATUS_DEBUFF_20.png",
+    "width": 20,
+    "height": 20,
+    "cornerAlpha": 0,
+    "sha256": "38270854007e108b624239e2f34ed2c1bee5d8472ae9ad526897be03b88dfc3d"
+  },
+  {
+    "file": "STATUS_DEBUFF_40.png",
+    "width": 40,
+    "height": 40,
+    "cornerAlpha": 0,
+    "sha256": "45db700bba3ac0ff130c8d12093be33a58429b7c8e54a0581562c5d24fa569d2"
+  },
+  {
+    "file": "STATUS_DEBUFF_64.png",
+    "width": 64,
+    "height": 64,
+    "cornerAlpha": 0,
+    "sha256": "cab919ad17f610663c3479b282cf11d265c87f80fd4a10625e2a23d59f9dc4b6"
+  },
+  {
+    "file": "STATUS_DEBUFF_MASTER.png",
+    "width": 1254,
+    "height": 1254,
+    "cornerAlpha": 0,
+    "sha256": "4ff43ec1878f8c16c43f0e4bbc8a0173ba7e02c20ac4394f261c29878e6718b4"
+  },
+  {
+    "file": "STATUS_NEUTRAL_20.png",
+    "width": 20,
+    "height": 20,
+    "cornerAlpha": 0,
+    "sha256": "6e25d681f9bdee9217c4609f11723dc8db21ceb709c12565e18ce37635b84f1b"
+  },
+  {
+    "file": "STATUS_NEUTRAL_40.png",
+    "width": 40,
+    "height": 40,
+    "cornerAlpha": 0,
+    "sha256": "bdfa8772bd4e39fb2ecde5ab6652010fc025868d9cc9ca5e8a84f5aeb396498f"
+  },
+  {
+    "file": "STATUS_NEUTRAL_64.png",
+    "width": 64,
+    "height": 64,
+    "cornerAlpha": 0,
+    "sha256": "eaac5a952842f762c1f2534eeb09289eb066dbaf5c65497ff9664e43816a1ea5"
+  },
+  {
+    "file": "STATUS_NEUTRAL_MASTER.png",
+    "width": 1254,
+    "height": 1254,
+    "cornerAlpha": 0,
+    "sha256": "4b47a2d8c2a636422f428fd004ff45914aeecf3bf3bd1c22f8af4bf61abe4ac9"
+  }
+]

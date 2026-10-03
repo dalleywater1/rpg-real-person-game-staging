@@ -1,0 +1,236 @@
+/* Personal Growth: page composition.
+   Handover sections 6 and 8. Grids, spacing, gutters, hero and crops only.
+   Materials (buttons, tabs, panels, rows) come from 01-pg-components.css and
+   are never redefined here.
+
+   Breakpoints are CONTAINER queries on .pg-page, at the handover's 40rem
+   and 64rem. The application shell is currently capped at 580px
+   (styles.css, #appShell), which is narrower than 40rem, so today every
+   viewport gets the phone composition. Container queries mean the wider
+   compositions switch on by themselves if that global cap is ever lifted,
+   and they never misfire inside the narrow column the way viewport queries
+   would on a desktop monitor. */
+
+.pg-page {
+  container-type: inline-size;
+  container-name: pg;
+  width: 100%;
+  max-width: var(--pg-content-max);
+  margin-inline: auto;
+}
+
+.pg-page__inner {
+  display: grid;
+  gap: var(--pg-space-4);
+  padding: var(--pg-space-1) var(--pg-space-2) var(--pg-space-6);
+}
+
+.pg-layout { display: grid; gap: var(--pg-space-4); }
+.pg-side,
+.pg-main { display: grid; gap: var(--pg-space-4); align-content: start; min-width: 0; }
+
+/* ------------------------------------------------------------------ */
+/* Hero: place and mood. Art is optional; the gradient is the fallback. */
+/* ------------------------------------------------------------------ */
+
+.pg-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--pg-glass-border);
+  border-radius: var(--pg-radius-panel);
+  background:
+    radial-gradient(120% 90% at 88% 0%, rgba(152, 212, 173, .24), transparent 58%),
+    radial-gradient(90% 80% at 0% 100%, rgba(142, 201, 232, .16), transparent 62%),
+    linear-gradient(160deg, var(--pg-bg-mid), var(--pg-bg-deep) 72%);
+  box-shadow: var(--pg-shadow-soft);
+}
+
+/* Scene slot. The production scenes (Velora batch 1, assets/PersonalGrowth/)
+   are set per page by the modifier rules below; a page with no scene keeps the
+   gradient. Write each url() directly in background-image, never through a
+   custom property: it would resolve against the wrong stylesheet. */
+.pg-hero__scene {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 40%;
+}
+/* Readability overlay: keeps the title legible over any scene. */
+.pg-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(7, 21, 29, .55), rgba(7, 21, 29, .12) 70%);
+  pointer-events: none;
+}
+
+/* Production scenes. Each is a full portrait picture shown with cover, so only a
+   band of it is visible in the banner; background-position picks the band that
+   reads best behind the title. */
+.pg-scene--home     { background-image: url("../../assets/PersonalGrowth/pg-home-hero.webp");     background-position: 50% 58%; }
+.pg-scene--habits   { background-image: url("../../assets/PersonalGrowth/pg-habits-hero.webp");   background-position: 50% 34%; }
+.pg-scene--trackers { background-image: url("../../assets/PersonalGrowth/pg-trackers-hero.webp"); background-position: 50% 62%; }
+.pg-scene--reading  { background-image: url("../../assets/PersonalGrowth/pg-reading-hero.webp");  background-position: 50% 45%; }
+
+/* A picture behind the title needs a stronger readability overlay than the
+   plain gradient does. */
+.pg-hero--art::after {
+  background: linear-gradient(90deg, rgba(7, 21, 29, .80), rgba(7, 21, 29, .68) 50%, rgba(7, 21, 29, .56));
+}
+
+.pg-hero__content {
+  display: flex;
+  align-items: center;
+  gap: var(--pg-space-4);
+  padding: var(--pg-space-6) var(--pg-space-4);
+}
+.pg-hero__text { min-width: 0; }
+.pg-hero__title {
+  font-family: var(--pg-font-display);
+  font-size: var(--pg-type-title);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: .03em;
+  color: var(--pg-text-gold);
+  overflow-wrap: anywhere;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
+}
+.pg-hero__sub {
+  margin-top: .375rem;
+  font-size: 1.0625rem;
+  color: var(--pg-text-secondary);
+}
+.pg-hero--art .pg-hero__sub { text-shadow: 0 1px 6px rgba(0, 0, 0, .6); }
+
+/* ------------------------------------------------------------------ */
+/* Summary strip and Focus Tools                                       */
+/* ------------------------------------------------------------------ */
+
+.pg-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--pg-space-2);
+}
+
+.pg-focus { display: grid; gap: var(--pg-space-3); }
+.pg-focus__head { display: flex; align-items: center; gap: var(--pg-space-3); }
+.pg-focus__body { display: grid; justify-items: center; gap: var(--pg-space-3); }
+.pg-timer {
+  font-family: var(--pg-font-display);
+  font-size: clamp(2.5rem, 14cqw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: .04em;
+  line-height: 1.1;
+  color: var(--pg-text-primary);
+  text-align: center;
+}
+.pg-timer.is-running { color: var(--pg-accent); }
+.pg-focus__status { font-size: var(--pg-type-meta); font-weight: 700; color: var(--pg-text-muted); }
+.pg-focus__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--pg-space-2);
+  width: 100%;
+}
+.pg-focus__actions .pg-btn { flex: 1 1 8.5rem; }
+.pg-focus__note { text-align: center; color: var(--pg-text-secondary); }
+
+/* ------------------------------------------------------------------ */
+/* Trackers section                                                    */
+/* ------------------------------------------------------------------ */
+
+.pg-trackers { display: grid; gap: var(--pg-space-4); }
+.pg-trackers__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pg-space-3);
+}
+.pg-trackers__count { margin-top: .125rem; }
+
+/* ------------------------------------------------------------------ */
+/* Personal Growth Hub and its child pages                             */
+/* ------------------------------------------------------------------ */
+
+.pg-hero--compact .pg-hero__content { padding: var(--pg-space-4); }
+.pg-hero--compact .pg-medallion--hero { --pg-medallion-size: min(4rem, 72px); }
+/* The heading takes programmatic focus after a page change; it is not a control. */
+.pg-hero__title:focus-visible { outline: none; }
+
+.pg-summary--four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+.pg-quick,
+.pg-recent { display: grid; gap: var(--pg-space-3); align-content: start; }
+
+/* Quick access: two columns on phones (the last card takes the full row), one
+   column when text is enlarged so nothing is squeezed, then 3 + 2, then a row
+   of five as the container grows. */
+.pg-hub-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--pg-space-3); }
+.pg-hub-grid > li { display: grid; }
+.pg-hub-grid > li:last-child:nth-child(odd) { grid-column: 1 / -1; }
+
+.pg-soon .pg-empty { padding-block: var(--pg-space-8); }
+
+/* Narrow container or enlarged text (15rem is 240px at normal size but 480px
+   at 200%): one column for the cards and stats, and the activity row stacks
+   its "when" under the text so the text column is never squeezed. */
+@container pg (max-width: 15rem) {
+  .pg-hero--art::after { background: linear-gradient(180deg, rgba(7, 21, 29, .70), rgba(7, 21, 29, .78)); }
+  .pg-hub-grid { grid-template-columns: 1fr; }
+  .pg-summary--four { grid-template-columns: 1fr; }
+  .pg-act { grid-template-columns: auto minmax(0, 1fr); }
+  .pg-act__when { grid-column: 2; text-align: start; }
+}
+
+/* Very narrow phones (320): give the row a little more width. */
+@container pg (max-width: 21rem) {
+  .pg-page__inner { padding-inline: .25rem; }
+  .pg-shell { padding: var(--pg-space-3); }
+  .pg-row { padding-inline: var(--pg-space-3); }
+  .pg-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pg-summary:not(.pg-summary--four) > :last-child { grid-column: 1 / -1; }
+  .pg-hero__content { gap: var(--pg-space-3); padding-inline: var(--pg-space-3); }
+  .pg-medallion--hero { --pg-medallion-size: min(4rem, 80px); }
+}
+
+/* 32rem and up (the real app column is about 35rem): four stats in a row and
+   the cards as 3 + 2. */
+@container pg (min-width: 32rem) {
+  .pg-summary--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pg-hub-grid { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+  .pg-hub-grid > li { grid-column: span 2; }
+  .pg-hub-grid > li:nth-child(n+4) { grid-column: span 3; }
+  .pg-hub-grid > li:last-child:nth-child(odd) { grid-column: span 3; }
+}
+
+/* 40rem and up: more columns as content permits. */
+@container pg (min-width: 40rem) {
+  .pg-page__inner { gap: var(--pg-space-6); padding-inline: var(--pg-space-6); }
+  .pg-hero__content { padding: var(--pg-space-8) var(--pg-space-6); }
+  .pg-shell { padding: var(--pg-space-6); }
+  .pg-filters { flex-wrap: wrap; overflow: visible; padding-right: .25rem; -webkit-mask-image: none; mask-image: none; }
+  .pg-rows { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .pg-focus__actions .pg-btn { flex: 0 1 auto; }
+}
+
+/* 64rem and up: centred content, up to 1200px, with the summary and the
+   focus tool as a companion column beside the tracker list. DOM order is
+   already summary, focus, then trackers, so the visual order matches the
+   reading and keyboard order. */
+@container pg (min-width: 64rem) {
+  .pg-layout { grid-template-columns: 20rem minmax(0, 1fr); gap: var(--pg-space-6); align-items: start; }
+  .pg-side { position: sticky; top: var(--pg-space-4); }
+  .pg-summary { grid-template-columns: 1fr; }
+  /* The Hub has no side column: its stats stay a row and its cards a row of five. */
+  .pg-summary--four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pg-hub-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .pg-hub-grid > li,
+  .pg-hub-grid > li:nth-child(n+4),
+  .pg-hub-grid > li:last-child:nth-child(odd) { grid-column: span 1; }
+}

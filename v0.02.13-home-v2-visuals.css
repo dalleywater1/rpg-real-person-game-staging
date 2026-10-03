@@ -1,0 +1,158 @@
+/* RPG v0.02.13 — Home v2 Fidelity Rebuild visual integration
+   (2026-09-06). Wires the frozen, hash-verified artwork from
+   RPG_HOME_V2_UPDATED_ARTWORK_ONLY_2026-09-06.zip into the existing
+   Home v2 module architecture (v0.02.12). Backgrounds/overlays are pure
+   background-image layers on #appShell — they never touch module
+   layout, DOM structure, or panel geometry (Home v2 handover §18). */
+
+/* Scenic environment (Day/Sunset/Night/Rain) + readability overlays.
+   #view stays transparent here (see the pre-existing
+   #view.home-marble-correction rule in styles.css) so this shows
+   through behind every Home panel. The overlay/vignette/FX PNGs are
+   each full-canvas layers pre-composed at the SAME pixel dimensions as
+   their matching background photo, so every layer uses identical
+   cover/center/fixed placement to stay pixel-aligned — layer order,
+   first = topmost: (rain FX,) top readability overlay, bottom
+   readability overlay, vignette, base environment photo. */
+/* Home V3 scenic background sizing fix (Aurelia — Home V3 scenic
+   backgrounds handover, 2026-09-09). The previous `background-size:cover`
+   sized the image against #appShell's own box — which is the FULL
+   scrollable Home page (measured ~1872px tall at 320px width, vs. a
+   ~700-900px viewport), not the viewport. Cover-against-full-page-height
+   forces the image ~2.7x wider than the viewport to satisfy the height
+   constraint, leaving only a ~11%-wide vertical sliver of the image
+   visible at any horizontal position — on these new landscape masters
+   (castle upper-left, bridge/waterfall center, ~1.5:1 aspect) that
+   sliver reliably misses the castle and often the bridge too, and
+   `position:center` (vertical) centers the FULL PAGE's worth of scaled
+   image, so image-top (sky) lines up near page-top and the landmark
+   cluster (roughly the image's own top 5-45%) ends up scrolled past the
+   Hero and down into the Character Stats / Today area — nowhere near
+   where players actually look.
+   Fix: size against 100vh (viewport height, resolved independent of the
+   element's own box or background-attachment mode) instead of the full
+   page, and anchor to the top so the landmark band sits behind the Hero.
+   `background-position-x` is shifted left of center (38% at 320/375,
+   fine-tuned upward at 580 where the viewport is proportionally wider)
+   to center the visible horizontal window on the castle+bridge cluster
+   rather than the empty lake — verified live, not calculated only. A
+   background-color fallback (approximate lake/sky tone per environment)
+   fills any page height below the sized image so tall pages never show
+   a hard edge. */
+body[data-theme="home"] #appShell{
+  background-repeat:no-repeat;
+  background-position:38% top;
+  background-size:auto 100vh;
+  background-attachment:fixed;
+}
+/* Runtime optimisation + mobile composition correction (Aurelia ruling,
+   2026-09-09). Two changes from the prior pass:
+   1. All background photos now point at the compressed JPEG runtime
+      exports (assets/Home/V3/Backgrounds/runtime/, quality 85) instead
+      of the original 1536x1024 PNG masters — 6.76MB across all 16
+      themes vs. the previous ~37MB of PNGs. The PNG masters (plus four
+      new mobile-composition PNG masters) are kept in
+      assets/Home/V3/Backgrounds/masters/ as source authority; nothing
+      in this file references that folder, so it never enters the
+      runtime payload.
+   2. At <=520px, the four core environments switch to dedicated mobile
+      portrait compositions (941x1672 source, recomposed by Velora for
+      narrow viewports — not a crop of the landscape master) via the
+      media query below. 580px+ keeps the landscape composition, per
+      Aurelia's ruling that 580 already passed. Position/sizing
+      (auto 100vh, 38% top) is unchanged and applies to both — Velora's
+      own mobile-composition simulations were built against this exact
+      rule and don't recommend another position search. */
+body[data-theme="home"].home-env-day #appShell{
+  background-color:#1f4d63;
+  background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-day.jpg');
+}
+body[data-theme="home"].home-env-sunset #appShell{
+  background-color:#2e2f3f;
+  background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-sunset.jpg');
+}
+body[data-theme="home"].home-env-night #appShell{
+  background-color:#0c1526;
+  background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-night.jpg');
+}
+body[data-theme="home"].home-env-rain #appShell{
+  background-color:#3a4550;
+  background-image:url('./assets/UI/shared/overlays/FX_HOME_RAIN.png?v=0.1.2.33'),url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-rain.jpg');
+}
+@media(max-width:520px){
+  body[data-theme="home"].home-env-day #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-mobile-day.jpg')}
+  body[data-theme="home"].home-env-sunset #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-mobile-sunset.jpg')}
+  body[data-theme="home"].home-env-night #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-mobile-night.jpg')}
+  body[data-theme="home"].home-env-rain #appShell{background-image:url('./assets/UI/shared/overlays/FX_HOME_RAIN.png?v=0.1.2.33'),url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-mobile-rain.jpg')}
+}
+/* Holiday + birthday layers — assets present for explicit manual
+   testing (toggle the home-env-<key> body class), NOT auto-applied;
+   see HOME_HOLIDAY_AUTO_ENABLED in app.js. Landscape-only at every
+   width (Velora's mobile recomposition covers only the core four; this
+   delivery's own note is explicit that holiday/birthday mobile crop
+   limits remain unaddressed — flagged in the return report, not fixed
+   here since these never auto-display). Fallback colors corrected per
+   Velora's factual correction: the holiday family is NOT uniformly
+   daytime-lit — Christmas/New Year/Halloween read dusk-to-night in
+   their own art, so they get a darker fallback than the shared
+   daytime tone the other four (Valentine/Easter/17 May/Midsummer/
+   birthday) use. */
+body[data-theme="home"].home-env-birthday #appShell,
+body[data-theme="home"].home-env-valentine #appShell,
+body[data-theme="home"].home-env-easter #appShell,
+body[data-theme="home"].home-env-norway17may #appShell,
+body[data-theme="home"].home-env-midsummer #appShell{
+  background-color:#1f4d63;
+  background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33');
+}
+body[data-theme="home"].home-env-christmas #appShell,
+body[data-theme="home"].home-env-newyear #appShell,
+body[data-theme="home"].home-env-halloween #appShell{
+  background-color:#141d2e;
+  background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33');
+}
+body[data-theme="home"].home-env-birthday #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-birthday.jpg')}
+body[data-theme="home"].home-env-christmas #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-christmas.jpg')}
+body[data-theme="home"].home-env-newyear #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-newyear.jpg')}
+body[data-theme="home"].home-env-valentine #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-valentine.jpg')}
+body[data-theme="home"].home-env-easter #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-easter.jpg')}
+body[data-theme="home"].home-env-norway17may #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-norway17may.jpg')}
+body[data-theme="home"].home-env-midsummer #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-midsummer.jpg')}
+body[data-theme="home"].home-env-halloween #appShell{background-image:url('./assets/UI/shared/overlays/VIGNETTE_HOME.png?v=0.1.2.33'),url('./assets/Home/V3/Backgrounds/runtime/home-v3-background-halloween.jpg')}
+
+/* Mobile background-attachment REVERTED to fixed (Aurelia — Home V3
+   scrolling-background grey-gap fix, 2026-09-11). The `scroll`
+   attachment this override used to force below 580px was exactly what
+   caused the "grey (dark blue-grey) fallback" complaint: `scroll`
+   attachment on a 100vh-sized image only ever covers the FIRST
+   viewport-height of a taller page — the flat background-color behind
+   it (previously judged "acceptable, mostly hidden by opaque cards")
+   became clearly visible in the gaps once those cards got lighter and
+   the page got longer through the internal-redesign passes. `fixed`
+   (the ≥581px behavior all along, which never showed this problem)
+   repaints against the viewport at every scroll position instead of
+   being sized to the document, so the scenic image stays present for
+   the entire scroll regardless of page length — the lowest-risk of
+   the three options Aurelia offered, tested first per her own
+   instruction. Known tradeoff, not verifiable from this environment:
+   `background-attachment:fixed` has a documented iOS Safari jitter
+   bug tied to the dynamic toolbar animating viewport height during
+   scroll — this file's own prior comment is the origin of that
+   concern, not a new finding. Needs a real iOS Safari check before
+   this is considered fully proven; if jitter shows up there, the next
+   step is a `position:fixed` decorative layer behind the content
+   instead of `background-attachment:fixed` on #appShell (avoids the
+   specific CSS property iOS mishandles), not reverting to `scroll`. */
+/* 580px sits at the mobile/desktop boundary — the viewport there is
+   proportionally wider relative to its own height than 320/375, so the
+   38% anchor (tuned for narrower phones) drifts the visible window too
+   far left and starts clipping the bridge; nudged back toward center. */
+@media(min-width:521px) and (max-width:580px){
+  body[data-theme="home"] #appShell{background-position:44% top}
+}
+
+/* Home Settings gear buttons (Today header + footer fallback, see
+   v0.02.12) previously showed a plain "⚙" glyph — now use the frozen
+   ICON_HOME_SETTINGS.png icon, sized to fit each button's existing box. */
+.home-settings-gear img{width:20px;height:20px;object-fit:contain}
+.home-settings-fallback-gear img{width:14px;height:14px;object-fit:contain;vertical-align:middle}

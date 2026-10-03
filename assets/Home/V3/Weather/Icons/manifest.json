@@ -1,0 +1,290 @@
+[
+  {
+    "file": "38\\weather-clear-day-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 1797,
+    "sha256": "1a4e44ced8eba17da5c88247b188a24e037f6de34b610e40274d6ef4585ef6a1"
+  },
+  {
+    "file": "38\\weather-clear-night-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 1632,
+    "sha256": "535acace87dca8ae86dfc71a200e8cacdd79ed0608c0aea2e461fb21c0a80c1a"
+  },
+  {
+    "file": "38\\weather-cloudy-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 1888,
+    "sha256": "14500d20fb619f437305468f20075fd09abc03de2b9e8d3b5c194a6beecc8ee4"
+  },
+  {
+    "file": "38\\weather-fog-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 2080,
+    "sha256": "297680181d490a2c2f93b33f9626f73f1c8c0403d8c8bbfc13001573961d5601"
+  },
+  {
+    "file": "38\\weather-heavy-rain-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 1914,
+    "sha256": "1d1a27bf85785a2ee0e706984d53fe555963dc2ebe9a824d4344590fb45ab408"
+  },
+  {
+    "file": "38\\weather-light-rain-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 1649,
+    "sha256": "3730bd46ce312bd04c8cd925bcd7ac430591fa592df6d026da96a52a05f8069c"
+  },
+  {
+    "file": "38\\weather-partly-cloudy-day-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 2180,
+    "sha256": "04c13d7579a0fd81beb0ee8d45cc032d618ea9b485fb5b1829f0e19ec59e3900"
+  },
+  {
+    "file": "38\\weather-partly-cloudy-night-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 1868,
+    "sha256": "99d6571f6eded87cc54774db00dffdcd57f2d42557dd7793abe08372353e1e82"
+  },
+  {
+    "file": "38\\weather-sleet-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 2073,
+    "sha256": "93e696671ff1645d4eca3c19242174960dfe096b46807cc92488a28c665a992a"
+  },
+  {
+    "file": "38\\weather-snow-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 2247,
+    "sha256": "15823d000f6a03053ce1ce84986d373b611bdac66aab33cea07347abcf99313e"
+  },
+  {
+    "file": "38\\weather-thunderstorm-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 2117,
+    "sha256": "a63dcd133068745c2bed566e4b78255d48eaa29909df53be2a5094ee7bb4e046"
+  },
+  {
+    "file": "38\\weather-windy-38px.png",
+    "width": 38,
+    "height": 38,
+    "cornerAlpha": 0,
+    "bytes": 1806,
+    "sha256": "db8142a646688a6afcb038b49b53907a6b68a58238dbd9643ded1ed074379326"
+  },
+  {
+    "file": "76\\weather-clear-day-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 5302,
+    "sha256": "0c6136c35d45f5587b8756a0cb5f859ddd0355c050ceb4c253c6dddaa3999af7"
+  },
+  {
+    "file": "76\\weather-clear-night-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 4847,
+    "sha256": "bc1e7a522e3997db34912f88cf1cfa21f628ad4e47169ecfaaac97853c0f19c7"
+  },
+  {
+    "file": "76\\weather-cloudy-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 5780,
+    "sha256": "bfc1d2a349f15053f9f30ed52ff3f692c678cb7a33f332bfa7a57bd1e1040d1f"
+  },
+  {
+    "file": "76\\weather-fog-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 6146,
+    "sha256": "d862bc13e6bc1bb3eb84f005d027893599b6ab78d5202aa9cb228f3e48e02923"
+  },
+  {
+    "file": "76\\weather-heavy-rain-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 5662,
+    "sha256": "3a73e4d326055f4be09f68bb908d7c9871edf5acd747f9d7aeeedfed8613026d"
+  },
+  {
+    "file": "76\\weather-light-rain-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 4833,
+    "sha256": "c74dc9a7f629841383059e8e46cb9da7ff9e05a5b1f30aa06d3ab8f40f4d7f0e"
+  },
+  {
+    "file": "76\\weather-partly-cloudy-day-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 6884,
+    "sha256": "4ca589070cf4905d1e1a80e95388e1f6764fd61cff0fbb9ccc61910c2bd25533"
+  },
+  {
+    "file": "76\\weather-partly-cloudy-night-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 5839,
+    "sha256": "269e04b6467783e4eed49582729ff48060176b64ffcfd750fafe4a9c181f8082"
+  },
+  {
+    "file": "76\\weather-sleet-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 6256,
+    "sha256": "bdf6e950f333654cf9211df0a6adbf0586410848c8ff15bae38c31bad500938e"
+  },
+  {
+    "file": "76\\weather-snow-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 6906,
+    "sha256": "1498275e192c250cf8e99d22ae299be80a3c0fc96cc2c180c9851efdd394901e"
+  },
+  {
+    "file": "76\\weather-thunderstorm-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 6429,
+    "sha256": "47e2e8cdde55295411a1b24884b17750ca6b7a5936628848d22cf6d02dc1d9c8"
+  },
+  {
+    "file": "76\\weather-windy-76px.png",
+    "width": 76,
+    "height": 76,
+    "cornerAlpha": 0,
+    "bytes": 5148,
+    "sha256": "e14c7028e7157da883c02379d02c6f2bbdeb902354b51f542e599a8abc7c7ae0"
+  },
+  {
+    "file": "masters\\weather-clear-day.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 615731,
+    "sha256": "64475d273b761fa2a8464497037eb5df597507635f4ad99661deb72fb71dad2d"
+  },
+  {
+    "file": "masters\\weather-clear-night.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 558823,
+    "sha256": "0c0753ed8eb5140f002e2ba8f9dbc1e07bc1f5ad3422f12cae00c99c262d27d3"
+  },
+  {
+    "file": "masters\\weather-cloudy.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 636528,
+    "sha256": "e457c76976eb76ffd0599cf2b6b9fffcff1c6675b25f61d1cdf0204b59bde396"
+  },
+  {
+    "file": "masters\\weather-fog.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 666874,
+    "sha256": "ae2eeb6c999140c9731fef670a6a58f26ce82a2a1e6c0b2cddcf8bbe2ef61c0e"
+  },
+  {
+    "file": "masters\\weather-heavy-rain.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 576119,
+    "sha256": "c304c882998876068bc0c8d87601c6f6296cafd24d15d439c1732bbea99fb28b"
+  },
+  {
+    "file": "masters\\weather-light-rain.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 479851,
+    "sha256": "d9b396c0811067a82f586938ad6c561c808dcd95cd53645e180eff73563fc28b"
+  },
+  {
+    "file": "masters\\weather-partly-cloudy-day.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 847653,
+    "sha256": "262d67f523bf7cebde336ef7baed81c17e355ffacb3193d66ddaaf1fd77287a1"
+  },
+  {
+    "file": "masters\\weather-partly-cloudy-night.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 677041,
+    "sha256": "1a654fe74f247940bd7c8054ca95ca6aad192c984c5dccd3c2d4786fa8d2c0ab"
+  },
+  {
+    "file": "masters\\weather-sleet.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 718288,
+    "sha256": "afe13a0ed3ebbeb99cd553bf07a02a0cc6c833f7beb76a1e34238bcbebd177c8"
+  },
+  {
+    "file": "masters\\weather-snow.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 761635,
+    "sha256": "774aba6cdc92d4e2360f03c3411166a8f1afcf6198c2c7659b79c66d4d4b780b"
+  },
+  {
+    "file": "masters\\weather-thunderstorm.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 727750,
+    "sha256": "c808bd2414b01fbf344fa25152293cbafb491b8d69b0d2c047bd38609a3287b2"
+  },
+  {
+    "file": "masters\\weather-windy.png",
+    "width": 1024,
+    "height": 1024,
+    "cornerAlpha": 0,
+    "bytes": 559376,
+    "sha256": "63640a67177247c695b240825fa0f4ca7c446640f39bb3a32858cdbca68f616e"
+  }
+]

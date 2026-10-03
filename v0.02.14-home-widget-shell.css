@@ -1,0 +1,320 @@
+/* RPG v0.02.14 — Home Widget Family shared shell system (PREPARATION ONLY,
+   2026-09-07). Reusable rendering primitives for Velora's Home Widget
+   Final Family (Lyra handover, ASTRA IMPLEMENTATION HANDOVER — Home
+   Widget Final Family, revised 2026-09-07).
+
+   STATUS: NOT WIRED INTO LIVE HOME. This file is intentionally not
+   linked from index.html. Aurelia's artwork freeze
+   ("HOME WIDGET FIRST FAMILY — ARTWORK FREEZE APPROVED") has not been
+   received yet — per the handover's own gate (§22) and Velora's
+   independent handover notes ("ASTRA — HOLD"), only asset
+   inventory/verification and this shell-system preparation are
+   authorized so far. Do not add a <link> for this file to index.html,
+   and do not reference these classes from any renderHome()-reachable
+   markup, until that freeze is confirmed and a follow-up pass wires
+   Phase D onward.
+
+   Verified against assets/Home/Widget Family/ (11 files, SHA-256 +
+   dimensions + alpha-edge-clean confirmed against the delivered
+   manifest — see ASTRA_CURRENT_STATE.md). Source masters are 2172x724
+   (most) or 2048x768 (Standard panel only, per the handover's own
+   §18 note) or 1254x1254 (Portrait frame, Level badge).
+
+   Slice values below were measured directly from each asset's actual
+   pixel content (topmost/bottommost/leftmost/rightmost opaque pixel
+   per column/row, away from the corner ornaments and center jewel) —
+   not guessed — with a small safety margin added so corner ornaments
+   are never cut into. Uses standard CSS border-image nine-slicing:
+   corners render at native resolution and are never stretched; edges
+   stretch along their own axis only (a center-top jewel motif stays
+   proportionally centered when its edge strip stretches horizontally
+   — this is the normal, expected border-image behavior for a
+   symmetric edge ornament, not a defect). */
+
+:root{
+  --widget-gold-line: #d7a94a;
+  --widget-navy: #0c1a2c;
+  --widget-jewel: #4bbcff;
+}
+
+/* ---------- Panel family (border-image nine-slice) ---------- */
+/* Each tier shares the same mechanism; only the source image and
+   measured slice percentages differ. --widget-slice is expressed as
+   top right bottom left (matches border-image-slice shorthand order). */
+
+.rpg-widget{
+  position: relative;
+  box-sizing: border-box;
+  background: transparent;
+  border-style: solid;
+  border-width: var(--widget-border-width, 28px);
+  border-image-source: var(--widget-image);
+  border-image-slice: var(--widget-slice);
+  border-image-width: var(--widget-border-width, 28px);
+  border-image-repeat: stretch;
+  padding: var(--widget-pad-y, 20px) var(--widget-pad-x, 28px);
+  min-height: var(--widget-min-height, 64px);
+}
+
+/* Feature Banner — BANNER_HOME_WIDGET_FEATURE.png (2172x724) */
+.rpg-widget-banner{
+  --widget-image: url('./assets/Home/Widget Family/BANNER_HOME_WIDGET_FEATURE.png');
+  --widget-slice: 16% 8% 14% 8%;
+  --widget-border-width: 32px;
+}
+
+/* Medium Feature Panel — PANEL_HOME_FEATURE_MEDIUM.png (2172x724) */
+.rpg-widget-feature-medium{
+  --widget-image: url('./assets/Home/Widget Family/PANEL_HOME_FEATURE_MEDIUM.png');
+  --widget-slice: 22% 13% 22% 13%;
+  --widget-border-width: 34px;
+}
+
+/* Standard Panel — PANEL_HOME_STANDARD.png (2048x768, NOTE different
+   source aspect ratio per handover §18 — slice is still expressed as
+   percentages so this is handled automatically). */
+.rpg-widget-standard{
+  --widget-image: url('./assets/Home/Widget Family/PANEL_HOME_STANDARD.png');
+  --widget-slice: 14% 8% 13% 8%;
+  --widget-border-width: 26px;
+}
+
+/* Compact Panel — PANEL_HOME_COMPACT.png (2172x724) */
+.rpg-widget-compact{
+  --widget-image: url('./assets/Home/Widget Family/PANEL_HOME_COMPACT.png');
+  --widget-slice: 17% 13% 18% 13%;
+  --widget-border-width: 22px;
+  --widget-pad-y: 14px;
+  --widget-pad-x: 20px;
+}
+
+/* Button / Tab frame — BUTTON_HOME_WIDGET.png (2172x724). Buttons stay
+   near their natural aspect ratio in practice (short, wide), so this
+   is included for completeness but is not expected to need extreme
+   stretch the way a content panel does. */
+.rpg-widget-button{
+  --widget-image: url('./assets/Home/Widget Family/BUTTON_HOME_WIDGET.png');
+  --widget-slice: 18% 11% 17% 11%;
+  --widget-border-width: 18px;
+  --widget-pad-y: 10px;
+  --widget-pad-x: 22px;
+  min-height: 44px; /* mobile tap-target floor, independent of art — see hitbox note below */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+/* Stat Inset — INSET_HOME_STAT.png (2172x724) */
+.rpg-widget-inset{
+  --widget-image: url('./assets/Home/Widget Family/INSET_HOME_STAT.png');
+  --widget-slice: 17% 11% 16% 11%;
+  --widget-border-width: 16px;
+  --widget-pad-y: 8px;
+  --widget-pad-x: 14px;
+  min-height: 40px;
+}
+
+/* ---------- Header (fixed-height, not stretched vertically) ---------- */
+/* HEADER_HOME_WIDGET.png's decorated content occupies only the
+   vertical middle band of its canvas (measured ~31% top / ~32%
+   bottom of transparent margin) — it's a title-bar shape, not a
+   growable panel. Rendered at a fixed height via background-size,
+   width stretches via border-image on the horizontal axis only. */
+.rpg-widget-header{
+  --widget-image: url('./assets/Home/Widget Family/HEADER_HOME_WIDGET.png');
+  box-sizing: border-box;
+  border-style: solid;
+  border-width: 0 26px;
+  border-image-source: var(--widget-image);
+  border-image-slice: 0 15% 0 15%;
+  border-image-width: 0 26px;
+  border-image-repeat: stretch;
+  background-image: var(--widget-image);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 12px;
+}
+
+/* ---------- Divider (center-anchored, not stretched) ---------- */
+/* DIVIDER_HOME_WIDGET.png's jewel sits at the horizontal center with
+   the line extending symmetrically — border-image would smear a
+   single center ornament across an arbitrary width, so this renders
+   at a fixed natural width instead (a divider spanning the full
+   container isn't the natural use case for a center-jewel motif
+   anyway). Override --widget-divider-width per placement if needed. */
+.rpg-widget-divider{
+  width: var(--widget-divider-width, 70%);
+  max-width: 520px;
+  height: 28px;
+  margin: 10px auto;
+  background-image: url('./assets/Home/Widget Family/DIVIDER_HOME_WIDGET.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+/* ---------- Hero / Player Status shell ---------- */
+/* FRAME_HOME_PLAYER_STATUS.png is a bespoke composite, not a tileable
+   nine-slice panel: pixel-measured (see Phase D notes), the portrait
+   aperture sits inside the LEFT EDGE strip (not a corner) and spans
+   most of the image height, so border-image's `stretch` repeat — which
+   scales that edge non-uniformly in x vs y to fit a 130px destination
+   width — turned the circular aperture into a warped oval. Nine-slicing
+   is the wrong tool for this asset. Instead: render the frame at its
+   own native aspect ratio (2172:724) as a "header" strip so nothing
+   inside it is stretched, and let the rest of the content (vitals,
+   progression, quip) sit below in a plain surface using the frame's own
+   sampled content-band color, so the two sections read as one card. */
+.rpg-widget-hero{
+  --hero-portrait-size: 108px;
+  box-sizing: border-box;
+  background: #071f38;
+  border-radius: 4px;
+  box-shadow: 0 0 0 1px rgba(228,180,90,.28), 0 6px 18px #0006;
+  overflow: hidden;
+  position: relative;
+}
+.rpg-widget-hero-header{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 2172 / 724;
+  background-image: url('./assets/Home/Widget Family/FRAME_HOME_PLAYER_STATUS.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: top left;
+}
+
+/* Portrait aperture + level badge. Positioned as percentages of the
+   header strip's own box — measured directly from the source PNG's
+   alpha channel (center ~16.5%/46.3% of width/height, radius ~10.1%/
+   26.0%), so they land inside the aperture regardless of the header's
+   rendered size, with no stretch/distortion since the header keeps the
+   image's own aspect ratio at any width. */
+.rpg-widget-hero-portrait-slot{
+  position: absolute;
+  left: 6.44%;
+  top: 20.30%;
+  width: 20.15%;
+  height: 51.93%;
+}
+.rpg-widget-hero-badge-slot{
+  position: absolute;
+  /* No separate socket hole exists in the frame art for this — the
+     badge is a standalone graphic that overlaps the portrait ring's
+     bottom-right edge, a standard "level medallion on corner of
+     portrait" placement rather than a socketed cutout. */
+  left: 19.5%;
+  top: 58%;
+  width: 11%;
+  height: 28%;
+}
+
+/* ---------- Portrait frame (fixed 1:1, never stretched) ---------- */
+.rpg-widget-portrait{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+.rpg-widget-portrait-frame{
+  position: absolute;
+  inset: 0;
+  /* Home V3 Player Portrait ring (Aurelia — Astra live handoff,
+     2026-09-09). One canonical 2x export at the largest tested tier
+     (184px, covering 580px's 92px slot at 2x) scales down cleanly via
+     background-size:contain for 320/375 — same single-canonical-source
+     approach used for the Resource/Movement/Character frames, just via
+     background-image instead of border-image since this is circular
+     artwork ("scale proportionally, never 9-slice"). */
+  background-image: url('./assets/Home/V3/Portrait/portrait-frame-184px.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  pointer-events: none;
+  z-index: 2;
+}
+.rpg-widget-portrait-art{
+  position: absolute;
+  /* Tuned 2026-09-10 against the real frame art (portrait-frame-
+     184px.png, scanned pixel-by-pixel along the horizontal midline):
+     the ring's transparent inner aperture starts at radius 71px, the
+     ring itself runs ~71-82px, fully transparent again past 82px, all
+     out of a 92px half-width. The original 16% inset (art stopping at
+     radius ~62px) left a visible gap of background between the photo's
+     edge and the ring — art now runs to a 4% inset (radius ~88px),
+     comfortably past the ring's own outer edge, so the ring paints over
+     the photo's edge with no seam instead of floating inside it. */
+  inset: 4%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+}
+.rpg-widget-portrait-art img{
+  width: 100%;
+  height: 100%;
+  /* contain, not cover: the app has no player-photo system, portrait
+     art is the character class badge (a square icon), so cropping it
+     to fill a circle (cover) would cut art off — contain keeps the
+     whole icon visible, matching how Variant 8 rendered the same
+     class-badge source. */
+  object-fit: contain;
+  border-radius: 0;
+}
+
+/* ---------- Level badge (fixed 1:1, number overlaid by code) ---------- */
+.rpg-widget-level-badge{
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-image: url('./assets/Home/Widget Family/BADGE_HOME_PLAYER_LEVEL.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+.rpg-widget-level-badge-value{
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 800;
+  color: #f7edcf;
+  text-shadow: 0 2px 3px #000a;
+  /* clamp() scales the number with the badge's own size rather than a
+     fixed px value, so it stays readable from a small mobile inset
+     stat use up to a large hero-badge use */
+  font-size: clamp(14px, 34%, 40px);
+  line-height: 1;
+}
+
+/* ---------- Hitboxes ---------- */
+/* Per handover §16/§13 — interaction size must never come from the
+   PNG's own transparent-pixel rectangle. .rpg-widget-button already
+   sets a 44px min-height; anything wrapping a .rpg-widget-inset or
+   .rpg-widget-divider in an interactive role should add its own
+   explicit hit-target sizing the same way rather than relying on
+   this file alone. */
+.rpg-widget-hit-target{
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Responsive ---------- */
+@media(max-width:390px){
+  .rpg-widget{ --widget-pad-y: 14px; --widget-pad-x: 18px; }
+  /* .rpg-widget-hero and its header/portrait/badge slots are percentage-
+     based (see the Hero block above), so they already rescale here
+     without a breakpoint override; any further Hero mobile tuning
+     lives in v0.02.15-home-widget-player-status.css instead. */
+  .rpg-widget-header{ height: 40px; }
+}

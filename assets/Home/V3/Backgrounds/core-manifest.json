@@ -1,0 +1,26 @@
+[
+  {
+    "filename": "home-v3-background-day-master.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "9a2f1a75efc53677686bbe20da22715db62ac3663f035ac31ac9cb157ef94865"
+  },
+  {
+    "filename": "home-v3-background-sunset-master.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "5f00f84cee876dcb5144deb797a5e9518903598b4c50a6e097188990cc4e5850"
+  },
+  {
+    "filename": "home-v3-background-night-master.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "d478fe11470e8c67d454eb21123e8c54f398550d9a62b89fad1992b90ec6aa23"
+  },
+  {
+    "filename": "home-v3-background-rain-master.png",
+    "width": 1536,
+    "height": 1024,
+    "sha256": "386569fc40ea5a72807adbb04f0b00b2cc190caf306d4c2c9aa81a064697ecd5"
+  }
+]

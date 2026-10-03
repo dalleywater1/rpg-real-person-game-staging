@@ -1,0 +1,91 @@
+/* Adventurer's Log - calendar (Week strip and Month grid).
+
+   Same glass language as the rest of the Quests system: soft glass day
+   cells inside one glass card, today marked with the Log accent hairline
+   and wash, a count or a few dots for what is scheduled. The cells only
+   ever show how much is on a day; what it is lives in Today and in the
+   source system (Training, Personal Growth). Tokens only, no literals. */
+
+.log-calendar { gap: 12px; }
+.log-calendar__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.log-calendar__title { display: grid; gap: 3px; min-width: 0; }
+.log-calendar__month { font: 700 15px/1.2 var(--q-font-display); letter-spacing: 0.02em; color: var(--q-text); }
+.log-calendar__tabs { flex: 0 0 auto; min-width: 150px; }
+/* the Week/Month toggle is a primary control: a comfortable touch height (the shared .q-tab is 28px) */
+.log-calendar__tabs .q-tab { min-height: 34px; }
+
+/* ---------- week: seven glass day cells ---------- */
+.log-week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; }
+.log-day {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  gap: 6px;
+  min-height: 78px;
+  padding: 9px 2px 8px;
+  border-radius: 12px;
+  background: var(--q-glass-soft);
+  border: 1px solid var(--q-edge);
+  min-width: 0;
+}
+.log-day__dow { font: 800 9.5px/1 var(--q-font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--q-text-muted); }
+.log-day__num { font: 700 18px/1 var(--q-font-display); color: var(--q-text); font-variant-numeric: tabular-nums; }
+.log-day__dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 3px; min-height: 7px; }
+.log-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--q-text-muted); }
+.log-dot--activity { background: var(--q-accent); }
+.log-dot--quest { background: var(--q-gold); }
+.log-day.is-today { border-color: var(--q-accent-line); background: var(--q-accent-wash); box-shadow: 0 0 8px var(--q-accent-soft); }
+.log-day.is-today .log-day__num { color: var(--q-accent); }
+.log-day.is-today .log-day__dow { color: var(--q-text-secondary); }
+
+/* ---------- month: 7 x 6 grid ----------
+   The day number and, when something is scheduled, a small count chip UNDER it:
+   one centred stack, so the two can never overlap however small the cell or large
+   the text. Days outside the month use the muted text colour (no opacity), which
+   keeps them readable. */
+.log-month { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.log-month__label { padding: 2px 0 4px; text-align: center; font: 800 9.5px/1 var(--q-font-body); letter-spacing: 0.1em; color: var(--q-text-muted); }
+.log-mday {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2px;
+  aspect-ratio: 1 / 1;
+  min-height: 36px;
+  min-width: 0;
+  border-radius: 10px;
+  background: var(--q-glass-soft);
+  border: 1px solid transparent;
+  font: 600 13px/1.1 var(--q-font-body);
+  color: var(--q-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+.log-mday.is-muted { background: transparent; color: var(--q-text-muted); }
+.log-mday.is-today { border-color: var(--q-accent-line); background: var(--q-accent-wash); color: var(--q-accent); box-shadow: 0 0 8px var(--q-accent-soft); }
+.log-mday__count {
+  min-width: 15px;
+  padding: 1px 4px;
+  border-radius: 999px;
+  border: 1px solid var(--q-accent-line);
+  background: var(--q-accent-soft);
+  font: 800 9px/1.25 var(--q-font-body);
+  text-align: center;
+  color: var(--q-accent);
+}
+
+@container quests (max-width: 330px) {
+  .log-week { gap: 4px; }
+  .log-day { min-height: 70px; padding: 8px 1px 7px; border-radius: 10px; }
+  .log-day__dow { font-size: 8.5px; letter-spacing: 0.06em; }
+  .log-day__num { font-size: 15px; }
+  .log-month { gap: 3px; }
+  .log-mday { min-height: 34px; gap: 1px; font-size: 12px; border-radius: 8px; }
+  .log-mday__count { min-width: 13px; padding: 0 3px; font-size: 8px; }
+  .log-calendar__tabs { min-width: 0; width: 100%; }
+}
+@container quests (min-width: 480px) {
+  .log-day { min-height: 88px; }
+  .log-day__num { font-size: 20px; }
+  /* a 580px shell would make 70px squares and a very tall month: keep the rows compact */
+  .log-mday { aspect-ratio: auto; min-height: 52px; font-size: 14px; }
+}

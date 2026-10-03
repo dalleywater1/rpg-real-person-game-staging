@@ -1,0 +1,116 @@
+/* Adventurer's Log - items, Top 3, Overdue, NEXT, buckets, Notes (Milestone 2).
+
+   Built on the Quests v4 design system like the rest of the Log: every colour
+   here is a token, every surface is a .q-row / .q-section / .q-btn. This file
+   only adds what those never needed: the title that is also a button, the
+   Top 3 / NEXT / Overdue states, the Reschedule row, the Habits and Done
+   folds and the when-fields of the item sheet. */
+
+/* ---------- toolbar under the header ---------- */
+.log-toolbar { display: flex; gap: var(--q-space-2); }
+.log-toolbar .q-btn--primary { flex: 1 1 auto; }
+
+/* ---------- item and reference rows ---------- */
+.log-item-row { grid-template-columns: auto minmax(0, 1fr) auto; }
+/* the title is a real button (it opens the item) wearing the row-title look;
+   its box is at least 32px tall so a short title is still an easy target */
+.log-row__open {
+  appearance: none;
+  display: flex;
+  align-items: center;
+  max-width: 100%;
+  min-height: 32px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.log-row__open:hover .q-row__title { color: var(--q-accent); }
+.log-row__open:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 3px; border-radius: 4px; }
+.log-row__when { color: var(--q-accent); font-variant-numeric: tabular-nums; }
+.log-item-row .q-row__sub { overflow-wrap: anywhere; }
+.log-item-row .q-row__actions { flex-wrap: nowrap; }
+.log-item-row .q-icon-btn { flex: 0 0 auto; }
+/* a Top 3 arrow that has reached an end: visibly off, no hover glow */
+.log-item-row .q-icon-btn:disabled { opacity: 0.4; cursor: default; box-shadow: none; border-color: var(--q-edge); color: var(--q-text-muted); }
+
+/* the lead of a quest reference is a quest glyph: nothing on the row completes it, so it must not look like a tick */
+.log-ref-glyph { border-style: dashed; }
+
+/* the Top 3 star: hollow until chosen, then the accent */
+.log-star { color: var(--q-text-muted); }
+.log-star.is-on { color: var(--q-accent); border-color: var(--q-accent-line); }
+
+/* the one row to do next */
+.log-item-row.is-next,
+.log-row.is-next { border-color: var(--q-accent-line); background: var(--q-accent-wash); }
+/* inside a Log item the chip sits above the title, so it never competes with the star for width */
+.log-item-row .q-row__body > .log-next { display: inline-flex; margin-bottom: 4px; }
+.log-next { flex: 0 0 auto; }
+
+/* the Overdue / Reschedule row runs under the whole row */
+.log-row__actions { grid-column: 1 / -1; gap: 6px; padding-top: 2px; }
+.log-row__actions .q-btn { flex: 0 1 auto; min-height: 32px; }
+
+/* ---------- groups inside Today ---------- */
+.log-group { display: grid; gap: var(--q-space-2); margin-bottom: var(--q-space-3); }
+.log-group__title {
+  margin: 0;
+  font: 800 10.5px/1.1 var(--q-font-body);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--q-warning);
+}
+.log-group__count {
+  display: inline-block;
+  min-width: 18px;
+  margin-left: 6px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  border: 1px solid var(--q-edge);
+  background: var(--q-glass-soft);
+  font: 700 10px/1.4 var(--q-font-body);
+  letter-spacing: 0;
+  text-align: center;
+  color: var(--q-text-secondary);
+}
+/* the Habits and Done folds */
+.log-habits { margin-top: var(--q-space-3); }
+.log-habits summary {
+  display: list-item;
+  cursor: pointer;
+  padding: 6px 2px;
+  font: 700 12px/1.3 var(--q-font-body);
+  color: var(--q-text-secondary);
+}
+.log-habits summary:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; border-radius: 4px; }
+.log-habits[open] summary { margin-bottom: var(--q-space-2); }
+
+/* an empty Coming up / Soon / Later / Unscheduled collapses to its heading and one muted line */
+.log-section--empty .q-note { margin-top: 0; }
+
+/* ---------- Notes ---------- */
+[data-arrange-id="notes"] .log-capture { margin-bottom: var(--q-space-2); }
+[data-arrange-id="notes"] .q-toolbar { margin-bottom: var(--q-space-2); }
+[data-arrange-id="notes"] #logNotesBody[hidden] { display: none; }
+[data-arrange-id="notes"] .q-row { grid-template-columns: auto minmax(0, 1fr); }
+[data-arrange-id="notes"] .q-row__actions { grid-column: 1 / -1; justify-content: flex-end; }
+
+/* ---------- the item sheet ---------- */
+.log-when-fields { display: grid; gap: 12px; }
+.log-when-fields[hidden] { display: none; }
+.log-sheet-error { margin: 0 0 12px; padding: 8px 10px; border-radius: 10px; border: 1px solid color-mix(in srgb, var(--q-danger) 55%, var(--q-border)); background: color-mix(in srgb, var(--q-danger) 12%, transparent); color: var(--q-text); }
+.log-sheet-error[hidden] { display: none; }
+.q-modal [aria-invalid="true"] { border-color: var(--q-danger); }
+
+/* ---------- narrow phones (root content width up to 330px) ---------- */
+@container quests (max-width: 330px) {
+  /* a Top 3 row carries three round buttons: they drop under the title instead of squeezing it */
+  .log-item-row--top3 { grid-template-columns: auto minmax(0, 1fr); }
+  .log-item-row--top3 .q-row__actions { grid-column: 1 / -1; justify-content: flex-end; }
+  .log-row__actions .q-btn { flex: 1 1 0; }
+}

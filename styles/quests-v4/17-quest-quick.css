@@ -1,0 +1,96 @@
+/* Quests v4 - Quick Quests (do-now): active card and timer, library rows,
+   saved presets, and the pieces that only the Quick Quest dialogs use.
+
+   Everything here reuses the existing family (.q-row, .q-btn, .q-card,
+   .q-chip, .q-tabs, questsModal) and only adds what those do not cover.
+   Colours come from the tokens: the violet Quick accent is --q-accent on a
+   .quest-quick root and completed states are --q-success (green is semantic,
+   never the Quick identity). Plain px sizes only, so this file has no
+   container-unit fallbacks. (The queue rows of the old scheduled model are gone.) */
+
+/* ---------- active card ---------- */
+.qq-active .q-card__title { margin: 2px 0; }
+.qq-titlebtn {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--q-accent) 45%, transparent);
+  text-underline-offset: 3px;
+}
+.qq-titlebtn:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 3px; border-radius: 4px; }
+
+.qq-timer {
+  margin: var(--q-space-3) 0;
+  text-align: center;
+  font: 800 34px/1 var(--q-font-body);
+  font-variant-numeric: tabular-nums lining-nums;
+  letter-spacing: 0.04em;
+  color: var(--q-text);
+  text-shadow: 0 0 16px var(--q-accent-glow);
+}
+.q-modal .qq-timer { margin-top: 0; font-size: 30px; }
+.qq-tile-timer { color: var(--q-accent); font-weight: 800; font-variant-numeric: tabular-nums lining-nums; }
+
+/* ---------- saved presets ---------- */
+.qq-preset { grid-template-columns: minmax(0, 1fr) auto; padding: 6px 8px 6px 10px; }
+.qq-preset__use {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  padding: 4px 0;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  background: none;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.qq-preset__use:hover .qq-plus,
+.qq-preset__use:focus-visible .qq-plus { border-color: var(--q-accent); box-shadow: 0 0 8px var(--q-accent-soft); }
+.qq-preset__use:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.qq-plus {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--q-accent-line);
+  color: var(--q-accent);
+  font: 700 15px/1 var(--q-font-body);
+}
+.qq-preset__remove { width: 30px; height: 30px; font-size: 18px; }
+
+/* ---------- dialog pieces ---------- */
+.qq-status { margin: 0 0 var(--q-space-3); display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.qq-times { margin: 0; font: 700 16px/1.3 var(--q-font-body); font-variant-numeric: tabular-nums lining-nums; color: var(--q-text); }
+.qq-times--long { font-weight: 500; font-size: 13px; color: var(--q-text-secondary); }
+.qq-notes { margin-top: var(--q-space-3); }
+.qq-notes p { margin: 2px 0 0; font: 500 13px/1.45 var(--q-font-body); color: var(--q-text-secondary); white-space: pre-wrap; overflow-wrap: anywhere; }
+.qq-conflict__name { margin: 0; font: 700 16px/1.3 var(--q-font-display); color: var(--q-text); overflow-wrap: anywhere; }
+.qq-conflict__time { margin: 2px 0 var(--q-space-3); font: 800 22px/1.2 var(--q-font-body); font-variant-numeric: tabular-nums lining-nums; color: var(--q-accent); }
+
+@media (prefers-reduced-motion: no-preference) {
+  .qq-plus { transition: border-color 0.15s ease, box-shadow 0.15s ease; }
+}
+
+/* ---------- the do-now page: your own, the library, its groups ---------- */
+.qq-own { display: flex; align-items: stretch; gap: var(--q-space-2); margin-bottom: var(--q-space-2); }
+.qq-own .q-input { flex: 1 1 auto; min-width: 0; }
+.qq-own .q-btn { flex: 0 0 auto; }
+.qq-group-tabs { margin-bottom: var(--q-space-2); }
+.qq-pool-row .q-row__title { overflow-wrap: anywhere; }
+.qq-pool-row .q-btn { min-height: 32px; }
+
+@container quests (max-width: 330px) {
+  .qq-own { flex-direction: column; }
+  .qq-own .q-btn { width: 100%; }
+}

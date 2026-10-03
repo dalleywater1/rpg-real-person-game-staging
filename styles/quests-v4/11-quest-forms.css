@@ -1,0 +1,119 @@
+/* Quests v4 - form controls (handover section 33 and 34).
+
+   Every Quests field, on a page or in a popup, is built from these
+   components, so there is nothing legacy to retire: no .form-row, no
+   .rpg-btn, no parchment inputs.
+
+     .q-field         label + control stack
+     .q-label         small caps field label
+     .q-input         dark translucent text / number / date / select / textarea
+     .q-field-row     two fields side by side
+     .q-choice        pill-chip group (radio = single choice)
+     .q-chip-toggle   one chip; wraps a real <input type=radio|checkbox>, so
+                      keyboard, focus and screen readers stay native
+     .q-check-row     single checkbox with a label
+
+   Field text is 16px on purpose: below 16px iOS zooms the whole page when a
+   field gains focus. The accent focus ring comes from --q-accent, so a field
+   opened from a Side Quest popup focuses green, from a Main Quest gold. */
+
+.q-field { display: grid; gap: 6px; min-width: 0; }
+.q-label { font: 700 11.5px/1.2 var(--q-font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--q-text-secondary); }
+.q-hint { margin: 0; font: 500 12px/1.45 var(--q-font-body); color: var(--q-text-muted); }
+.q-field-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+
+.q-input {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--q-border);
+  background: rgba(7, 20, 31, 0.62);
+  color: var(--q-text);
+  font: 500 16px/1.3 var(--q-font-body);
+  appearance: none;
+  -webkit-appearance: none;
+}
+textarea.q-input { min-height: 84px; line-height: 1.45; resize: vertical; }
+.q-input::placeholder { color: var(--q-text-muted); }
+.q-input:focus,
+.q-input:focus-visible {
+  outline: none;
+  border-color: var(--q-accent);
+  box-shadow: 0 0 0 3px var(--q-accent-soft);
+}
+select.q-input {
+  padding-right: 38px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--q-text-secondary) 50%),
+    linear-gradient(135deg, var(--q-text-secondary) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+select.q-input option { background: #0b131b; color: var(--q-text); }
+input[type="date"].q-input,
+input[type="time"].q-input { color-scheme: dark; }
+
+/* ---------- pill chips (single choice = radio, multi choice = checkbox) ---------- */
+.q-choice { display: flex; flex-wrap: wrap; gap: 8px; }
+.q-chip-toggle { position: relative; display: inline-flex; }
+.q-chip-toggle input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.q-chip-toggle span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--q-border);
+  background: var(--q-glass-soft);
+  color: var(--q-text-secondary);
+  font: 700 12px/1 var(--q-font-body);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+/* the mark keeps its room whether or not it is selected, so a wrapped row
+   never jumps when the selection changes; a filled mark, not just a glow,
+   says "selected" */
+.q-chip-toggle span::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  opacity: 0.7;
+}
+.q-chip-toggle input[type="checkbox"] + span::before { border-radius: 3px; }
+.q-chip-toggle input:checked + span {
+  color: var(--q-accent);
+  border-color: var(--q-accent);
+  background: var(--q-accent-wash);
+  box-shadow: 0 0 8px var(--q-accent-soft);
+}
+.q-chip-toggle input:checked + span::before { background: currentColor; opacity: 1; }
+.q-chip-toggle input:focus-visible + span { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+
+/* ---------- single checkbox row ---------- */
+.q-check-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  color: var(--q-text-secondary);
+  font: 500 13.5px/1.35 var(--q-font-body);
+  cursor: pointer;
+}
+
+/* ---------- Main Quest journal composer ---------- */
+.q-compose { display: grid; gap: 8px; }
+.q-compose .q-btn { justify-self: start; }

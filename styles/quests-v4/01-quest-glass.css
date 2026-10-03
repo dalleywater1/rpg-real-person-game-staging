@@ -1,0 +1,31 @@
+/* Quests v4 - glass surfaces. Three levels, same recipe as Training
+   (.tr-glass-strong / .tr-glass / .tr-glass-soft). The accent shows up
+   only as a hairline + a very small glow, never as a fill. */
+
+.q-glass {
+  background: var(--q-glass-main);
+  border: 1px solid var(--q-edge);
+  border-radius: var(--q-radius-lg);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 6px 18px rgba(0, 0, 0, 0.35);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.q-glass--strong {
+  background: var(--q-glass-strong);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+.q-glass--soft {
+  background: var(--q-glass-soft);
+  box-shadow: none;
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.q-glass--accent {
+  border-color: var(--q-accent-line);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 0 0 1px var(--q-accent-soft),
+    0 0 14px var(--q-accent-soft),
+    0 6px 18px rgba(0, 0, 0, 0.35);
+}

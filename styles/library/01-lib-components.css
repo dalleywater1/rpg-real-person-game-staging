@@ -1,0 +1,489 @@
+/* Library: components and page composition.
+   Library V1 handover, Phase 1A. One set of materials for every Library
+   surface: the page and hero, the search field, the collection card
+   (LibraryCollectionCard), the entry row (LibraryEntryRow), buttons, tags
+   and empty states.
+
+   Surface hierarchy
+     0 world      the page and the hero scene
+     1 .lib-shell  dark glass section
+     2 .lib-card, .lib-entry  tonal rows and cards inside a shell
+     3 controls    buttons, search field
+
+   Blur is not used anywhere: the glass is a dependable dark fill plus a
+   highlight and a thin edge, so there is nothing to fall back from.
+
+   Breakpoints are CONTAINER queries on .lib-page. The application shell is
+   capped at 580px (styles.css, #appShell), narrower than a viewport
+   breakpoint would assume, and container units scale with enlarged text
+   (rem), which is how 200 percent text gets the single-column layout. No
+   motion is used, so reduced motion needs no special case. */
+
+/* ------------------------------------------------------------------ */
+/* Page                                                                */
+/* ------------------------------------------------------------------ */
+
+.lib-page {
+  container-type: inline-size;
+  container-name: lib;
+  width: 100%;
+  max-width: var(--lib-content-max);
+  margin-inline: auto;
+}
+
+.lib-page__inner {
+  display: grid;
+  gap: var(--lib-space-4);
+  padding: var(--lib-space-1) var(--lib-space-2) var(--lib-space-6);
+}
+
+/* ------------------------------------------------------------------ */
+/* Hero: place and mood. Art is optional; the gradient is the fallback. */
+/* ------------------------------------------------------------------ */
+
+.lib-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--lib-glass-border);
+  border-radius: var(--lib-radius-panel);
+  background:
+    radial-gradient(120% 90% at 88% 0%, rgba(229, 196, 126, .24), transparent 58%),
+    radial-gradient(90% 80% at 0% 100%, rgba(198, 175, 240, .16), transparent 62%),
+    linear-gradient(160deg, var(--lib-bg-mid), var(--lib-bg-deep) 72%);
+  box-shadow: var(--lib-shadow-soft);
+}
+
+/* Scene slot. No Library art has been supplied yet (docs/LIBRARY.md, asset
+   manifest). When it arrives, add one rule here with the url() written
+   directly in background-image, for example
+     .lib-hero__scene { background-image: url("../../assets/Library/lib-hub-hero.webp"); }
+   Do not route the url() through a custom property: it would resolve
+   against the wrong stylesheet. */
+.lib-hero__scene {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 50% 40%;
+}
+
+/* Readability overlay: keeps the title legible over any scene. */
+.lib-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(7, 14, 24, .55), rgba(7, 14, 24, .12) 70%);
+  pointer-events: none;
+}
+
+.lib-hero__content {
+  display: flex;
+  align-items: center;
+  gap: var(--lib-space-4);
+  padding: var(--lib-space-4);
+}
+
+.lib-hero__text { min-width: 0; }
+
+.lib-hero__title {
+  font-family: var(--lib-font-display);
+  font-size: var(--lib-type-title);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: .03em;
+  color: var(--lib-text-gold);
+  overflow-wrap: anywhere;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .45);
+}
+
+/* The heading takes programmatic focus after a page change; it is not a control. */
+.lib-hero__title:focus-visible { outline: none; }
+
+.lib-hero__sub {
+  margin-top: .375rem;
+  font-size: 1.0625rem;
+  color: var(--lib-text-secondary);
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------------ */
+/* Surfaces and type                                                   */
+/* ------------------------------------------------------------------ */
+
+.lib-shell {
+  position: relative;
+  display: grid;
+  gap: var(--lib-space-3);
+  align-content: start;
+  padding: var(--lib-space-4);
+  background:
+    linear-gradient(180deg, var(--lib-glass-highlight), transparent 38%),
+    var(--lib-glass-fill);
+  border: 1px solid var(--lib-glass-border);
+  border-radius: var(--lib-radius-panel);
+  box-shadow: var(--lib-shadow-soft), inset 0 1px 0 var(--lib-glass-highlight);
+}
+
+.lib-section__title {
+  font-family: var(--lib-font-heading);
+  font-weight: 600;
+  font-size: var(--lib-type-section);
+  line-height: 1.25;
+  color: var(--lib-text-gold);
+  text-wrap: balance;
+}
+
+.lib-meta {
+  font-size: var(--lib-type-meta);
+  line-height: 1.4;
+  color: var(--lib-text-muted);
+}
+
+.lib-num { font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ */
+/* Buttons and tags                                                    */
+/* ------------------------------------------------------------------ */
+
+.lib-backrow { display: flex; }
+
+.lib-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--lib-space-2);
+  min-height: var(--lib-touch-min);
+  padding: .5rem 1.1rem;
+  border: 1px solid var(--lib-control-border);
+  border-radius: var(--lib-radius-control);
+  background: rgba(10, 27, 35, .6);
+  color: var(--lib-text-primary);
+  font-size: var(--lib-type-body);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-btn:hover { background: rgba(255, 255, 255, .1); }
+.lib-btn:active { background: rgba(255, 255, 255, .16); }
+.lib-btn--compact { padding: .4rem .85rem; font-size: .9375rem; }
+
+/* A text-weight action that sits beside a section title ("View All"). */
+.lib-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  min-height: var(--lib-touch-min);
+  padding: .25rem .6rem;
+  border: 0;
+  border-radius: var(--lib-radius-control);
+  background: transparent;
+  color: var(--lib-text-gold);
+  font-size: var(--lib-type-body);
+  font-weight: 700;
+  line-height: 1.2;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-link:hover { background: rgba(255, 255, 255, .08); }
+
+.lib-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: .125rem .7rem;
+  border: 1px solid var(--lib-control-border);
+  border-radius: var(--lib-radius-pill);
+  background: var(--lib-tonal);
+  color: var(--lib-text-secondary);
+  font-size: var(--lib-type-meta);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* ------------------------------------------------------------------ */
+/* Icon medallion. The letter form is the placeholder for a discovery  */
+/* that has no art yet (artwork tier 4): a monogram, never a blank.     */
+/* ------------------------------------------------------------------ */
+
+.lib-medallion {
+  --lib-medallion-size: var(--lib-icon-row);
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: var(--lib-medallion-size);
+  height: var(--lib-medallion-size);
+  border-radius: 50%;
+  color: var(--lib-accent);
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255, 255, 255, .16), transparent 55%),
+    var(--lib-accent-soft);
+  box-shadow:
+    inset 0 0 0 2px var(--lib-accent),
+    inset 0 0 0 4px rgba(7, 21, 29, .55);
+  font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "Noto Sans Symbols", "Apple Symbols", system-ui, sans-serif;
+  font-size: calc(var(--lib-medallion-size) * .46);
+  line-height: 1;
+}
+.lib-medallion--sm { --lib-medallion-size: min(2.25rem, 44px); }
+.lib-medallion--hero { --lib-medallion-size: min(4rem, 72px); }
+.lib-medallion--letter {
+  font-family: var(--lib-font-display);
+  font-weight: 700;
+}
+
+/* Art that already carries its own ring must not get a second one. */
+.lib-medallion--art {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+.lib-medallion--art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ------------------------------------------------------------------ */
+/* Search (LibrarySearch)                                              */
+/* ------------------------------------------------------------------ */
+
+.lib-search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.lib-search__icon {
+  position: absolute;
+  inset-inline-start: min(.95rem, 15px);
+  display: grid;
+  place-items: center;
+  width: min(1.25rem, 20px);
+  height: min(1.25rem, 20px);
+  color: var(--lib-text-muted);
+  pointer-events: none;
+}
+.lib-search__icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+.lib-search__input {
+  width: 100%;
+  min-height: var(--lib-touch-min);
+  padding: .55rem var(--lib-touch-min) .55rem min(2.75rem, 44px);
+  border: 1px solid var(--lib-control-border);
+  border-radius: var(--lib-radius-pill);
+  background: var(--lib-field-bg);
+  color: var(--lib-text-primary);
+  font-size: var(--lib-type-body);
+  text-overflow: ellipsis;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.lib-search__input::placeholder { color: var(--lib-text-muted); opacity: 1; }
+/* The field draws its own clear button, so the browser's is hidden. */
+.lib-search__input::-webkit-search-cancel-button,
+.lib-search__input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  display: none;
+}
+
+.lib-search__clear {
+  position: absolute;
+  inset-inline-end: .15rem;
+  display: grid;
+  place-items: center;
+  width: var(--lib-touch-min);
+  height: var(--lib-touch-min);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--lib-text-secondary);
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.lib-search__clear:hover { background: rgba(255, 255, 255, .1); }
+.lib-search__clear[hidden] { display: none; }
+
+/* ------------------------------------------------------------------ */
+/* Collection card (LibraryCollectionCard)                             */
+/* ------------------------------------------------------------------ */
+
+.lib-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--lib-space-3);
+}
+.lib-grid > li { display: grid; }
+
+.lib-card {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  gap: .25rem;
+  width: 100%;
+  min-height: 8.5rem;
+  padding: var(--lib-space-3);
+  border: 1px solid var(--lib-divider);
+  border-radius: var(--lib-radius-row);
+  background: var(--lib-tonal);
+  color: var(--lib-text-primary);
+  text-align: start;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.lib-card:hover { background: rgba(255, 255, 255, .09); border-color: var(--lib-accent); }
+
+.lib-card__top { display: flex; margin-bottom: .25rem; }
+
+.lib-card__title {
+  font-family: var(--lib-font-heading);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.lib-card__sub {
+  font-size: var(--lib-type-meta);
+  line-height: 1.35;
+  color: var(--lib-text-muted);
+}
+.lib-card__foot {
+  display: grid;
+  gap: .125rem;
+  align-self: end;
+  padding-top: var(--lib-space-2);
+}
+.lib-card__status { font-weight: 700; color: var(--lib-accent); overflow-wrap: anywhere; }
+.lib-card__detail { font-size: var(--lib-type-meta); color: var(--lib-text-secondary); }
+
+/* ------------------------------------------------------------------ */
+/* Entry row (LibraryEntryRow)                                         */
+/* A search result, a discovery, and later an exercise or a chronicle. */
+/* ------------------------------------------------------------------ */
+
+.lib-entries { display: grid; gap: var(--lib-space-2); }
+
+.lib-entry {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--lib-space-3);
+  width: 100%;
+  min-height: var(--lib-touch-min);
+  padding: var(--lib-space-2) var(--lib-space-3);
+  border: 0;
+  border-radius: var(--lib-radius-row);
+  background: var(--lib-tonal);
+  color: var(--lib-text-primary);
+  text-align: start;
+}
+.lib-entry--nowhen { grid-template-columns: auto minmax(0, 1fr); }
+.lib-entry--link { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.lib-entry--link:hover { background: rgba(255, 255, 255, .09); }
+
+.lib-entry__text { display: grid; gap: .0625rem; min-width: 0; }
+.lib-entry__title { font-weight: 700; overflow-wrap: anywhere; }
+.lib-entry__sub { font-size: var(--lib-type-meta); line-height: 1.35; color: var(--lib-text-muted); overflow-wrap: anywhere; }
+.lib-entry__when { font-size: var(--lib-type-meta); color: var(--lib-text-secondary); text-align: end; overflow-wrap: anywhere; }
+
+/* ------------------------------------------------------------------ */
+/* Hub sections, search results and empty states                       */
+/* ------------------------------------------------------------------ */
+
+.lib-recent__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--lib-space-2);
+}
+
+.lib-browse { display: grid; gap: var(--lib-space-4); }
+.lib-browse[hidden],
+.lib-results-wrap[hidden] { display: none; }
+
+.lib-results { display: grid; gap: var(--lib-space-3); }
+.lib-results__group { display: grid; gap: var(--lib-space-2); }
+.lib-results__label {
+  font-size: var(--lib-type-meta);
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--lib-text-muted);
+}
+
+.lib-empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--lib-space-3);
+  padding: var(--lib-space-4) var(--lib-space-2);
+  text-align: center;
+}
+.lib-empty__title {
+  font-family: var(--lib-font-heading);
+  font-size: var(--lib-type-section);
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--lib-text-gold);
+  text-wrap: balance;
+}
+.lib-empty__text { max-width: 36ch; color: var(--lib-text-secondary); }
+.lib-empty--inline { padding-block: var(--lib-space-2); }
+
+.lib-soon .lib-empty { padding-block: var(--lib-space-6); }
+.lib-fact { color: var(--lib-text-primary); font-weight: 700; }
+
+/* ------------------------------------------------------------------ */
+/* Container queries                                                   */
+/* ------------------------------------------------------------------ */
+
+/* Very narrow phones (320): give the content a little more width. */
+@container lib (max-width: 21rem) {
+  .lib-page__inner { padding-inline: .25rem; }
+  .lib-shell { padding: var(--lib-space-3); }
+  .lib-hero__content { gap: var(--lib-space-3); padding-inline: var(--lib-space-3); }
+}
+
+/* Narrow container or enlarged text (15rem is 240px at normal size but 480px
+   at 200%). This comes after the 21rem block so it wins where both apply.
+   One column for the cards; the "when" of a row stacks under its text; the
+   emblem stacks above the title and the title scales with the container, so
+   a display word such as LIBRARY is not split; padding tightens so a card
+   title has room. Text is still larger than at 100%. */
+@container lib (max-width: 15rem) {
+  .lib-page__inner { padding-inline: 0; }
+  .lib-shell,
+  .lib-card { padding: var(--lib-space-2); }
+  .lib-hero__content { flex-direction: column; align-items: flex-start; gap: var(--lib-space-2); }
+  .lib-hero__title { font-size: clamp(22px, 11cqw, var(--lib-type-title)); letter-spacing: .01em; }
+  .lib-grid { grid-template-columns: 1fr; }
+  .lib-entry { grid-template-columns: auto minmax(0, 1fr); }
+  .lib-entry__when { grid-column: 2; text-align: start; }
+}
+
+/* 40rem and up: more air as the container grows. */
+@container lib (min-width: 40rem) {
+  .lib-page__inner { gap: var(--lib-space-6); padding-inline: var(--lib-space-6); }
+  .lib-hero__content { padding: var(--lib-space-8) var(--lib-space-6); }
+  .lib-shell { padding: var(--lib-space-6); }
+}
+
+/* 64rem and up (only if the 580px application cap is ever lifted): the four
+   collections as one row. */
+@container lib (min-width: 64rem) {
+  .lib-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}

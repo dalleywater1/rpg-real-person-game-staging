@@ -1,0 +1,142 @@
+[
+  {
+    "file": "masters/home-mobile-day.png",
+    "width": 941,
+    "height": 1672,
+    "bytes": 2903038,
+    "sha256": "030b1f87a27a54276d711d145bb2411c306b031ecc41b67807560d79f1c147e1"
+  },
+  {
+    "file": "masters/home-mobile-night.png",
+    "width": 941,
+    "height": 1672,
+    "bytes": 2518093,
+    "sha256": "dcf78bf23c3cd6b7f35d18da432dddd7e17ea2edcdfd0981376c115d35cefdc3"
+  },
+  {
+    "file": "masters/home-mobile-rain.png",
+    "width": 941,
+    "height": 1672,
+    "bytes": 2720214,
+    "sha256": "6df8ee9b158b97a43a3a7cd3ea2102ba1e114eada191e529aa2b96a47d9e75eb"
+  },
+  {
+    "file": "masters/home-mobile-sunset.png",
+    "width": 941,
+    "height": 1672,
+    "bytes": 2793266,
+    "sha256": "294b9f51eb9694011dba4956123981fc69f1ee25d630ffae2429ab8c5a35a9a6"
+  },
+  {
+    "file": "runtime/home-mobile-day.jpg",
+    "width": 720,
+    "height": 1279,
+    "bytes": 285145,
+    "sha256": "62ff86fe533c11497ed5b39baf6fcb7786af984c8d17659a20bf9ff6c54aa476"
+  },
+  {
+    "file": "runtime/home-mobile-night.jpg",
+    "width": 720,
+    "height": 1279,
+    "bytes": 221242,
+    "sha256": "cd043246821104cc1b02adc2a4cf97c1c017c01fb9456d98079d8ab62da999a5"
+  },
+  {
+    "file": "runtime/home-mobile-rain.jpg",
+    "width": 720,
+    "height": 1279,
+    "bytes": 220988,
+    "sha256": "4bb36c1f0c342fc03a22caa4494672506ff75bcea942f6b896cc746315cfc2fa"
+  },
+  {
+    "file": "runtime/home-mobile-sunset.jpg",
+    "width": 720,
+    "height": 1279,
+    "bytes": 289571,
+    "sha256": "5361d5fd47e780085c7218fd2d7fa3e8ccb4b549c2c57faabb042104fae8255a"
+  },
+  {
+    "file": "runtime/home-v3-background-birthday.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 538382,
+    "sha256": "bcc7b1846498da36618f8aaf2678813c23e1247b98962de0f47f2d8cbefad6df"
+  },
+  {
+    "file": "runtime/home-v3-background-christmas.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 537578,
+    "sha256": "c3ceb7d85a973d5fb8104ddf58ed587a2c2afe80eab1b39094ed1452d5987e45"
+  },
+  {
+    "file": "runtime/home-v3-background-day.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 459565,
+    "sha256": "42093563f735ff89a2be5328ee911f1f9bc4ff599c7fddd572ab8ea4263b863a"
+  },
+  {
+    "file": "runtime/home-v3-background-easter.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 585879,
+    "sha256": "593286c2bd7a00f6edcb19742d93847b2758bf0bf5f51abda43e64544bbbdacf"
+  },
+  {
+    "file": "runtime/home-v3-background-halloween.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 388988,
+    "sha256": "2928039dcd2b221f5000b4b6727fb951a3c937a07e5576a707962ac151bf7a76"
+  },
+  {
+    "file": "runtime/home-v3-background-midsummer.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 489725,
+    "sha256": "eff3fc7690fdeda4eda100908543fc57f21691bf757e73d22d50b8487e76da46"
+  },
+  {
+    "file": "runtime/home-v3-background-newyear.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 542719,
+    "sha256": "a3154b39f38ceea3d23cfbc7f268a35d38810e81329bb718b402bdc6a88939c5"
+  },
+  {
+    "file": "runtime/home-v3-background-night.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 326853,
+    "sha256": "d76d917a628f3a37ca1e25bd0f650ec2ab30cec6553507a80dbc2197e7f8d968"
+  },
+  {
+    "file": "runtime/home-v3-background-norway17may.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 594824,
+    "sha256": "69af1d508ec7cc702994a4f4e58ebf036110f5ac3000e8de4757dafe3ab36a66"
+  },
+  {
+    "file": "runtime/home-v3-background-rain.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 403594,
+    "sha256": "320b23fb33d8ed3a6531272c25afb192e7db0c44b1383ebb48060f649bb81892"
+  },
+  {
+    "file": "runtime/home-v3-background-sunset.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 411565,
+    "sha256": "1fa4bea2ce68e5b626368a3734ada416a7cc32a0d9f3fce512b7ba8b71918de3"
+  },
+  {
+    "file": "runtime/home-v3-background-valentine.jpg",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 463971,
+    "sha256": "b9e53f53a9a200696e197345a5e72a9e12a4e0e15f8e0e22665a5d5d4e53722e"
+  }
+]

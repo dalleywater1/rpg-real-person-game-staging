@@ -1,0 +1,148 @@
+/* Library: theme tokens.
+   Library V1 handover (Jay / Lyra, 2026-09-21), Phase 1A. Docs: docs/LIBRARY.md.
+
+   Everything is scoped to .lib-theme, which is set on the page root, so no
+   rule here can reach Home, Training, Quests or any other section. Load
+   order: this file, then 01-lib-components.css.
+
+   The material is the same dark enchanted glass as Personal Growth, with a
+   candlelit navy-and-gold hero. The token values are deliberately the same
+   as styles/personal-growth/00-pg-theme.css so the two sections read as one
+   family and the contrast checks carry over. They are duplicated, not
+   shared, because Personal Growth is locked; a shared token file is a
+   cleanup for the UI overhaul (docs/LIBRARY.md, section 9).
+
+   Fonts reuse the application's real font variables (styles.css :root):
+   display = Cinzel, ui = Alegreya, micro = Alegreya Sans. The global body
+   font is a legacy monospace, so this scope always sets its own family. */
+
+.lib-theme {
+  color-scheme: dark;
+
+  /* World and glass */
+  --lib-bg-deep: #0a1420;
+  --lib-bg-mid: #182238;
+  --lib-glass-fill: rgba(16, 38, 47, .88);
+  --lib-glass-border: rgba(177, 202, 210, .24);
+  --lib-glass-highlight: rgba(255, 255, 255, .06);
+  --lib-divider: rgba(177, 202, 210, .16);
+  --lib-tonal: rgba(255, 255, 255, .045);
+  --lib-shadow-soft: 0 6px 20px rgba(0, 0, 0, .22);
+  --lib-field-bg: #0b2029;
+  --lib-control-border: #718c96;
+
+  /* Text */
+  --lib-text-primary: #f5f1e8;
+  --lib-text-secondary: #ccd7d6;
+  --lib-text-muted: #a8bbbd;
+  --lib-text-gold: #e5c47e;
+
+  /* Accents. One per collection; the page itself is gold. */
+  --lib-accent-gold: #e5c47e;
+  --lib-accent-orange: #edb083;
+  --lib-accent-blue: #8ec9e8;
+  --lib-accent-purple: #c6aff0;
+  --lib-accent-gold-soft: rgba(229, 196, 126, .14);
+  --lib-accent-orange-soft: rgba(237, 176, 131, .14);
+  --lib-accent-blue-soft: rgba(142, 201, 232, .14);
+  --lib-accent-purple-soft: rgba(198, 175, 240, .14);
+  --lib-accent: var(--lib-accent-gold);
+  --lib-accent-soft: var(--lib-accent-gold-soft);
+  --lib-focus: #b6e8ff;
+
+  /* Shape and spacing */
+  --lib-radius-control: .75rem;
+  --lib-radius-row: 1rem;
+  --lib-radius-panel: 1.5rem;
+  --lib-radius-pill: 999px;
+  --lib-space-1: .25rem;
+  --lib-space-2: .5rem;
+  --lib-space-3: .75rem;
+  --lib-space-4: 1rem;
+  --lib-space-6: 1.5rem;
+  --lib-space-8: 2rem;
+
+  /* Type */
+  --lib-font-body: var(--font-micro, "Alegreya Sans", system-ui, sans-serif);
+  --lib-font-heading: var(--font-ui, "Alegreya", Georgia, serif);
+  --lib-font-display: var(--font-display, "Cinzel", Georgia, serif);
+  --lib-type-meta: .875rem;
+  --lib-type-body: 1rem;
+  --lib-type-section: 1.25rem;
+  --lib-type-title: clamp(1.75rem, 4vw, 2.5rem);
+
+  /* Sizes. Touch targets and icons are capped in CSS pixels, not rem: at 200%
+     text a pure rem value doubles (88px targets) and squeezes a 320px screen
+     until the page scrolls sideways. Text and spacing still scale with rem. */
+  --lib-icon-row: min(3rem, 56px);
+  --lib-icon-hero: min(5rem, 96px);
+  --lib-content-max: 75rem;
+  --lib-touch-min: 44px;
+
+  font-family: var(--lib-font-body);
+  font-size: var(--lib-type-body);
+  line-height: 1.5;
+  color: var(--lib-text-primary);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+.lib-theme *,
+.lib-theme *::before,
+.lib-theme *::after {
+  box-sizing: border-box;
+}
+
+/* Resets are wrapped in :where() so they carry ZERO specificity: a component
+   class always beats them instead of the reset silently overriding it. */
+.lib-theme :where(button, input, select, textarea) {
+  font: inherit;
+  color: inherit;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.lib-theme :where(h1, h2, h3, h4, p, ul, ol, dl, dd, figure) {
+  margin: 0;
+  padding: 0;
+}
+
+.lib-theme :where(ul, ol) {
+  list-style: none;
+}
+
+/* Collection accents. Set the accent and its soft tint together. */
+.lib-accent-gold   { --lib-accent: var(--lib-accent-gold);   --lib-accent-soft: var(--lib-accent-gold-soft); }
+.lib-accent-orange { --lib-accent: var(--lib-accent-orange); --lib-accent-soft: var(--lib-accent-orange-soft); }
+.lib-accent-blue   { --lib-accent: var(--lib-accent-blue);   --lib-accent-soft: var(--lib-accent-blue-soft); }
+.lib-accent-purple { --lib-accent: var(--lib-accent-purple); --lib-accent-soft: var(--lib-accent-purple-soft); }
+
+/* Text exposed to assistive technology only. */
+.lib-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Keyboard focus: an outline, never only a shadow or a background. */
+.lib-theme :focus-visible {
+  outline: 3px solid var(--lib-focus);
+  outline-offset: 2px;
+}
+
+/* Forced colours: shadows and background images drop out, so state is carried
+   by borders, outlines and text, which is how the components are built. */
+@media (forced-colors: active) {
+  .lib-theme {
+    --lib-glass-border: CanvasText;
+    --lib-divider: GrayText;
+    --lib-control-border: ButtonBorder;
+    --lib-focus: Highlight;
+  }
+}

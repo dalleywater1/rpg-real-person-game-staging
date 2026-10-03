@@ -1,0 +1,46 @@
+/* Page Arrange (v0.02.65-page-arrange.js). Two pieces:
+   1. the small "Arrange" entry button the engine puts at the top of every
+      registered page. It sits outside any page's own design system, so it
+      carries its own neutral navy glass and antique gold (mirroring the Quests
+      palette) and is deliberately quiet.
+   2. the list inside the Arrange dialog. The dialog is the shared Quests glass
+      popup (questsModal), so these rows use the .quests-v4 tokens. */
+
+.arrange-entry { display: flex; justify-content: flex-end; margin: 0 0 6px; padding: 0 2px; }
+.arrange-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 30px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(155, 190, 210, 0.28);
+  background: rgba(9, 24, 36, 0.62);
+  color: #bec8cc;
+  font: 700 10.5px/1 Georgia, "Times New Roman", serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+}
+.arrange-btn:hover,
+.arrange-btn:focus-visible { border-color: rgba(232, 191, 114, 0.6); color: #f5f4ef; }
+.arrange-btn:focus-visible { outline: 2px solid #e8bf72; outline-offset: 2px; }
+
+.arr-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.arr-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 8px 12px;
+  border-radius: 12px;
+  background: var(--q-glass-soft);
+  border: 1px solid var(--q-edge);
+}
+.arr-pos { min-width: 1.2em; text-align: center; font: 700 12px/1 var(--q-font-display); color: var(--q-text-muted); font-variant-numeric: tabular-nums; }
+.arr-label { font: 700 13.5px/1.25 var(--q-font-body); color: var(--q-text); overflow-wrap: anywhere; }
+.arr-ctl { display: flex; gap: 6px; }
+.arr-btn { width: 38px; height: 38px; }
+.arr-btn:disabled { opacity: 0.35; cursor: default; box-shadow: none; border-color: var(--q-edge); color: var(--q-text-muted); }

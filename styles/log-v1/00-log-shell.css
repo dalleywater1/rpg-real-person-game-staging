@@ -1,0 +1,62 @@
+/* Adventurer's Log - page pieces, built on the Quests v4 design system.
+
+   Jay, 2026-10-02: "use same design style for Log as used in quests".
+   So the Log is NOT a second visual language. Its page root is
+   <div class="quests-v4 quest-log log-v1">: the Quests tokens, glass
+   surfaces, scene header, section titles, rows, cards, buttons, tabs,
+   forms and popups all apply unchanged (styles/quests-v4/). The one
+   identity difference is the accent: .quest-log points --q-accent at
+   --q-log (16-quest-themes.css), exactly like a Quests category.
+
+   This folder holds only the pieces the Quests pages never needed:
+     00-log-shell.css     Today rows, linked Training rows, Brain Dump
+     01-log-calendar.css  Week strip and Month grid
+     02-log-modals.css    re-skins the legacy popups opened from the Log
+   (the Weekly Recap, a view of the Log, lives in styles/weekly-recap/).
+   Everything reads Quests tokens; there are no literal colours here, so a
+   change to the shared palette moves the Log with it. */
+
+/* ---------- Today / schedule rows ---------- */
+.log-today-list { display: grid; gap: var(--q-space-2); }
+
+/* the time rail at the start of a Today row: antique-gold digits on the
+   Log accent, the same weight as a Quests row title */
+.log-row__time {
+  min-width: 46px;
+  font: 700 12.5px/1.1 var(--q-font-display);
+  letter-spacing: 0.04em;
+  color: var(--q-accent);
+  font-variant-numeric: tabular-nums;
+}
+.log-row .q-row__sub { overflow-wrap: anywhere; }
+.log-row .q-reward.is-done {
+  color: var(--q-success);
+  border-color: color-mix(in srgb, var(--q-success) 50%, var(--q-border));
+  background: color-mix(in srgb, var(--q-success) 12%, transparent);
+}
+
+/* ---------- Linked Training Schedule (injected by v0.02.4-integration.js) ---------- */
+.log-linked-row { gap: 10px; }
+.log-linked-row .q-card__head { align-items: flex-start; }
+.log-linked-row .q-btn-row { gap: 6px; }
+.log-linked-row .q-btn { flex: 0 1 auto; }
+.log-capture .q-btn,
+.log-dump .q-btn { min-height: 34px; }
+
+/* ---------- Brain Dump ---------- */
+.log-capture { display: flex; align-items: stretch; gap: var(--q-space-2); }
+.log-capture .q-input { flex: 1 1 auto; min-width: 0; }
+.log-capture .q-btn { flex: 0 0 auto; }
+.log-dump { display: grid; gap: var(--q-space-2); }
+.log-dump .q-row { grid-template-columns: auto minmax(0, 1fr) auto; }
+
+/* ---------- narrow phones (root content width up to 330px) ---------- */
+@container quests (max-width: 330px) {
+  /* four session actions as a 2 x 2 grid instead of 3 + an orphaned Delete */
+  .log-linked-row .q-btn-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .log-row__time { min-width: 40px; font-size: 11.5px; }
+  .log-capture { flex-direction: column; }
+  .log-capture .q-btn { width: 100%; }
+  .log-dump .q-row { grid-template-columns: auto minmax(0, 1fr); }
+  .log-dump .q-row .q-btn { grid-column: 1 / -1; justify-self: start; }
+}

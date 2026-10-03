@@ -1,0 +1,229 @@
+/* RPG v0.02.18 — Home Internal Redesign: Feature Module (2026-09-11).
+
+   Aurelia's "Home widget internals" brief: the outer widget shells/frames
+   and overall Home information architecture stay exactly as they are —
+   this pass only redesigns what sits INSIDE them. It introduces a shared
+   three-material internal language for every Home widget going forward:
+
+     PARCHMENT   — readable information / logs / lists
+     NAVY INSET  — interactive controls / progress / current objectives
+     GOLD + ICON — hierarchy, section identity, active emphasis
+
+   Main Quest is built first as the "Feature Module" — the heaviest of the
+   three reusable row weights approved in the ruling (Feature Module /
+   Standard Row / Compact Row). It replaces the old dark-scene
+   .command-section/.quest-* styling for Main Quest specifically (those
+   classes are left alone for whatever else in the app still uses them —
+   nothing here overrides them, this file only styles the new .feature-*
+   class names introduced in app.js's rewritten mainQuestBlockHTML()).
+
+   Geometry note: all four states (active / completed / empty, plus a
+   reserved but unused "not started" hook — see app.js comment) share one
+   .feature-module skeleton, per Aurelia's "share exactly the same
+   geometry" ruling, so nothing jumps when the quest's state changes.
+
+   Frame note: Aurelia asked for a lighter "Feature-weight inset" rather
+   than a full ornate perimeter, since this already lives inside the
+   Today widget's own outer frame. What's below is a navy header + a
+   1px gold-edged parchment body with two small gold corner brackets —
+   no border-image asset, no second full frame.
+
+   Crest note: no real shield/crest artwork exists yet. The shield shape
+   below is CSS (clip-path), holding the existing Main Quest icon as a
+   placeholder — flagged in the asset manifest as temporary, same
+   reuse-existing-art precedent used elsewhere in Home V3, not final art. */
+
+#view .feature-module{ position: relative; margin: 0 0 4px; }
+
+/* ---- Header: navy, gold rule at its base ---- */
+#view .feature-module-header{
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  background: linear-gradient(#16233f, #0d1723);
+  border-radius: 7px 7px 0 0;
+  padding: 7px 12px;
+  box-shadow: inset 0 -1px 0 rgba(202,166,87,.4), inset 0 1px 0 rgba(255,255,255,.05);
+}
+#view .feature-module-label{
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 12px;
+  letter-spacing: .09em;
+  text-transform: uppercase;
+  color: #f0d99b;
+  text-shadow: 0 1px 2px #000;
+}
+#view .feature-module-context{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 9px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: #7fa8c9;
+  flex: 0 0 auto;
+}
+
+/* ---- Body: parchment, restrained gold edge + corner brackets ---- */
+#view .feature-module-body{
+  position: relative;
+  background: var(--parchment-main, #f4f0e7);
+  border: 1px solid #caa657;
+  border-top: 0;
+  border-radius: 0 0 7px 7px;
+  padding: 14px 14px 13px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+#view .feature-module-body::before,
+#view .feature-module-body::after{
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: #caa657;
+  pointer-events: none;
+}
+#view .feature-module-body::before{ left: -1px; bottom: -1px; border-left: 2px solid; border-bottom: 2px solid; border-radius: 0 0 0 6px; }
+#view .feature-module-body::after{ right: -1px; bottom: -1px; border-right: 2px solid; border-bottom: 2px solid; border-radius: 0 0 6px 0; }
+
+/* ---- Crest: CSS shield placeholder, houses the existing quest icon ---- */
+#view .feature-crest{
+  flex: 0 0 auto;
+  width: 58px;
+  height: 66px;
+  position: relative;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+#view .feature-crest-shape{
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0, 100% 15%, 100% 58%, 50% 100%, 0 58%, 0 15%);
+  background: linear-gradient(160deg, #22314f, #0c141f 72%);
+  box-shadow: inset 0 10px 14px -8px #00000088;
+}
+#view .feature-crest-shape::after{
+  content: "";
+  position: absolute;
+  inset: 2px;
+  clip-path: polygon(50% 0, 100% 15%, 100% 58%, 50% 100%, 0 58%, 0 15%);
+  border: 1.5px solid #caa657;
+}
+#view .feature-crest img{
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+  margin: 18% auto 0;
+  filter: drop-shadow(0 1px 2px #000a);
+}
+#view .feature-crest:hover .feature-crest-shape,
+#view .feature-crest:focus-visible .feature-crest-shape{ box-shadow: inset 0 10px 14px -8px #00000088, 0 0 9px #4bbcff66; outline: none; }
+#view .feature-crest.muted .feature-crest-shape{ background: linear-gradient(160deg, #2a3140, #171b22 72%); }
+#view .feature-crest.muted .feature-crest-shape::after{ border-color: #8a7a56; opacity: .6; }
+#view .feature-crest.muted img{ opacity: .4; }
+#view .feature-crest-check{
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  z-index: 2;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #1f5c34;
+  border: 1.5px solid #79d99a;
+  color: #d9ffe4;
+  font-size: 10px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 2px 4px #0007;
+}
+
+/* ---- Content column: grid so the primary action sits top-right of the
+   copy regardless of how tall the copy grows (title/subtitle/progress) ---- */
+#view .feature-content{
+  flex: 1 1 auto;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0,1fr) auto;
+  column-gap: 10px;
+  row-gap: 6px;
+  align-items: start;
+}
+#view .feature-copy{ grid-column: 1; min-width: 0; cursor: pointer; border-radius: 4px; padding: 2px 4px; margin: -2px -4px; transition: .15s; }
+#view .feature-copy:hover, #view .feature-copy:focus-visible{ background: rgba(22,35,63,.06); outline: none; }
+#view .feature-title{
+  font-family: var(--font-ui, Georgia, serif);
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--ink-primary, #16233f);
+  margin: 0;
+}
+#view .feature-title.muted{ color: var(--ink-tertiary, #8a7a52); }
+#view .feature-subtitle{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 10.5px;
+  line-height: 1.4;
+  color: var(--ink-secondary, #5b4a2a);
+  margin: 4px 0 0;
+}
+/* The Daily Quest block's meta line and progress nodes / bar / text were removed with the block (Lyra D4). */
+
+/* ---- Actions ----
+   Restyled (Aurelia — Home V3 Parchment Colour & Effects Handover,
+   2026-09-11): was a navy/gold filled plaque with a sapphire hover
+   border — exactly the "glossy blue framed button inside a parchment
+   module" the new handover asks to avoid. Now a slightly darker
+   parchment shade (--parchment-inset, the same tone as the stat
+   wells/resource tiles), restrained gold text, no heavy border — the
+   button blends into the widget's own material instead of sitting on
+   it as a separate navy plaque. Text brightens/glows on hover/focus
+   rather than the surface changing (.parchment-hover-glow, shared
+   with "View Character" — see v0.02.21). This changes the action-
+   button visual family from the one approved earlier in this session
+   (navy/gold normal, sapphire focus) — flagged explicitly in the
+   return report, not silently overridden. */
+#view .feature-action-primary{
+  grid-column: 2;
+  justify-self: end;
+  appearance: none;
+  border: 1px solid var(--separator-tone, rgba(201,168,106,.42));
+  border-radius: 5px;
+  background: var(--parchment-inset, #ecdfc0);
+  color: var(--gold-accent, #a9762f);
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  padding: 9px 13px;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 2px rgba(255,255,255,.32), inset 0 -1px 2px rgba(60,38,18,.12);
+  transition: color .15s ease, text-shadow .15s ease;
+}
+#view .feature-action-primary:hover,
+#view .feature-action-primary:focus-visible{ color: var(--gold-accent-bright, #c98f3a); text-shadow: 0 0 6px rgba(169,118,47,.35); outline: none; }
+#view .feature-action-primary:active{ background: #e4d4a8; }
+#view .feature-action-primary:disabled{ opacity: .55; cursor: default; box-shadow: none; color: var(--ink-tertiary, #8a7a52); }
+
+/* The Daily Quest block's Completed badge, Delay / Complete row and Cancel link were removed with the block (Lyra D4). */
+
+/* ---- Empty state ---- */
+#view .feature-module.state-empty .feature-title{ font-family: var(--font-ui, Georgia, serif); }
+#view .feature-module.state-empty .feature-content{ align-items: center; }
+#view .feature-module.state-empty .feature-action-primary{ grid-row: 2; }
+
+@media (max-width: 420px){
+  #view .feature-module-body{ padding: 12px 11px 11px; gap: 9px; }
+  #view .feature-crest{ width: 50px; height: 58px; }
+  #view .feature-title{ font-size: 13.5px; }
+  #view .feature-action-primary{ font-size: 9px; padding: 8px 10px; }
+}

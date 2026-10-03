@@ -1,0 +1,26 @@
+/* RPG v0.02.4.14 — Remove all decorative frames from Home.
+   Reversible: delete this file's <link> in index.html to restore the
+   shared gold frame (Player Box, Weather, Today, Resources all revert
+   to the v0.02.4.7-12 frame treatment immediately, nothing else changes).
+
+   Strips the border-image frame from every Home panel:
+   - Player Box: its .v8-player-frame-border overlay (the element that
+     carried the shared frame asset as of v0.02.4.12) is hidden.
+   - Weather / Today / Resources: the shared border-image on the panel
+     itself (.home-variant-2.home-v2-frame-hotfix ...) is zeroed out.
+   Panel backgrounds, padding, and all live content are untouched. */
+
+.home-player-v8 .v8-frame-control-hotfix-active .v8-player-frame-border{
+  display:none!important;
+}
+
+.home-variant-2.home-v2-frame-hotfix .player-status-panel,
+.home-variant-2.home-v2-frame-hotfix .weather-panel,
+.home-variant-2.home-v2-frame-hotfix .home-command-panel,
+.home-variant-2.home-v2-frame-hotfix .resource-section-frame,
+.home-variant-2.home-v2-frame-hotfix .development-section-frame{
+  border-style:none!important;
+  border-width:0!important;
+  border-image-source:none!important;
+  box-shadow:none!important;
+}

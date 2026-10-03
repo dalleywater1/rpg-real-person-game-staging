@@ -1,0 +1,119 @@
+/* Self Care & Habits — Home modules and the Personal Growth Self Care page
+   (Phase A, Astra 2026-09-25, RPG-0094). The Home modules reuse the shared
+   `.home-panel` shell (header, icon, glass) and the `.hw-progress-bar`
+   primitive, so they read as native Home previews; only their internals live
+   here, all under the `sc-` prefix. No new palette: text uses the HUD tokens
+   with sensible fallbacks. */
+
+#view .home-panel-selfcare{ font-family: var(--font-ui, "Alegreya Sans", system-ui, sans-serif); }
+#view .home-panel-selfcare button, #view .home-panel-selfcare input{ font-family: inherit; }
+#view .home-panel-selfcare{ font-variant-numeric: lining-nums tabular-nums; }/* Alegreya's default figures are old-style; times and counts read better lining */
+#view .home-panel-selfcare .sc-body{ display: grid; gap: 10px; padding: 4px 2px 2px; }
+#view .home-panel-selfcare .home-panel-header{ align-items: center; }
+#view .home-panel-selfcare .home-panel-header .sc-link{
+  margin-left: auto; appearance: none; border: 0; background: transparent; cursor: pointer;
+  color: var(--hud-text-secondary, #c9d4dc); font: inherit; font-size: 11px; letter-spacing: .04em;
+  min-height: 32px; padding: 0 6px; border-radius: 6px;
+}
+#view .home-panel-selfcare .sc-link:hover, #view .home-panel-selfcare .sc-link[aria-pressed="true"]{ color: var(--hud-text-primary, #f2f6f8); }
+#view .home-panel-selfcare .sc-glyph{ display: inline-grid; place-items: center; font-size: 22px; color: var(--hud-text-primary, #f2f6f8); }
+#view .home-panel-selfcare :focus-visible{ outline: 2px solid #4bbcff; outline-offset: 2px; }
+
+/* Hero number (opens the log) */
+.sc-hero{
+  appearance: none; border: 0; background: rgba(255,255,255,.04); cursor: pointer; text-align: left;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  min-height: 44px; padding: 8px 12px; border-radius: 10px; color: inherit; font: inherit;
+  border: 1px solid rgba(190,137,49,.22);
+}
+.sc-hero__num{ font-size: 20px; font-weight: 700; color: var(--hud-text-primary, #f2f6f8); font-variant-numeric: tabular-nums; }
+.sc-hero__num small{ font-size: 12px; font-weight: 600; color: var(--hud-text-secondary, #c9d4dc); }
+.sc-tick{ display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #2f9d64; color: #fff; font-size: 14px; font-weight: 800; }
+
+/* Meter */
+.sc-meter{ display: grid; grid-template-columns: 74px 1fr 28px; align-items: center; gap: 8px; }
+.sc-meter__label{ font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--hud-text-secondary, #c9d4dc); }
+.sc-meter__val{ font-size: 12px; text-align: right; color: var(--hud-text-primary, #f2f6f8); font-variant-numeric: tabular-nums; }
+.sc-meter .hw-progress-bar{ width: 100%; margin: 0; }
+
+/* Quick actions + chips */
+.sc-quick, .sc-chips{ display: flex; flex-wrap: wrap; gap: 8px; }
+.sc-chipbtn, .sc-primary{
+  appearance: none; cursor: pointer; font: inherit; font-size: 13px; font-weight: 700;
+  min-height: 44px; padding: 0 14px; border-radius: 999px; touch-action: manipulation;
+  border: 1px solid rgba(190,137,49,.4); background: rgba(255,255,255,.06); color: var(--hud-text-primary, #f2f6f8);
+}
+.sc-chipbtn small{ font-size: 10px; font-weight: 600; opacity: .8; margin-left: 2px; }
+.sc-chipbtn.is-on{ background: rgba(47,157,100,.28); border-color: #2f9d64; }
+.sc-primary{ background: #d9ac5c; border-color: #d9ac5c; color: #1c1305; }
+.sc-note{ margin: 0; font-size: 12px; color: var(--hud-text-secondary, #c9d4dc); line-height: 1.35; }
+.sc-note--good{ color: #7fd6a2; }
+.sc-note--care{ padding: 8px 10px; border-radius: 8px; background: rgba(217,172,92,.14); border: 1px solid rgba(217,172,92,.4); color: var(--hud-text-primary, #f2f6f8); }
+
+/* Sleep */
+.sc-asleep{ display: flex; align-items: center; gap: 12px; }
+.sc-moon{ font-size: 30px; color: #cfe1ff; }
+.sc-asleep__time{ font-size: 24px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--hud-text-primary, #f2f6f8); }
+.sc-field{ display: grid; gap: 4px; }
+.sc-field label{ font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--hud-text-secondary, #c9d4dc); }
+.sc-field input{ min-height: 44px; border-radius: 8px; padding: 0 10px; background: rgba(0,0,0,.35); color: #fff; border: 1px solid rgba(255,255,255,.2); font: inherit; }
+
+/* Vigil ring */
+.sc-ringwrap{ position: relative; width: 132px; height: 132px; margin: 0 auto; }
+.sc-ring{ width: 100%; height: 100%; transform: rotate(-90deg); }
+.sc-ring__bg{ fill: none; stroke: rgba(255,255,255,.14); stroke-width: 8; }
+.sc-ring__fg{ fill: none; stroke: #d9ac5c; stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
+.sc-ring__center{ position: absolute; inset: 0; display: grid; place-content: center; text-align: center; gap: 2px; }
+.sc-ring__time{ font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--hud-text-primary, #f2f6f8); }
+.sc-ring__center small{ font-size: 11px; color: var(--hud-text-secondary, #c9d4dc); }
+@media (prefers-reduced-motion: reduce){ .sc-ring__fg{ transition: none; } }
+
+/* Habits 3x3 */
+.sc-habit-grid{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.sc-tile-wrap{ position: relative; min-width: 0; }
+.sc-tile{
+  appearance: none; width: 100%; cursor: pointer; font: inherit; color: inherit; text-align: center;
+  display: grid; justify-items: center; align-content: start; gap: 3px; min-height: 96px; padding: 8px 4px 6px;
+  border-radius: 12px; border: 1px solid rgba(190,137,49,.25); background: rgba(255,255,255,.05); touch-action: manipulation;
+  -webkit-touch-callout: none; user-select: none;
+}
+.sc-tile.is-done{ border-color: #2f9d64; background: rgba(47,157,100,.14); }
+.sc-tile.is-rest{ opacity: .58; }
+.sc-tile--empty{ border-style: dashed; align-content: center; opacity: .8; }
+.sc-tile__plus{ font-size: 26px; color: var(--hud-text-secondary, #c9d4dc); }
+.sc-ring2{
+  position: relative; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center;
+  background: conic-gradient(#d9ac5c calc(var(--p) * 1%), rgba(255,255,255,.14) 0);
+}
+.sc-ring2::before{ content: ""; position: absolute; inset: 4px; border-radius: 50%; background: #0d1a26; }
+.sc-tile__icon{ position: relative; z-index: 1; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; overflow: hidden; font-size: 20px; color: #fff; }
+.sc-tile__icon img{ width: 100%; height: 100%; object-fit: cover; }
+.sc-tile__tick{ position: absolute; right: -4px; top: -4px; z-index: 2; width: 18px; height: 18px; border-radius: 50%; background: #2f9d64; color: #fff; font-size: 11px; font-weight: 800; display: grid; place-items: center; border: 1.5px solid #0d1a26; }
+.sc-tile__name{ font-size: 11.5px; font-weight: 700; line-height: 1.15; color: var(--hud-text-primary, #f2f6f8); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; max-width: 100%; }
+.sc-tile__meta{ font-size: 10.5px; color: var(--hud-text-secondary, #c9d4dc); white-space: nowrap; }
+.sc-tile__streak{ color: #d9ac5c; font-weight: 700; }
+.sc-tile-wrap.is-editing .sc-tile{ outline: 1px dashed rgba(217,172,92,.6); }
+.sc-tile__edit{ display: flex; justify-content: center; gap: 4px; margin-top: 4px; }
+.sc-tile__edit button{ min-width: 44px; min-height: 36px; border-radius: 8px; border: 1px solid rgba(255,255,255,.25); background: rgba(0,0,0,.35); color: #fff; font-size: 16px; cursor: pointer; }
+@media (max-width: 340px){ .sc-tile{ min-height: 90px; } .sc-ring2{ width: 46px; height: 46px; } .sc-tile__icon{ width: 34px; height: 34px; } .sc-meter{ grid-template-columns: 64px 1fr 24px; } }
+
+/* Self Care page (Personal Growth design system) */
+.sc-page .pg-tabs-wrap, .sc-page .pg-tabpanel, .sc-page .sc-today > *, .sc-page .sc-body{ min-width: 0; max-width: 100%; }/* a flex/grid child otherwise grows to its content and pushes the page wider than the screen at 320 */
+.sc-page .sc-today{ display: grid; gap: 14px; }
+.sc-page .home-panel-selfcare{ margin: 0; }
+.sc-page .sc-link[data-sc-action="open-selfcare"]{ display: none; }/* the page IS Self Care */
+.sc-settings{ display: grid; gap: 14px; }
+.sc-settings fieldset{ border: 0; margin: 0; display: grid; gap: 10px; }
+.sc-settings legend{ padding: 0; margin-bottom: 4px; }
+.sc-two{ display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.sc-check{ display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: .95rem; }
+.sc-check input{ width: 22px; height: 22px; }
+.sc-quality{ display: flex; flex-wrap: wrap; gap: 8px; }
+.sc-histlist{ list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sc-hist{ display: grid; grid-template-columns: 82px 1fr; gap: 10px; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+.sc-hist__date{ font-size: .85rem; }
+.sc-hist__bits{ display: flex; flex-wrap: wrap; gap: 6px 12px; font-size: .85rem; align-items: center; }
+.sc-sess{ appearance: none; cursor: pointer; font: inherit; font-size: .78rem; min-height: 32px; padding: 0 10px; border-radius: 999px; border: 1px solid rgba(255,255,255,.25); background: transparent; color: inherit; }
+.sc-sess[disabled]{ opacity: .5; cursor: default; }
+.sc-picker{ list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.sc-picker__btn{ width: 100%; justify-content: flex-start; min-height: 44px; }

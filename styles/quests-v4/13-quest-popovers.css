@@ -1,0 +1,43 @@
+/* Quests v4 - small popovers / context menus (handover section 39).
+
+   The Quests pages have no popover or overflow menu today, so nothing
+   renders with this yet. It is the ONE shared shell for the first one, so
+   a future menu can not arrive as a browser-white or parchment box:
+   compact dark glass, rounded corners, neutral rows, accent on hover and
+   focus, destructive rows in semantic red (never the category colour).
+   Native <select> lists are drawn by the operating system and can not be
+   styled; the Quests popups use pill-chip groups instead (11-quest-forms). */
+
+.q-popover {
+  position: absolute;
+  z-index: 30;
+  min-width: 180px;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--q-border-strong);
+  background: linear-gradient(180deg, rgba(15, 36, 50, 0.96), rgba(6, 18, 29, 0.98));
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 14px color-mix(in srgb, var(--q-accent) 10%, transparent);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+.q-popover__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 40px;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--q-text-secondary);
+  font: 600 13px/1.2 var(--q-font-body);
+  text-align: left;
+  cursor: pointer;
+  appearance: none;
+}
+.q-popover__item:hover,
+.q-popover__item:focus-visible { background: var(--q-accent-wash); color: var(--q-text); outline: none; }
+.q-popover__item--danger { color: var(--q-danger); }
+.q-popover__item--danger:hover,
+.q-popover__item--danger:focus-visible { background: color-mix(in srgb, var(--q-danger) 12%, transparent); color: var(--q-danger); }

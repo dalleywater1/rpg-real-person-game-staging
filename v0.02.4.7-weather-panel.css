@@ -1,0 +1,144 @@
+/* RPG v0.02.4.7 — Home Weather panel content redesign (Phase 2A).
+   Reversible by setting HOME_WEATHER_V2_HOTFIX=false in the paired .js file.
+   Content/layout only inside the existing .weather-panel frame; no frame,
+   asset, or Player Box changes. Removes the standalone Forecast button and
+   image title plaque in favour of a text header + live clock + a Running
+   Conditions badge, and condenses the stat row onto one line. */
+
+#view .weather-panel.weather-v2-active > .home-v2-title,
+#view .weather-panel.weather-v2-active > #weatherForecastButton{
+  display:none!important;
+}
+
+/* The legacy plaque-title layout reserved 58px of top padding for the old
+   image banner (styles.css .home-variant-2 .weather-panel). The new text
+   header flows in-line and doesn't need that reserved space. */
+#view .weather-panel.weather-v2-active{
+  padding:26px 28px 20px!important;
+}
+@media(max-width:580px){
+  #view .weather-panel.weather-v2-active{padding:20px 18px 16px!important}
+}
+
+#view .weather-v2-header{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-bottom:14px;
+}
+#view .weather-v2-title{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:17px;
+  font-weight:700;
+  letter-spacing:.12em;
+  color:#a9762f;
+  text-transform:uppercase;
+}
+#view .weather-v2-clock{
+  margin-top:3px;
+  font-size:11px;
+  color:#7a6a45;
+}
+
+#view .weather-v2-running{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 12px;
+  border-radius:20px;
+  border:1.5px solid var(--wc-color,#c9a86a);
+  background:color-mix(in srgb, var(--wc-color,#c9a86a) 12%, transparent);
+  flex-shrink:0;
+  white-space:nowrap;
+}
+#view .weather-v2-running.wc-perfect{box-shadow:0 0 10px color-mix(in srgb, var(--wc-color) 55%, transparent)}
+#view .weather-v2-running-dot{width:8px;height:8px;border-radius:50%;background:var(--wc-color);box-shadow:0 0 5px var(--wc-color);flex-shrink:0}
+#view .weather-v2-running-star{font-size:11px;color:var(--wc-color);line-height:1}
+#view .weather-v2-running b{font-size:10px;letter-spacing:.08em;color:#5b4a2a;font-weight:700;white-space:nowrap}
+
+#view .weather-v2-main{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  flex-wrap:wrap;
+  gap:14px;
+}
+#view .weather-v2-main-left{display:flex;align-items:center;gap:14px;min-width:0}
+#view .weather-v2-condition-block{min-width:0}
+#view .weather-v2-condition-block .weather-condition{
+  font-size:16px;
+  font-weight:700;
+  color:#16233f;
+  letter-spacing:.02em;
+  margin:0;
+  text-transform:uppercase;
+}
+#view .weather-v2-tap-hint{font-size:10.5px;color:#7a6a45;margin-top:2px}
+#view .weather-v2-main .weather-temp{
+  font-size:34px!important;
+  font-weight:800;
+  color:#16233f;
+  line-height:1;
+  flex-shrink:0;
+}
+
+#view .weather-v2-divider{
+  position:relative;
+  margin:16px 0;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#c9a86a 15%,#c9a86a 85%,transparent);
+}
+#view .weather-v2-gem{
+  position:absolute;left:50%;top:-6px;transform:translateX(-50%) rotate(45deg);
+  width:11px;height:11px;
+  background:linear-gradient(135deg,#bfe3ff,#4f9fe0 45%,#1c5f9e);
+  border:1px solid #0b3a63;
+}
+
+#view .weather-v2-stats{
+  display:flex!important;
+  align-items:stretch;
+  gap:12px;
+  flex-wrap:nowrap;
+}
+#view .weather-v2-stat{
+  flex:1 1 0;
+  min-width:0;
+  text-align:center;
+}
+#view .weather-v2-stat span{
+  display:block;
+  font-size:9.5px;
+  letter-spacing:.08em;
+  color:#5b4a2a;
+  font-weight:700;
+  white-space:nowrap;
+  text-overflow:ellipsis;
+  overflow:hidden;
+}
+#view .weather-v2-stat b{
+  display:block;
+  margin-top:2px;
+  font-size:13.5px;
+  color:#16233f;
+  font-weight:700;
+  white-space:nowrap;
+}
+#view .weather-v2-stat-divider{
+  width:1.5px;
+  align-self:stretch;
+  flex-shrink:0;
+  background:linear-gradient(180deg,transparent,#a9762f,transparent);
+}
+
+@media(max-width:580px){
+  #view .weather-v2-title{font-size:14px}
+  #view .weather-v2-main .weather-temp{font-size:27px!important}
+  #view .weather-v2-condition-block .weather-condition{font-size:13px}
+  #view .weather-v2-stats{flex-wrap:wrap;gap:8px 4px}
+  #view .weather-v2-stat{flex:1 1 40%}
+  #view .weather-v2-stat-divider{display:none}
+  #view .weather-v2-running b{display:none}
+}

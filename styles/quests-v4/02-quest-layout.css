@@ -1,0 +1,51 @@
+/* Quests v4 - page shell, toolbar, section titles, grids.
+   The page root is a size container: every responsive rule in this
+   system keys off the root's own width (see 15-quest-responsive.css),
+   so the same markup is correct in a 320px phone column, the 580px app
+   shell and the mockup board frames alike. The page header lives in
+   03-quest-header.css. */
+
+.quests-v4 {
+  color: var(--q-text);
+  font-family: var(--q-font-body);
+  font-size: 13px;
+  line-height: 1.4;
+}
+/* The modal backdrop carries .quests-v4 too (so the dialog gets the
+   tokens); it must keep its own grid layout and must not become a size
+   container. Only the page root is a block and a container. */
+.quests-v4:not(.modal-backdrop) {
+  display: block;
+  container-type: inline-size;
+  container-name: quests;
+}
+.quests-v4 :where(h1, h2, h3, p) { margin: 0; }
+.quests-v4 *,
+.quests-v4 *::before,
+.quests-v4 *::after { box-sizing: border-box; }
+
+/* ---------- toolbar (back button row) ---------- */
+.q-toolbar { display: flex; align-items: center; gap: var(--q-space-2); margin: 0 0 var(--q-space-3); }
+
+/* ---------- section: gold Georgia title with a fading rule ---------- */
+.q-section { display: grid; gap: 10px; margin-top: 22px; }
+.q-section:first-child { margin-top: 0; }
+.q-section__title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0;
+  font: 700 12.5px/1.2 var(--q-font-display);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--q-heading);
+}
+.q-section__title::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background: linear-gradient(90deg, var(--q-rule), transparent);
+}
+
+/* ---------- grids ---------- */
+.q-stack { display: grid; gap: var(--q-space-2); }

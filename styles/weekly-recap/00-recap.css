@@ -1,0 +1,28 @@
+/* Weekly Recap (RPG-0061). Scoped to .recap-*. The recap is a view of the Adventurer's Log, so it sits inside the
+   Log's page root (.quests-v4 .quest-log .log-v1) and is built from the Quests .q-* components (card, section title,
+   pill tabs, buttons); this file adds only the tiles and lists, and reads Quests tokens (2026-10-02, "use same design
+   style for Log as used in quests"). No literals, no !important. */
+.recap-card { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-top: 22px; }
+.recap-card__text { display: grid; gap: 3px; min-width: 0; }
+.recap-card__text b { font: 700 15px/1.25 var(--q-font-display); letter-spacing: 0.02em; color: var(--q-text); }
+.recap-card__text span { font: 500 12.5px/1.4 var(--q-font-body); color: var(--q-text-secondary); overflow-wrap: anywhere; }
+.recap-page { display: grid; gap: 12px; min-width: 0; }
+.recap-controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.recap-switch { flex: 1 1 190px; min-width: 0; max-width: 260px; }
+.recap-switch .q-tab { min-height: 34px; }
+.recap-range { margin: 0; font: 500 12px/1.4 var(--q-font-body); color: var(--q-text-muted); }
+.recap-section { min-width: 0; margin-top: 10px; }
+.recap-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.recap-tile { display: grid; gap: 3px; padding: 10px 12px; background: var(--q-glass-soft); border: 1px solid var(--q-edge); border-radius: 12px; min-width: 0; }
+.recap-tile__val { font: 700 20px/1.1 var(--q-font-display); color: var(--q-text); font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.recap-tile__label { font: 800 10px/1.2 var(--q-font-body); letter-spacing: 0.1em; text-transform: uppercase; color: var(--q-text-muted); }
+.recap-tile__note { font: 500 11px/1.3 var(--q-font-body); color: var(--q-text-muted); }
+.recap-delta { font: 600 11px/1.3 var(--q-font-body); color: var(--q-text-muted); }
+.recap-delta.is-up { color: var(--q-success); }
+.recap-delta.is-down { color: var(--q-warning); }
+.recap-note { margin: 0; font: 500 12.5px/1.4 var(--q-font-body); color: var(--q-text-secondary); overflow-wrap: anywhere; }
+.recap-ach { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.recap-ach li { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 8px 12px; background: var(--q-glass-soft); border: 1px solid var(--q-edge); border-radius: 12px; font: 600 13px/1.3 var(--q-font-body); color: var(--q-text); }
+.recap-ach__name { overflow-wrap: anywhere; }
+.recap-ach__rar { font: 800 10px/1.2 var(--q-font-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--q-gold); white-space: nowrap; }
+@container quests (max-width: 330px) { .recap-grid { grid-template-columns: 1fr; } .recap-switch { min-width: 0; width: 100%; } }

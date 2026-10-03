@@ -1,0 +1,146 @@
+[
+  {
+    "filename": "home-v3-resource-water-master.png",
+    "width": 1024,
+    "height": 1024,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "4b5f59730ba9ab3b37ce2e685eb240efd3f6d6d7f9d50fe5967cb2222cc2ee5e"
+  },
+  {
+    "filename": "home-v3-resource-water-1x.png",
+    "width": 48,
+    "height": 48,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "48eb6eb6fe49038cd73370df1fcb0e37d3d0fedd99a7a5192642cffa62a9f86f"
+  },
+  {
+    "filename": "home-v3-resource-water-2x.png",
+    "width": 96,
+    "height": 96,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "2cf8ef14169d923b5078bcc87ff7fca35950173e4cba8b03c9190b9c12593921"
+  },
+  {
+    "filename": "home-v3-resource-calories-master.png",
+    "width": 1024,
+    "height": 1024,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "b55ee182916afa764757fa8e5b30c7ede8a3f91ae2d6824a315ad94ae17a3703"
+  },
+  {
+    "filename": "home-v3-resource-calories-1x.png",
+    "width": 48,
+    "height": 48,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "cccd889dd015d9f3b95382d3749186b45178be3e51cc746490cdb7458151522d"
+  },
+  {
+    "filename": "home-v3-resource-calories-2x.png",
+    "width": 96,
+    "height": 96,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "c7b32ed316677ee23f3f58ae0130ca48293bea6b26117d848bf59f7327cc30fc"
+  },
+  {
+    "filename": "home-v3-resource-protein-master.png",
+    "width": 1024,
+    "height": 1024,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "eedefb6bdc53462c01063c3de489d0e15c1d5d1321425e148de2aac8626c7645"
+  },
+  {
+    "filename": "home-v3-resource-protein-1x.png",
+    "width": 48,
+    "height": 48,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "20b045e1b3da08e0d5ac1c3aade41c2fda215ed247ec59c9c413f39cbe3cb484"
+  },
+  {
+    "filename": "home-v3-resource-protein-2x.png",
+    "width": 96,
+    "height": 96,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "045408d604456259e7be192733eba0305f058610522750c75d86f360d5675c9a"
+  },
+  {
+    "filename": "home-v3-resource-sleep-master.png",
+    "width": 1024,
+    "height": 1024,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "f69f3f42c4c788ea6ce64c17c76ce90257ea962d53513f5a1baa8466dd0e8f6c"
+  },
+  {
+    "filename": "home-v3-resource-sleep-1x.png",
+    "width": 48,
+    "height": 48,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "773e7f69be34cae3ed50972b531e0c09d1c7e9cdda4fe13152b6fb6bbb56c00b"
+  },
+  {
+    "filename": "home-v3-resource-sleep-2x.png",
+    "width": 96,
+    "height": 96,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "cf4de2a5d5d03082c2905a7e5bd5f0d282f85c62232f570df3ce61556c32a969"
+  },
+  {
+    "filename": "home-v3-resource-mind-master.png",
+    "width": 1024,
+    "height": 1024,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "1031bec75a00062ba8cd5a4a759d0db48e5dfbe0b18b924371d440393e2dd5ea"
+  },
+  {
+    "filename": "home-v3-resource-mind-1x.png",
+    "width": 48,
+    "height": 48,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "afc34643c013d776f9ad8f9bca7483f42457f96c500b008a0c528e1864ce7f37"
+  },
+  {
+    "filename": "home-v3-resource-mind-2x.png",
+    "width": 96,
+    "height": 96,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "d6fb37ec60e374c187047cef48d56b40fd85a3e11f7d602d9b8e4cfa5b3d84aa"
+  },
+  {
+    "filename": "home-v3-resource-social-master.png",
+    "width": 1024,
+    "height": 1024,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "7b4334efaeff5cef52ebdec58e34194ecd9f5869e9055e9c611adc28c9ba031a"
+  },
+  {
+    "filename": "home-v3-resource-social-1x.png",
+    "width": 48,
+    "height": 48,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "9724931417cd63e2435b4d99e78fe0b484e6d96455b7f73d3028ac7474fe51d6"
+  },
+  {
+    "filename": "home-v3-resource-social-2x.png",
+    "width": 96,
+    "height": 96,
+    "transparency": "RGBA; transparent exterior, opaque navy interior",
+    "minimum_safe_css_canvas_px": 48,
+    "sha256": "e62df3d358ed42279aff873009d68e6207bcfc27e1f1959c06d9469df4a7fb7a"
+  }
+]

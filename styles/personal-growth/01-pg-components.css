@@ -1,0 +1,876 @@
+/* Personal Growth: reusable components.
+   Handover sections 4, 5 and 7. One set of materials for every Personal
+   Growth surface. Page CSS (02-pg-pages.css) sets grids, spacing and crops
+   only; it never redefines a button, tab or panel material.
+
+   Surface hierarchy
+     0 world      the page and the hero scene (02-pg-pages.css)
+     1 .pg-shell   dark glass section
+     2 .pg-group   tonal inner grouping, .pg-row list rows
+     3 .pg-inset   warm matte reading inset, opt in, needs a reading purpose
+     4 controls    buttons, chips, tabs, progress, fields
+     overlay       .pg-dialog
+
+   Glass is a dependable dark fill plus a highlight and a thin edge. Blur is
+   progressive enhancement on one broad surface at a time (.pg-shell--blur
+   and the dialog), never on rows and never nested. */
+
+/* ------------------------------------------------------------------ */
+/* Surfaces                                                            */
+/* ------------------------------------------------------------------ */
+
+.pg-shell {
+  position: relative;
+  padding: var(--pg-space-4);
+  background:
+    linear-gradient(180deg, var(--pg-glass-highlight), transparent 38%),
+    var(--pg-glass-fill);
+  border: 1px solid var(--pg-glass-border);
+  border-radius: var(--pg-radius-panel);
+  box-shadow: var(--pg-shadow-soft), inset 0 1px 0 var(--pg-glass-highlight);
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pg-shell--blur {
+    background:
+      linear-gradient(180deg, var(--pg-glass-highlight), transparent 38%),
+      rgba(16, 38, 47, .74);
+    -webkit-backdrop-filter: blur(var(--pg-blur));
+    backdrop-filter: blur(var(--pg-blur));
+  }
+}
+
+/* No-blur mode: the opaque fallback is a designed surface, not a leftover. */
+@media (prefers-reduced-transparency: reduce) {
+  .pg-shell--blur {
+    background:
+      linear-gradient(180deg, var(--pg-glass-highlight), transparent 38%),
+      var(--pg-glass-solid);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+.pg-no-blur .pg-shell--blur {
+  background:
+    linear-gradient(180deg, var(--pg-glass-highlight), transparent 38%),
+    var(--pg-glass-solid);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+
+.pg-group {
+  padding: var(--pg-space-3);
+  background: var(--pg-tonal);
+  border-radius: var(--pg-radius-row);
+}
+
+/* Warm matte reading inset. Text, links, focus and controls all switch to
+   their light-surface variants here; nothing inherits pale glass colours. */
+.pg-inset {
+  padding: var(--pg-space-4);
+  background: var(--pg-ivory);
+  color: var(--pg-ink);
+  border: 1px solid var(--pg-ivory-border);
+  border-radius: var(--pg-radius-row);
+  box-shadow: var(--pg-ivory-shadow);
+  max-width: var(--pg-reading-max);
+}
+.pg-inset :is(h2, h3, h4) { color: var(--pg-ink); }
+.pg-inset .pg-meta,
+.pg-inset .pg-field__help { color: var(--pg-ink-secondary); }
+.pg-inset :focus-visible { outline-color: var(--pg-focus-on-warm); }
+.pg-inset .pg-btn--secondary {
+  background: rgba(36, 49, 46, .06);
+  border-color: #6f8078;
+  color: var(--pg-ink);
+}
+.pg-inset .pg-btn--primary { color: #0f2027; }
+.pg-inset .pg-input,
+.pg-inset .pg-select {
+  background: #fbf8f0;
+  color: var(--pg-ink);
+  border-color: #6f8078;
+}
+.pg-inset .pg-field__label { color: var(--pg-ink); }
+.pg-inset .pg-field__error { color: #8a1f2b; }
+
+/* ------------------------------------------------------------------ */
+/* Type helpers                                                        */
+/* ------------------------------------------------------------------ */
+
+.pg-section__title:focus-visible { outline: none; }
+
+.pg-section__title,
+.pg-title {
+  font-family: var(--pg-font-heading);
+  font-weight: 600;
+  font-size: var(--pg-type-section);
+  line-height: 1.25;
+  color: var(--pg-text-gold);
+  text-wrap: balance;
+}
+
+.pg-meta {
+  font-size: var(--pg-type-meta);
+  line-height: 1.4;
+  color: var(--pg-text-muted);
+}
+
+/* Timer and count numerals do not jitter in width. */
+.pg-num { font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------------ */
+/* Buttons: primary accent, secondary glass, warm context, danger      */
+/* ------------------------------------------------------------------ */
+
+.pg-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pg-space-2);
+  min-height: var(--pg-touch-min);
+  padding: .5rem 1.1rem;
+  border: 1px solid var(--pg-control-border);
+  border-radius: var(--pg-radius-control);
+  background: rgba(255, 255, 255, .05);
+  color: var(--pg-text-primary);
+  font-size: var(--pg-type-body);
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.pg-btn:hover { background: rgba(255, 255, 255, .1); }
+.pg-btn:active { background: rgba(255, 255, 255, .16); }
+
+.pg-btn--primary {
+  background: var(--pg-accent);
+  border-color: var(--pg-accent);
+  color: var(--pg-on-accent);
+}
+.pg-btn--primary:hover { background: var(--pg-accent); filter: brightness(1.08); }
+.pg-btn--primary:active { background: var(--pg-accent); filter: brightness(.94); }
+
+.pg-btn--secondary {
+  background: rgba(10, 27, 35, .6);
+  border-color: var(--pg-control-border);
+}
+
+.pg-btn--danger {
+  background: transparent;
+  border-color: var(--pg-text-danger);
+  color: var(--pg-text-danger);
+}
+.pg-btn--danger.pg-btn--solid {
+  background: var(--pg-text-danger);
+  color: #3a0d13;
+}
+
+.pg-btn--compact { padding: .4rem .85rem; font-size: .9375rem; }
+.pg-btn--icon { width: var(--pg-touch-min); padding: 0; border-radius: 50%; font-size: 1.375rem; font-weight: 400; }
+.pg-btn--block { width: 100%; }
+
+.pg-btn:disabled,
+.pg-btn[aria-disabled="true"] { opacity: .5; cursor: not-allowed; filter: none; }
+.pg-btn[aria-busy="true"] { opacity: .75; cursor: progress; pointer-events: none; }
+
+/* ------------------------------------------------------------------ */
+/* Icon medallion                                                      */
+/* ------------------------------------------------------------------ */
+
+.pg-medallion {
+  --pg-medallion-size: var(--pg-icon-row);
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: var(--pg-medallion-size);
+  height: var(--pg-medallion-size);
+  border-radius: 50%;
+  color: var(--pg-accent);
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255, 255, 255, .16), transparent 55%),
+    var(--pg-accent-soft);
+  box-shadow:
+    inset 0 0 0 2px var(--pg-accent),
+    inset 0 0 0 4px rgba(7, 21, 29, .55);
+  font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "Noto Sans Symbols", "Apple Symbols", system-ui, sans-serif;
+  font-size: calc(var(--pg-medallion-size) * .46);
+  line-height: 1;
+}
+.pg-medallion--sm { --pg-medallion-size: min(2.25rem, 44px); }
+.pg-medallion--hero { --pg-medallion-size: var(--pg-icon-hero); }
+
+/* Art that already carries its own ring must not get a second one. */
+.pg-medallion--art {
+  background: none;
+  box-shadow: none;
+  border-radius: 0;
+}
+.pg-medallion--art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ------------------------------------------------------------------ */
+/* Filters: pressed buttons, not tabs                                  */
+/* ------------------------------------------------------------------ */
+
+.pg-filters {
+  display: flex;
+  gap: var(--pg-space-2);
+  padding: .25rem 1.75rem .5rem .25rem;
+  margin-inline: -.25rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scroll-padding-inline: .5rem 1.75rem;
+  scrollbar-width: thin;
+  /* The fade on the right edge tells people the row scrolls. The extra end
+     padding keeps the last chip clear of it once scrolled to the end. */
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 1.75rem), transparent);
+  mask-image: linear-gradient(90deg, #000 calc(100% - 1.75rem), transparent);
+}
+
+/* A chip group that wraps (dialogs), as opposed to the scrolling page filter row. */
+.pg-chips { display: flex; flex-wrap: wrap; gap: var(--pg-space-2); }
+
+.pg-chip {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  min-height: var(--pg-touch-min);
+  padding: .4rem .95rem;
+  border: 1px solid var(--pg-control-border);
+  border-radius: var(--pg-radius-pill);
+  background: rgba(10, 27, 35, .6);
+  color: var(--pg-text-secondary);
+  font-size: var(--pg-type-body);
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.pg-chip__glyph {
+  color: var(--pg-accent);
+  font-family: "Segoe UI Symbol", "Noto Sans Symbols 2", "Noto Sans Symbols", "Apple Symbols", system-ui, sans-serif;
+  font-size: 1.125rem;
+  line-height: 1;
+}
+.pg-chip:hover { background: rgba(255, 255, 255, .09); }
+.pg-chip[aria-pressed="true"] {
+  background: var(--pg-accent-soft);
+  border-color: var(--pg-accent);
+  box-shadow: inset 0 0 0 1px var(--pg-accent);
+  color: var(--pg-text-primary);
+}
+/* State is text as well as colour. */
+.pg-chip[aria-pressed="true"]::after {
+  content: "\2713";
+  font-size: .9rem;
+  color: var(--pg-accent);
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabs: content tabs with an associated panel (arrow keys in the JS)  */
+/* ------------------------------------------------------------------ */
+
+.pg-tabs {
+  display: flex;
+  gap: var(--pg-space-1);
+  overflow-x: auto;
+  border-bottom: 1px solid var(--pg-divider);
+  scrollbar-width: thin;
+}
+.pg-tab {
+  flex: 0 0 auto;
+  min-height: var(--pg-touch-min);
+  padding: .5rem 1rem;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  background: none;
+  color: var(--pg-text-secondary);
+  font-weight: 700;
+  cursor: pointer;
+}
+.pg-tab:hover { color: var(--pg-text-primary); }
+.pg-tab[aria-selected="true"] {
+  color: var(--pg-text-primary);
+  border-bottom-color: var(--pg-accent);
+}
+.pg-tabpanel { padding-top: var(--pg-space-4); }
+
+/* ------------------------------------------------------------------ */
+/* Stat block: value, label, optional unit. Unknown is not zero.       */
+/* ------------------------------------------------------------------ */
+
+.pg-stat {
+  display: grid;
+  align-content: start;
+  gap: .125rem;
+  padding: var(--pg-space-3);
+  border-radius: var(--pg-radius-row);
+  background: var(--pg-tonal);
+}
+.pg-stat__value {
+  font-family: var(--pg-font-heading);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--pg-text-primary);
+}
+.pg-stat__unit { font-size: var(--pg-type-meta); font-weight: 500; color: var(--pg-text-muted); margin-inline-start: .25rem; }
+.pg-stat__label { font-size: var(--pg-type-meta); line-height: 1.3; color: var(--pg-text-secondary); overflow-wrap: anywhere; }
+
+.pg-stat--na .pg-stat__value { color: var(--pg-text-muted); }
+.pg-stat__note { font-size: var(--pg-type-meta); line-height: 1.3; color: var(--pg-text-muted); overflow-wrap: anywhere; }
+
+/* Small status tag. Plain, or accented when it reports something live. */
+.pg-tag {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: .125rem .7rem;
+  border: 1px solid var(--pg-control-border);
+  border-radius: var(--pg-radius-pill);
+  background: var(--pg-tonal);
+  color: var(--pg-text-secondary);
+  font-size: var(--pg-type-meta);
+  font-weight: 700;
+  line-height: 1.2;
+}
+.pg-tag--live {
+  border-color: var(--pg-accent);
+  background: var(--pg-accent-soft);
+  color: var(--pg-text-primary);
+}
+
+.pg-backrow { display: flex; }
+
+/* ------------------------------------------------------------------ */
+/* Hub card: one quick-access destination (PGHubCard)                  */
+/* ------------------------------------------------------------------ */
+
+.pg-hubcard {
+  display: grid;
+  grid-template-rows: auto auto auto 1fr;
+  gap: .25rem;
+  width: 100%;
+  min-height: 8.5rem;
+  padding: var(--pg-space-3);
+  border: 1px solid var(--pg-divider);
+  border-radius: var(--pg-radius-row);
+  background: var(--pg-tonal);
+  color: var(--pg-text-primary);
+  text-align: start;
+  cursor: pointer;
+}
+.pg-hubcard:hover { background: rgba(255, 255, 255, .09); border-color: var(--pg-accent); }
+.pg-hubcard__top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--pg-space-2);
+  margin-bottom: .25rem;
+}
+/* Production emblems (assets/PersonalGrowth/) read better a little larger than the
+   glyph circle they replace. The cap is in CSS pixels, like the other icon sizes. */
+.pg-hubcard .pg-medallion--art { --pg-medallion-size: min(3.5rem, 64px); }
+.pg-hubcard__title {
+  font-family: var(--pg-font-heading);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+.pg-hubcard__sub { font-size: var(--pg-type-meta); line-height: 1.35; color: var(--pg-text-muted); }
+.pg-hubcard__foot { display: grid; gap: .125rem; align-self: end; padding-top: var(--pg-space-2); }
+.pg-hubcard__status { font-weight: 700; color: var(--pg-accent); overflow-wrap: anywhere; }
+.pg-hubcard__detail { font-size: var(--pg-type-meta); color: var(--pg-text-secondary); }
+/* Not built yet: a dashed edge and the words "Coming later", so it is never
+   colour alone that says so. */
+.pg-hubcard.is-unavailable { border-style: dashed; }
+.pg-hubcard.is-unavailable .pg-hubcard__status { color: var(--pg-text-muted); font-weight: 500; }
+
+/* ------------------------------------------------------------------ */
+/* Activity row (PGActivityRow)                                        */
+/* ------------------------------------------------------------------ */
+
+.pg-acts { display: grid; gap: var(--pg-space-2); }
+.pg-act {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--pg-space-3);
+  width: 100%;
+  min-height: var(--pg-touch-min);
+  padding: var(--pg-space-2) var(--pg-space-3);
+  border: 0;
+  border-radius: var(--pg-radius-row);
+  background: var(--pg-tonal);
+  color: var(--pg-text-primary);
+  text-align: start;
+  cursor: pointer;
+}
+.pg-act:hover { background: rgba(255, 255, 255, .09); }
+.pg-act__text { display: grid; gap: .0625rem; min-width: 0; }
+.pg-act__action { font-size: var(--pg-type-meta); color: var(--pg-text-muted); }
+.pg-act__title { font-weight: 700; overflow-wrap: anywhere; }
+.pg-act__when { font-size: var(--pg-type-meta); color: var(--pg-text-secondary); text-align: end; overflow-wrap: anywhere; }
+.pg-acts__empty { padding: var(--pg-space-2) 0; }
+
+/* ------------------------------------------------------------------ */
+/* List row: medallion, title and metadata, value, favorite, actions   */
+/* ------------------------------------------------------------------ */
+
+.pg-rows {
+  display: grid;
+  gap: var(--pg-space-3);
+}
+
+.pg-row {
+  display: grid;
+  gap: var(--pg-space-3);
+  padding: var(--pg-space-3) var(--pg-space-4) var(--pg-space-4);
+  background: var(--pg-tonal);
+  border-radius: var(--pg-radius-row);
+}
+.pg-row__head {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--pg-space-3);
+}
+.pg-row__name {
+  font-family: var(--pg-font-heading);
+  font-size: 1.1875rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--pg-text-primary);
+  overflow-wrap: anywhere;
+}
+.pg-row__meta { margin-top: .125rem; }
+
+.pg-fav {
+  display: grid;
+  place-items: center;
+  width: var(--pg-touch-min);
+  height: var(--pg-touch-min);
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: var(--pg-text-muted);
+  cursor: pointer;
+}
+.pg-fav svg { width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.pg-fav:hover { background: rgba(255, 255, 255, .08); }
+/* Filled versus outline, so the state is a shape and not only a colour. */
+.pg-fav[aria-pressed="true"] { color: var(--pg-accent-gold); }
+.pg-fav[aria-pressed="true"] svg { fill: currentColor; }
+
+/* Today: a labelled value with a bar when the tracker has a numeric goal. */
+.pg-today {
+  display: grid;
+  gap: .375rem;
+}
+.pg-today__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: .25rem .75rem;
+  font-size: var(--pg-type-body);
+}
+.pg-today__label { color: var(--pg-text-secondary); }
+.pg-today__value { font-weight: 700; color: var(--pg-text-primary); }
+.pg-today__value.is-done { color: var(--pg-text-success); }
+
+.pg-bar {
+  height: .5rem;
+  border-radius: var(--pg-radius-pill);
+  background: rgba(255, 255, 255, .12);
+  overflow: hidden;
+}
+.pg-bar > i {
+  display: block;
+  width: var(--pg-fill, 0%);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--pg-accent);
+}
+
+/* Week: seven day columns, each a full-height target with a smaller disc. */
+.pg-week { display: grid; gap: .125rem; }
+.pg-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: .125rem;
+}
+.pg-day { display: grid; justify-items: center; }
+.pg-day__label {
+  font-size: var(--pg-type-meta);
+  font-weight: 700;
+  color: var(--pg-text-muted);
+}
+.pg-day.is-today .pg-day__label { color: var(--pg-text-gold); }
+
+.pg-orb {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  min-height: var(--pg-touch-min);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+/* The disc is the button's ::before, so a day costs one DOM node, not two.
+   The check is text in the same pseudo-element, so a logged day is a mark and
+   not only a colour. */
+.pg-orb::before {
+  content: "";
+  display: grid;
+  place-items: center;
+  /* Shrinks with its column, so seven of them still fit a narrow row when
+     text is enlarged to 200 percent (a fixed rem size would overflow). */
+  width: min(1.75rem, calc(100% - .25rem));
+  aspect-ratio: 1;
+  border: 2px solid var(--pg-accent);
+  border-radius: 50%;
+  color: var(--pg-on-accent);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.pg-orb.is-done::before { content: "\2713"; background: var(--pg-accent); }
+.pg-orb.is-today::before { box-shadow: 0 0 0 3px rgba(229, 196, 126, .45); }
+.pg-orb:hover:not(:disabled)::before { background: var(--pg-accent-soft); }
+.pg-orb.is-done:hover:not(:disabled)::before { background: var(--pg-accent); filter: brightness(1.1); }
+.pg-orb:disabled { cursor: default; }
+.pg-orb:disabled::before { border-style: dashed; opacity: .4; }
+
+.pg-week__count { font-size: var(--pg-type-meta); color: var(--pg-text-secondary); }
+
+/* Footer: the stats, and Delete kept apart from the day buttons at the other
+   end of the row. Delete is outlined, never filled, so it is not an invitation. */
+.pg-row__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--pg-space-2) var(--pg-space-4);
+  padding-top: var(--pg-space-3);
+  border-top: 1px solid var(--pg-divider);
+}
+.pg-row__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .25rem 1.5rem;
+}
+.pg-row__stats div { display: flex; align-items: baseline; gap: .375rem; }
+.pg-row__stats dt { font-size: var(--pg-type-meta); color: var(--pg-text-muted); }
+.pg-row__stats dd { font-size: 1.125rem; font-weight: 700; color: var(--pg-text-primary); }
+
+/* ------------------------------------------------------------------ */
+/* Form fields: label, help, error, control, on dark and on warm       */
+/* ------------------------------------------------------------------ */
+
+.pg-form { display: grid; gap: var(--pg-space-4); align-content: start; }
+.pg-form__row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--pg-space-3); }
+.pg-field { display: grid; gap: .375rem; min-width: 0; }
+.pg-field__label { font-weight: 700; color: var(--pg-text-primary); }
+.pg-field__opt { margin-inline-start: .35rem; font-size: var(--pg-type-meta); font-weight: 500; color: var(--pg-text-muted); }
+.pg-field__help { font-size: var(--pg-type-meta); color: var(--pg-text-muted); }
+.pg-field__error { font-size: var(--pg-type-meta); font-weight: 700; color: var(--pg-text-danger); }
+
+.pg-input,
+.pg-select {
+  width: 100%;
+  min-height: var(--pg-touch-min);
+  padding: .55rem .8rem;
+  border: 1px solid var(--pg-control-border);
+  border-radius: var(--pg-radius-control);
+  background: var(--pg-field-bg);
+  color: var(--pg-text-primary);
+  font-size: 1rem;
+  line-height: 1.3;
+  box-shadow: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+.pg-select {
+  padding-inline-end: 2.4rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1.5 7 7.5 13 1.5' fill='none' stroke='%23a8bbbd' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .85rem center;
+}
+.pg-input::placeholder { color: var(--pg-text-muted); opacity: 1; }
+.pg-input:disabled,
+.pg-select:disabled { opacity: .55; cursor: not-allowed; }
+.pg-input[aria-invalid="true"],
+.pg-select[aria-invalid="true"] {
+  border-color: var(--pg-text-danger);
+  box-shadow: 0 0 0 1px var(--pg-text-danger);
+}
+
+/* Scheduled-day chips: real checkboxes with visible text. */
+.pg-daychips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pg-space-2);
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.pg-daychips legend { padding: 0; margin-bottom: .375rem; font-weight: 700; }
+.pg-daychip { position: relative; display: inline-flex; }
+.pg-daychip input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.pg-daychip span {
+  display: grid;
+  place-items: center;
+  width: var(--pg-touch-min);
+  height: var(--pg-touch-min);
+  border: 1px solid var(--pg-control-border);
+  border-radius: var(--pg-radius-control);
+  background: var(--pg-field-bg);
+  font-weight: 700;
+}
+.pg-daychip input:checked + span {
+  background: var(--pg-accent);
+  border-color: var(--pg-accent);
+  color: var(--pg-on-accent);
+}
+.pg-daychip input:checked + span::after { content: "\2713"; margin-inline-start: .15rem; font-size: .75rem; }
+.pg-daychip input:focus-visible + span { outline: 3px solid var(--pg-focus); outline-offset: 2px; }
+
+/* ------------------------------------------------------------------ */
+/* Empty, error and loading states share the shell and the type        */
+/* ------------------------------------------------------------------ */
+
+.pg-empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--pg-space-2);
+  padding: var(--pg-space-8) var(--pg-space-4);
+  text-align: center;
+}
+.pg-empty__title { font-family: var(--pg-font-heading); font-size: 1.375rem; font-weight: 600; color: var(--pg-text-gold); }
+.pg-empty__text { max-width: 34rem; color: var(--pg-text-secondary); }
+.pg-empty .pg-btn { margin-top: var(--pg-space-2); }
+
+.pg-alert {
+  padding: var(--pg-space-3) var(--pg-space-4);
+  border: 1px solid var(--pg-text-danger);
+  border-radius: var(--pg-radius-row);
+  background: rgba(255, 177, 183, .1);
+  color: var(--pg-text-primary);
+}
+.pg-alert strong { color: var(--pg-text-danger); }
+
+/* Stable geometry while loading. Static by default; shimmer only when the
+   user has not asked for reduced motion (see the motion block below). */
+.pg-skeleton {
+  min-height: 4.5rem;
+  border-radius: var(--pg-radius-row);
+  background: rgba(255, 255, 255, .07);
+}
+
+/* ------------------------------------------------------------------ */
+/* Dialog shell. Built by pgModal() in v0.02.34-personal-growth.js.    */
+/* The .modal-backdrop class stays for stacking (z-index) and for the  */
+/* on-screen-keyboard viewport sync in app.js; the legacy .modal box   */
+/* is not used, so no old popup rule can reach the dialog.             */
+/* ------------------------------------------------------------------ */
+
+.modal-backdrop.pg-dialog-backdrop {
+  background: rgba(2, 10, 15, .72);
+}
+
+.pg-dialog {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: min(100%, 36rem);
+  max-height: calc(100vh - 1.5rem);
+  max-height: calc(100dvh - 1.5rem);
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, var(--pg-glass-highlight), transparent 26%),
+    var(--pg-glass-fill-strong);
+  color: var(--pg-text-primary);
+  border: 1px solid var(--pg-glass-border);
+  border-radius: var(--pg-radius-panel);
+  box-shadow: var(--pg-shadow-deep), inset 0 1px 0 var(--pg-glass-highlight);
+  outline: none;
+}
+/* The dialog box itself is only a programmatic focus target (tabindex -1),
+   not a control, so it gets no ring. Every control inside keeps its own. */
+.pg-dialog:focus-visible { outline: none; }
+.pg-dialog--sm { width: min(100%, 26rem); }
+.pg-dialog--wide { width: min(100%, 52rem); }
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .pg-dialog {
+    -webkit-backdrop-filter: blur(var(--pg-blur));
+    backdrop-filter: blur(var(--pg-blur));
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .pg-dialog { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--pg-glass-solid); }
+}
+.pg-no-blur .pg-dialog { -webkit-backdrop-filter: none; backdrop-filter: none; background: var(--pg-glass-solid); }
+
+.pg-dialog__head {
+  display: flex;
+  align-items: center;
+  gap: var(--pg-space-3);
+  padding: var(--pg-space-3) var(--pg-space-3) var(--pg-space-3) var(--pg-space-4);
+  border-bottom: 1px solid var(--pg-divider);
+}
+.pg-dialog__titles { flex: 1 1 auto; min-width: 0; }
+.pg-dialog__title {
+  font-family: var(--pg-font-heading);
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.2;
+  color: var(--pg-text-gold);
+  overflow-wrap: anywhere;
+}
+.pg-dialog__sub { margin-top: .125rem; font-size: var(--pg-type-meta); color: var(--pg-text-muted); }
+.pg-dialog__body {
+  flex: 1 1 auto;
+  min-height: 0;
+  padding: var(--pg-space-4);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.pg-dialog__foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--pg-space-2);
+  padding: var(--pg-space-3) var(--pg-space-4) calc(var(--pg-space-3) + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid var(--pg-divider);
+}
+.pg-dialog__foot .pg-btn { flex: 1 1 8rem; }
+.pg-dialog__text { color: var(--pg-text-secondary); }
+
+/* Preset picker inside the Add dialog. */
+.pg-presets { display: grid; gap: var(--pg-space-4); }
+.pg-preset-group { display: grid; gap: var(--pg-space-2); }
+.pg-preset-list { display: grid; gap: var(--pg-space-2); }
+.pg-preset-group__title {
+  display: flex;
+  align-items: center;
+  gap: var(--pg-space-2);
+  font-family: var(--pg-font-heading);
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: var(--pg-text-primary);
+}
+.pg-preset {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--pg-space-3);
+  width: 100%;
+  min-height: 3rem;
+  padding: .5rem .9rem;
+  border: 1px solid var(--pg-divider);
+  border-radius: var(--pg-radius-control);
+  background: var(--pg-tonal);
+  text-align: start;
+  cursor: pointer;
+}
+.pg-preset:hover { background: rgba(255, 255, 255, .09); border-color: var(--pg-control-border); }
+.pg-preset__name { font-weight: 700; overflow-wrap: anywhere; }
+.pg-preset__meta { font-size: var(--pg-type-meta); color: var(--pg-text-muted); white-space: nowrap; }
+.pg-preset__add {
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 2px solid var(--pg-accent);
+  border-radius: 50%;
+  color: var(--pg-accent);
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+@media (max-width: 40rem) {
+  /* Near-full-width sheet on phones; the body scrolls, the footer stays. */
+  .modal-backdrop.pg-dialog-backdrop { place-items: end center; padding: .5rem; }
+  .pg-dialog { width: 100%; }
+  .pg-dialog--sm { width: 100%; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Motion: brief opacity and colour feedback only, and only when the   */
+/* user has not asked for reduced motion. Blur, large shadows and the  */
+/* background are never animated.                                      */
+/* ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: no-preference) {
+  .pg-btn,
+  .pg-chip,
+  .pg-tab,
+  .pg-fav,
+  .pg-preset,
+  .pg-hubcard,
+  .pg-act,
+  .pg-orb::before {
+    transition:
+      background-color var(--pg-motion-fast) ease,
+      border-color var(--pg-motion-fast) ease,
+      color var(--pg-motion-fast) ease,
+      opacity var(--pg-motion-fast) ease;
+  }
+  .pg-bar > i { transition: width var(--pg-motion-normal) ease; }
+  .pg-dialog { animation: pg-dialog-in var(--pg-motion-normal) ease-out; }
+  .pg-skeleton { animation: pg-skeleton-pulse 1.6s ease-in-out infinite; }
+}
+@keyframes pg-dialog-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes pg-skeleton-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .55; }
+}
+
+/* ------------------------------------------------------------------ */
+/* Forced colours: borders and text carry every state                  */
+/* ------------------------------------------------------------------ */
+
+@media (forced-colors: active) {
+  .pg-shell,
+  .pg-group,
+  .pg-row,
+  .pg-stat,
+  .pg-hubcard,
+  .pg-act,
+  .pg-dialog,
+  .pg-inset { border: 1px solid CanvasText; }
+  .pg-chip[aria-pressed="true"],
+  .pg-tab[aria-selected="true"] { outline: 2px solid Highlight; }
+  .pg-orb.is-done::before,
+  .pg-daychip input:checked + span,
+  .pg-btn--primary { forced-color-adjust: none; background: Highlight; color: HighlightText; border-color: Highlight; }
+  .pg-bar { border: 1px solid CanvasText; }
+  .pg-bar > i { forced-color-adjust: none; background: Highlight; }
+  .pg-fav[aria-pressed="true"] svg { fill: Highlight; }
+}

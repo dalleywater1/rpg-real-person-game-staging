@@ -1,0 +1,51 @@
+/* Training v3 -- popups (modals) opened from a Training page.
+
+   modal() copies .training-v3 (+ .training-<id>) onto .modal-backdrop
+   when the Training area is on screen, so every rule in the earlier
+   training-v3 files already applies inside the popup. This file only
+   adds the popup-specific chrome: panel, heading, close button, section
+   dividers, segmented tabs and form-control accents. Popups opened
+   anywhere else in the app are untouched. */
+
+.modal-backdrop.training-v3{background:rgba(2,6,11,.78);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px)}
+
+.training-v3 .modal{
+  background:linear-gradient(180deg,rgba(16,39,55,.97),rgba(7,20,31,.99));
+  border:1px solid var(--tr-edge);
+  border-top-color:color-mix(in srgb,var(--tr-accent) 45%,var(--tr-edge));
+  border-radius:16px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 14px 44px rgba(0,0,0,.6),0 0 22px var(--tr-accent-soft);
+  color:var(--tr-text);
+}
+
+.training-v3 .modal h2{font-family:var(--tr-font-display);font-size:15px;letter-spacing:.09em;text-transform:uppercase;color:#e3bd65;margin:2px 36px 12px 0}
+.training-v3 .modal-section{border-top:1px solid var(--tr-divider)}
+.training-v3 .modal-section h3,
+.training-v3 .modal h3{font-family:var(--tr-font-display);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:#e3bd65}
+
+.training-v3 .modal .close{
+  top:10px;right:10px;width:30px;height:30px;padding:0;
+  border:1px solid var(--tr-edge);border-radius:50%;
+  background:rgba(8,25,37,.88);color:var(--tr-text-secondary);
+  font-size:18px;line-height:1;display:inline-flex;align-items:center;justify-content:center;
+}
+.training-v3 .modal .close:hover,
+.training-v3 .modal .close:focus-visible{border-color:color-mix(in srgb,var(--tr-accent) 55%,var(--tr-edge));color:var(--tr-text);outline:none}
+
+.training-v3 .modal label{font-size:11px;color:var(--tr-text-secondary)}
+.training-v3 .modal .helper{color:var(--tr-text-muted)}
+
+.training-v3 .tabs{border:1px solid var(--tr-edge);border-radius:10px;overflow:hidden;background:rgba(7,20,31,.5)}
+.training-v3 .tabs button{background:transparent;color:var(--tr-text-muted);font-family:inherit;font-size:11px;font-weight:700}
+.training-v3 .tabs button.active{background:var(--tr-accent-soft);color:var(--tr-accent)}
+
+.training-v3 input[type=checkbox],
+.training-v3 input[type=radio],
+.training-v3 input[type=range]{accent-color:var(--tr-accent)}
+
+.training-v3 .modal{scrollbar-width:thin;scrollbar-color:rgba(155,190,210,.35) transparent}
+.training-v3 .modal::-webkit-scrollbar{width:8px}
+.training-v3 .modal::-webkit-scrollbar-track{background:transparent}
+.training-v3 .modal::-webkit-scrollbar-thumb{background:rgba(155,190,210,.28);border-radius:8px}
+.training-v3 .home-settings-row{border-top-color:var(--tr-divider)}
+.training-v3 .home-settings-row span{font-size:13px;color:var(--tr-text)}

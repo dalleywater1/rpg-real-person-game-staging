@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#080d16">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>RPG: Real Person Game</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <!-- Home V3 Hero typography proof (Lyra Workstream A, 2026-09-10):
+       Cinzel = identity/display, Alegreya = primary RPG UI serif,
+       Alegreya Sans = micro/technical text. Alegreya Sans has no 600
+       weight in the actual font family (300/400/500/700/800/900) —
+       requesting 700 instead of the handover's "500/600" for that one
+       face; flagged in the return report rather than silently
+       requesting a weight that doesn't exist. -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Alegreya:wght@500;600&family=Alegreya+Sans:wght@500;700&display=swap">
+  <!-- Leaflet (Astra Training/Running Architecture handover, 2026-09-16
+       §6 Routes: "an active, functional map... not a static illustrated
+       map"). OpenStreetMap tiles, no API key required. Pinned exact
+       version. -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <!-- MapLibre GL JS (World Tours 5.2, Aster's live-map handoff §5: "do
+       not hard-code World Tours to one map vendor" — OSM raster tiles
+       again, same no-API-key posture as Leaflet above). Pinned to the
+       4.7.1 line deliberately, not the current 6.x latest: MapLibre
+       dropped its UMD/global bundle in favour of ES-modules-only
+       starting with a later major, and this app's classic <script src>
+       + SRI-pinning pattern (matching Leaflet) needs a real UMD file to
+       hash — 4.7.1 is the newest release that still ships one. Verified
+       both the JS and CSS integrity hashes below against the actual
+       bytes served (not copied blind from a registry page). -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css" integrity="sha256-V2sIX92Uh6ZaGSFTKMHghsB85b9toJtmazgG09AI2uk=" crossorigin="">
+  <link rel="stylesheet" href="styles.css?v=b7980329">
+  <link rel="stylesheet" href="v0.02.4.3-player-box.css?v=32a9f32b">
+  <link rel="stylesheet" href="v0.02.4.4-player-box-cleanup.css?v=8d5f2f68">
+  <link rel="stylesheet" href="v0.02.4.5-player-box-layout.css?v=03b0137d">
+  <link rel="stylesheet" href="v0.02.4.6-player-frame-controls.css?v=2adbc0dd">
+  <link rel="stylesheet" href="v0.02.4.11-player-box-progression-fix.css?v=b8348672">
+  <link rel="stylesheet" href="v0.02.4.12-player-box-shared-frame.css?v=091d643c">
+  <link rel="stylesheet" href="v0.02.4.13-today-controls-extension.css?v=350ee48d">
+  <link rel="stylesheet" href="v0.02.4.14-home-frames-removed.css?v=7d624ac3">
+  <link rel="stylesheet" href="v0.02.4.7-weather-panel.css?v=c006d5cc">
+  <link rel="stylesheet" href="v0.02.4.8-today-panel.css?v=1f17c7b7">
+  <link rel="stylesheet" href="v0.02.4.9-resources-panel.css?v=ece0c6d3">
+  <link rel="stylesheet" href="v0.02.4.10-navigation.css?v=fc22aaab">
+  <link rel="stylesheet" href="v0.02.4.15-today-panels.css?v=5d69eecf">
+  <link rel="stylesheet" href="v0.02.4.17-flat-panel-background.css?v=2bbbe457">
+  <link rel="stylesheet" href="v0.02.4.18-player-panel-cleanup.css?v=392b1e4f">
+  <link rel="stylesheet" href="v0.02.4.19-weather-forecast-cleanup.css?v=0f327247">
+  <link rel="stylesheet" href="v0.02.4.20-secondary-panels-cleanup.css?v=79ead383">
+  <link rel="stylesheet" href="v0.02.4.21-resources-bar-redesign.css?v=775ba6c0">
+  <link rel="stylesheet" href="v0.02.5-home-baseline.css?v=21b7edea">
+  <link rel="stylesheet" href="v0.02.6-home-final-polish.css?v=62bdcecf">
+  <link rel="stylesheet" href="v0.02.7-adventure-campaign.css?v=5de5355a">
+  <link rel="stylesheet" href="v0.02.8-achievements-page.css?v=2422b727">
+  <link rel="stylesheet" href="v0.02.9-quests-hub.css?v=26c4b412">
+  <link rel="stylesheet" href="v0.02.10-training-journal.css?v=60d5c747">
+  <!-- Training v3 design system (CSS overhaul, 2026-09-17) — shared
+       Training tokens/shell/primitives layered on top of the existing
+       Training CSS above, migrated onto real screens one at a time per
+       the phased/gated migration plan. Load order matters: tokens
+       first, then shell, then primitives. -->
+  <link rel="stylesheet" href="styles/training-v3/00-training-tokens.css?v=8c98e7f6">
+  <!-- Category accent theme files (Visual System Overhaul, 2026-09-18)
+       -- must load after tokens so each .training-<id> override wins
+       the same-specificity tie against .training-v3's default gold. -->
+  <link rel="stylesheet" href="styles/training-v3/categories/running.css?v=17a951ac">
+  <link rel="stylesheet" href="styles/training-v3/categories/strength.css?v=9a3ad8a3">
+  <link rel="stylesheet" href="styles/training-v3/categories/cycling.css?v=9254d836">
+  <link rel="stylesheet" href="styles/training-v3/categories/climbing.css?v=d203fd01">
+  <link rel="stylesheet" href="styles/training-v3/categories/sports.css?v=7d2a4709">
+  <link rel="stylesheet" href="styles/training-v3/categories/rowing.css?v=e7b3fa0d">
+  <link rel="stylesheet" href="styles/training-v3/categories/skiing.css?v=19de51bb">
+  <link rel="stylesheet" href="styles/training-v3/categories/health-training.css?v=cae4b117">
+  <link rel="stylesheet" href="styles/training-v3/categories/yoga.css?v=8615901b">
+  <link rel="stylesheet" href="styles/training-v3/categories/swimming.css?v=fa091b71">
+  <link rel="stylesheet" href="styles/training-v3/categories/walking-hiking.css?v=b2c7cc67">
+  <link rel="stylesheet" href="styles/training-v3/categories/calisthenics.css?v=759c0b3c">
+  <link rel="stylesheet" href="styles/training-v3/01-training-shell.css?v=f046529a">
+  <link rel="stylesheet" href="styles/training-v3/02-training-cards.css?v=2265b6e4">
+  <link rel="stylesheet" href="styles/training-v3/04-training-gateways.css?v=eb1120fd">
+  <link rel="stylesheet" href="styles/training-v3/05-training-tabs.css?v=1bdb3510">
+  <link rel="stylesheet" href="styles/training-v3/06-training-metrics.css?v=d645f92b">
+  <link rel="stylesheet" href="styles/training-v3/07-training-rows.css?v=20c7fb0d">
+  <link rel="stylesheet" href="styles/training-v3/08-training-actions.css?v=bab912bf">
+  <link rel="stylesheet" href="styles/training-v3/09-training-week-calendar.css?v=bf78e9f8">
+  <link rel="stylesheet" href="styles/training-v3/10-training-glass-icons-buttons.css?v=bf985670">
+  <link rel="stylesheet" href="styles/training-v3/11-training-specialist-hero.css?v=d74957b5">
+  <link rel="stylesheet" href="styles/training-v3/12-training-legacy-retirement.css?v=ebf0e957">
+  <link rel="stylesheet" href="styles/training-v3/13-training-modals.css?v=05d37b48">
+  <link rel="stylesheet" href="styles/training-v3/14-library-scroll-rows.css?v=1fd10a29">
+  <link rel="stylesheet" href="styles/integrations.css?v=332e1527">
+  <link rel="stylesheet" href="styles/achievement-card/00-ach-tokens.css?v=abdc4aa6">
+  <link rel="stylesheet" href="styles/achievement-card/01-ach-card.css?v=2ce8911f">
+  <link rel="stylesheet" href="styles/achievement-card/02-ach-surfaces.css?v=e9b9c015">
+  <link rel="stylesheet" href="styles/achievement-card/03-ach-motion.css?v=d81da346">
+  <link rel="stylesheet" href="v0.02.11-journeys.css?v=087ba817">
+  <link rel="stylesheet" href="v0.02.45-illustrated-journey-map.css?v=7cbf31a8">
+  <link rel="stylesheet" href="v0.02.43-journey-catalogue.css?v=46b8f5d7">
+  <link rel="stylesheet" href="v0.02.12-home-modules.css?v=b92e77a8">
+  <!-- Home v4 (Jay's 2026-09-22 dark-glass redesign direction) — tokens
+       load first, right after the module shell stub and before every
+       existing Home CSS file, so v0.02.x files below can start
+       consuming --home-* variables as they're migrated one widget at a
+       time. Mirrors styles/training-v3/ and styles/quests-v4/'s own
+       00-*-tokens.css-loads-first convention. -->
+  <link rel="stylesheet" href="styles/home-v4/00-home-tokens.css?v=178ac57a">
+  <link rel="stylesheet" href="v0.02.13-home-v2-visuals.css?v=832ed910">
+  <link rel="stylesheet" href="v0.02.14-home-widget-shell.css?v=ef5f7273">
+  <link rel="stylesheet" href="v0.02.15-home-widget-player-status.css?v=ec0913d7">
+  <link rel="stylesheet" href="v0.02.16-home-parchment-modules.css?v=0464bb6e">
+  <link rel="stylesheet" href="v0.02.18-home-feature-module.css?v=c28c196b">
+  <link rel="stylesheet" href="v0.02.19-home-standard-module.css?v=118fd549">
+  <link rel="stylesheet" href="v0.02.20-home-parchment-material.css?v=e4ab74d0">
+  <link rel="stylesheet" href="v0.02.21-home-parchment-tokens.css?v=9a410963">
+  <link rel="stylesheet" href="v0.02.22-home-component-primitives.css?v=0c65851a">
+  <link rel="stylesheet" href="v0.02.24-home-classic-hud-character-stats.css?v=6852a68b">
+  <link rel="stylesheet" href="v0.02.25-home-classic-hud-phase-3-6.css?v=02039f70">
+  <link rel="stylesheet" href="v0.02.26-home-player-hud-rebuild.css?v=1f9c0ad9">
+  <link rel="stylesheet" href="styles/quests-v4/00-quest-tokens.css?v=e1b8b13b">
+  <link rel="stylesheet" href="styles/quests-v4/01-quest-glass.css?v=67818d39">
+  <link rel="stylesheet" href="styles/quests-v4/02-quest-layout.css?v=31f684f2">
+  <link rel="stylesheet" href="styles/quests-v4/03-quest-header.css?v=2a54dd40">
+  <link rel="stylesheet" href="styles/quests-v4/04-quest-gateways.css?v=f9be5970">
+  <link rel="stylesheet" href="styles/quests-v4/05-quest-icons.css?v=ba3276d1">
+  <link rel="stylesheet" href="styles/quests-v4/06-quest-buttons.css?v=224018f7">
+  <link rel="stylesheet" href="styles/quests-v4/07-quest-cards.css?v=4e6e0a43">
+  <link rel="stylesheet" href="styles/quests-v4/08-quest-rows.css?v=e56bf646">
+  <link rel="stylesheet" href="styles/quests-v4/09-quest-tabs.css?v=b7de41f8">
+  <link rel="stylesheet" href="styles/quests-v4/10-quest-progress.css?v=4719a410">
+  <link rel="stylesheet" href="styles/quests-v4/11-quest-forms.css?v=f72966c5">
+  <link rel="stylesheet" href="styles/quests-v4/12-quest-modals.css?v=48ecad8a">
+  <link rel="stylesheet" href="styles/quests-v4/13-quest-popovers.css?v=2e20c1f3">
+  <link rel="stylesheet" href="styles/quests-v4/14-quest-toasts.css?v=39369ee3">
+  <link rel="stylesheet" href="styles/quests-v4/15-quest-responsive.css?v=f97f226d">
+  <link rel="stylesheet" href="styles/quests-v4/16-quest-themes.css?v=3bcde247">
+  <link rel="stylesheet" href="styles/quests-v4/17-quest-quick.css?v=255a354b">
+  <link rel="stylesheet" href="styles/log-v1/00-log-shell.css?v=d3e85276">
+  <link rel="stylesheet" href="styles/log-v1/01-log-calendar.css?v=4ca4143b">
+  <link rel="stylesheet" href="styles/log-v1/02-log-modals.css?v=9f0b857d">
+  <link rel="stylesheet" href="styles/log-v1/03-log-items.css?v=ca954acb">
+  <link rel="stylesheet" href="styles/arrange/00-arrange.css?v=88f556e2">
+  <link rel="stylesheet" href="styles/home-quick-quest.css?v=a055ddf6">
+  <!-- Personal Growth design system (2026-09-21): scoped tokens, components, page composition. Load order matters. -->
+  <link rel="stylesheet" href="styles/personal-growth/00-pg-theme.css?v=3f6c7917">
+  <link rel="stylesheet" href="styles/personal-growth/01-pg-components.css?v=36fbbae5">
+  <link rel="stylesheet" href="styles/personal-growth/02-pg-pages.css?v=8862bac5">
+  <link rel="stylesheet" href="styles/personal-growth/03-pg-detail.css?v=250b9ee9">
+  <link rel="stylesheet" href="styles/weekly-recap/00-recap.css?v=bd2e8d69">
+  <link rel="stylesheet" href="styles/onboarding/00-onboarding.css?v=427cd077">
+  <link rel="stylesheet" href="styles/notifications/00-notifications.css?v=80245d89">
+  <link rel="stylesheet" href="styles/library/00-lib-theme.css?v=8f911646">
+  <link rel="stylesheet" href="styles/library/01-lib-components.css?v=77a8d702">
+  <link rel="stylesheet" href="styles/library/02-lib-detail.css?v=30705c18">
+  <link rel="stylesheet" href="styles/inventory-v1/00-inv-tokens.css?v=bb72db28">
+  <link rel="stylesheet" href="styles/inventory-v1/01-inv-components.css?v=2a093d9a">
+  <link rel="stylesheet" href="styles/economy/00-economy.css?v=e2b4c2b5">
+  <link rel="stylesheet" href="styles/home-compact/00-compact-trackers.css?v=ebe996d4">
+  <link rel="stylesheet" href="styles/self-care/00-self-care.css?v=983ef75a">
+</head>
+<body data-theme="home">
+<div id="startupScreen" class="startup-screen" role="status" aria-live="polite">
+  <div class="startup-shell">
+    <div class="startup-corners" aria-hidden="true"></div>
+    <img class="startup-logo" src="assets/Home_Logo.png" alt="RPG: Real Person Game">
+    <div id="startupPlayerName" class="startup-player">GREETINGS, PLAYER</div>
+    <div class="startup-init">INITIALISING PLAYER SYSTEM...</div>
+    <div class="startup-progress" aria-hidden="true"><i></i></div>
+    <div id="startupStatus" class="startup-status">RESTORING PLAYER DATA</div>
+    <div id="startupFinal" class="startup-final">SYSTEM BOOT</div>
+  </div>
+</div>
+<div id="appShell">
+  <main id="view"></main>
+  <nav class="global-radial-nav" aria-label="Main navigation"></nav>
+</div>
+<div id="modalRoot"></div>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="systemRewardHost" class="system-reward-host" aria-live="polite"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js" integrity="sha256-vpYzxNhw4m+zfxz+XFp3GBZnEUAD6hYgeseFDY2ordE=" crossorigin=""></script>
+<script src="app.js?v=e668e3c1"></script>
+<script src="v0.02.17-exercise-library.js?v=99bd1b56"></script>
+<script src="v0.02.4-integration.js?v=bfee163b"></script>
+<script src="v0.02.49-sleep-hidden-progress.js?v=63ecb995"></script>
+<script src="v0.02.4.1-frame-hotfix.js?v=730d3831"></script>
+<script src="v0.02.4.2-character.js?v=6f11d2b6"></script>
+<script src="v0.02.4.3-player-box.js?v=9c1ac0aa"></script>
+<script src="v0.02.4.4-player-box-cleanup.js?v=d76ba53e"></script>
+<script src="v0.02.4.5-player-box-layout.js?v=6e8ec233"></script>
+<script src="v0.02.4.6-player-frame-controls.js?v=8ddf4843"></script>
+<script src="v0.02.4.11-player-box-progression-fix.js?v=302e37c4"></script>
+<script src="v0.02.4.7-weather-panel.js?v=b42ec168"></script>
+<script src="v0.02.4.8-today-panel.js?v=1e71a258"></script>
+<script src="v0.02.4.9-resources-panel.js?v=dc54233d"></script>
+<script src="v0.02.4.10-navigation.js?v=816da747"></script>
+<script src="v0.02.4.13-today-controls-extension.js?v=3f1e3e5c"></script>
+<script src="v0.02.4.16-resources-header-fix.js?v=5388a60c"></script>
+<script src="v0.02.15-home-widget-player-status.js?v=f3253fff"></script>
+<script src="v0.02.27-health-connect-bridge.js?v=429403e1"></script>
+<script src="v0.02.29-training-gear.js?v=2dbc689a"></script>
+<script src="v0.02.30-training-import.js?v=cbeca351"></script>
+<script src="v0.02.31-strava-adapter.js?v=efe86032"></script>
+<script src="v0.02.32-integrations-ui.js?v=c20c9f6d"></script>
+<script src="v0.02.33-quick-quests.js?v=b4441404"></script>
+<script src="v0.02.34-personal-growth.js?v=6081728a"></script>
+<script src="v0.02.35-library.js?v=5c848db9"></script>
+<script src="v0.02.46-economy-config.js?v=8eb0a1f0"></script>
+<script src="v0.02.36-inventory.js?v=3127d040"></script>
+<script src="v0.02.37-inventory-ui.js?v=d6db8db2"></script>
+<script src="v0.02.47-economy-core.js?v=80e00cbd"></script>
+<script src="v0.02.48-economy-ui.js?v=082a37a5"></script>
+<script src="v0.02.50-self-care.js?v=0a052d34"></script>
+<script src="v0.02.51-self-care-ui.js?v=19e3478b"></script>
+<script src="v0.02.52-pg-habits-hobbies-detail.js?v=e2f9a31d"></script>
+<script src="v0.02.53-pg-reading-nook.js?v=e2da68c6"></script>
+<script src="v0.02.54-pg-records-feed.js?v=231f14e6"></script>
+<script src="v0.02.55-weekly-recap.js?v=3b496ad7"></script>
+<script src="v0.02.56-onboarding.js?v=3945c391"></script>
+<script src="v0.02.57-notifications.js?v=1b87c87d"></script>
+<script src="v0.02.58-dev-tools.js?v=ce1050ac"></script>
+<script src="v0.02.59-compact-home-trackers.js?v=eee04932"></script>
+<script src="v0.02.60-scroll-bars.js?v=b5b6af98"></script>
+<script src="v0.02.39-world-tours-map.js?v=156ac755"></script>
+<script src="v0.02.44-illustrated-journey-map.js?v=dd9f43b6"></script>
+<script src="v0.02.40-hadrians-wall-illustrated-map.js?v=dc7e96ab"></script>
+<script src="v0.02.61-rome-illustrated-map.js?v=5ac5ae0a"></script>
+<script src="v0.02.63-camino-illustrated-map.js?v=cd9f6cc5"></script>
+<script src="v0.02.65-page-arrange.js?v=71e8fa78"></script>
+<script src="v0.02.65-page-arrange-specs.js?v=46a429b5"></script>
+<script src="v0.02.66-quest-completions.js?v=75889182"></script>
+<script src="v0.02.67-adventurers-log.js?v=27d26752"></script>
+<script src="v0.02.68-log-page.js?v=708097ad"></script>
+<script src="v0.02.64-route-66-illustrated-map.js?v=8b5f4351"></script>
+<script src="v0.02.62-update-banner.js?v=aad9469f"></script>
+<script src="v0.02.42-journey-catalogue.js?v=a382da8c"></script>
+</body>
+</html>

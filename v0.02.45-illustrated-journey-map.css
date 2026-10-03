@@ -1,0 +1,70 @@
+/* RPG v0.02.45 — generic illustrated Journey map styling.
+   Supersedes v0.02.41-hadrians-wall-illustrated.css (that file's classes
+   were hw-*, hardcoded to one Tour; this file's are ill-*, shared by
+   every Tour registered into v0.02.44-illustrated-journey-map.js,
+   starting with Hadrian's Wall). Same dark-frame/gold-accent language as
+   v0.02.11-journeys.css; the map itself is full-colour illustrated art,
+   everything around it (controls, popups) stays in the app's existing
+   visual system. v0.02.41 is left on disk, unreferenced, rather than
+   deleted -- retire, don't delete, same convention as every other
+   superseded file in this codebase. */
+
+.ill-illustrated-wrap{display:flex;flex-direction:column;gap:8px}
+.ill-map-viewport{position:relative;height:320px;border-radius:8px;overflow:hidden;border:1px solid #334b5b;background:#0c1723;touch-action:none;cursor:grab}
+.ill-map-viewport:active{cursor:grabbing}
+.ill-map-svg{width:100%;height:100%;display:block}
+
+.ill-route-future{opacity:.4}
+.ill-route-completed{fill:none;stroke:#f0cf6a;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 3px #00000088)}
+
+.ill-major-marker{cursor:pointer}
+.ill-major-ring{fill:#0c1723cc;stroke:#5c6b75;stroke-width:2.5}
+.ill-major-dot{fill:#5c6b75}
+.ill-major-number{font-family:var(--font-ui,inherit);font-size:11px;font-weight:700;text-anchor:middle;fill:#0c1723}
+.ill-major-locked .ill-major-ring{opacity:.92;stroke:#a9b8c2}
+.ill-major-locked .ill-major-dot{opacity:.7;fill:#a9b8c2}
+.ill-major-locked .ill-major-number{opacity:.95}
+.ill-major-current .ill-major-ring{stroke:#e7c676;stroke-width:3}
+.ill-major-current .ill-major-dot{fill:#e7c676}
+.ill-major-pulse{fill:none;stroke:#e7c676;stroke-width:2;opacity:.6;animation:illPulse 1.8s ease-out infinite}
+@keyframes illPulse{0%{r:14;opacity:.7}100%{r:26;opacity:0}}
+@media(prefers-reduced-motion:reduce){
+  .ill-major-pulse{animation:none;r:20;opacity:.35}
+}
+.ill-major-completed .ill-major-ring{stroke:#c9992f}
+.ill-major-completed .ill-major-dot{fill:#e7c676}
+/* Fixture-preview state only (v0.02.44 illMapMajorState returns 'preview'
+   when a package has no tourId, i.e. no real save-backed progress to
+   read discovered/locked/current from) -- a neutral blue distinct from
+   the live locked/current/completed palette, so a fixture render never
+   reads as "this is what real gameplay looks like". */
+.ill-major-preview .ill-major-ring{stroke:#4bbcff}
+.ill-major-preview .ill-major-dot{fill:#4bbcff}
+
+.ill-minor-marker{cursor:pointer}
+.ill-minor-dot{fill:#8ec9e8;stroke:#0c1723;stroke-width:1.5;opacity:.9}
+
+.ill-player-marker{pointer-events:auto;cursor:pointer}
+.ill-player-pointer{fill:#4bbcff}
+.ill-player-ring{fill:#0c1723;stroke:#4bbcff;stroke-width:2}
+.ill-player-dot{fill:#4bbcff}
+
+.ill-map-controls{display:flex;gap:6px;flex-wrap:wrap}
+.ill-map-controls button{font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;border-radius:5px;border:1px solid #334b5b;background:#0c1723;color:#dce8ed;cursor:pointer}
+.ill-map-controls button:hover{border-color:#e7c676;color:#e7c676}
+.ill-map-controls button[data-ill-view-toggle]{margin-left:auto}
+
+.ill-popup{position:fixed;z-index:2200;width:240px;max-width:calc(100vw - 16px);background:#0c1723;border:1px solid #334b5b;border-radius:8px;padding:12px 14px;box-shadow:0 8px 24px #000c;font-family:var(--font-ui,inherit)}
+.ill-popup h3{margin:0 0 6px;font-size:14px;color:#e7c676;padding-right:20px}
+.ill-popup p{margin:4px 0;font-size:11px;color:#dce8ed;line-height:1.4}
+.ill-popup .resource-entry-label{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#8fa8b6;margin-top:8px}
+.ill-popup .journey-aster-note{margin-top:8px;font-size:11px}
+.ill-popup-close{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;border:1px solid #334b5b;background:transparent;color:#8fa8b6;cursor:pointer;line-height:1;font-size:13px}
+.ill-popup-close:hover{color:#e7c676;border-color:#e7c676}
+
+@media(max-width:400px){
+  .ill-map-viewport{height:280px}
+}
+@media(max-width:340px){
+  .ill-map-viewport{height:260px}
+}

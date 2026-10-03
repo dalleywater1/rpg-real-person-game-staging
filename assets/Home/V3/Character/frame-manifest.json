@@ -1,0 +1,146 @@
+[
+  {
+    "filename": "character-320-native-preview.png",
+    "width": 320,
+    "height": 211,
+    "sha256": "5b80c20f54de11ee65b25c36ac9fe69dee724a1928459af404b1fd4796301189"
+  },
+  {
+    "filename": "character-bottom-1x.png",
+    "width": 121,
+    "height": 9,
+    "sha256": "a6e1d0c7c4c7f0b4b434e8ca2998a8b27bf53f923ae8d4a6c318e3dcad85a88c"
+  },
+  {
+    "filename": "character-bottom-2x.png",
+    "width": 242,
+    "height": 18,
+    "sha256": "1c5bf32ca293013f1418952658cda044cf4f97373183e209ba4cfa9a870f489a"
+  },
+  {
+    "filename": "character-bottom-left-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "5db6e73010eafaadbc843c42021f23d6cc58dc71ed002055c991fc09387ea733"
+  },
+  {
+    "filename": "character-bottom-left-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "059d9de9b430897fd9f95be32b36c9d294672f3c071632c9d3380d32c3bad5c7"
+  },
+  {
+    "filename": "character-bottom-right-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "54f38788cafca1b8cd39c7b66d8b80611fc7de34ee8c547f9800cba982829c7a"
+  },
+  {
+    "filename": "character-bottom-right-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "34ee01049ca6dd2fa74b632bcbcca2f1773064ea5515310982cbe040f8a53b40"
+  },
+  {
+    "filename": "character-frame-320-1x.png",
+    "width": 280,
+    "height": 179,
+    "sha256": "ef1cfd38316e519e9d21ffea3ab8a372a5aa17853311ce546839bc2b8b723bab"
+  },
+  {
+    "filename": "character-frame-320-2x.png",
+    "width": 560,
+    "height": 358,
+    "sha256": "3b6126d47e66c7ab0bb0ebe6af4d509c33d776d1188119ed91d897659acf1eac"
+  },
+  {
+    "filename": "character-frame-375-1x.png",
+    "width": 335,
+    "height": 179,
+    "sha256": "915563e078bdb3e7fcbf6e31792a8656ce5e883e628fce98367525156dfbca6a"
+  },
+  {
+    "filename": "character-frame-375-2x.png",
+    "width": 670,
+    "height": 358,
+    "sha256": "84158a3eb3b3c961ecadc5afc060195fdd715008246b645f2f83984b15437cbd"
+  },
+  {
+    "filename": "character-frame-580-1x.png",
+    "width": 534,
+    "height": 114,
+    "sha256": "460491824e9b6de588e5f9fd9712645a811853d44e73ba78c2a8b84074f58cf9"
+  },
+  {
+    "filename": "character-frame-580-2x.png",
+    "width": 1068,
+    "height": 228,
+    "sha256": "436671b327bc292ed0c6b72c22b5201c55ba93f33cc60bf52527c4826143289d"
+  },
+  {
+    "filename": "character-frame-size-review.png",
+    "width": 1180,
+    "height": 760,
+    "sha256": "acb7e166ba6f579d1227b7498d3045070322cbc86468b7693eca5e7fcc802f8f"
+  },
+  {
+    "filename": "character-left-1x.png",
+    "width": 9,
+    "height": 92,
+    "sha256": "9f916c8dd77f960ae42a7dc3103d6d8adfd05a435b8df000aadaa849c9e8e6ef"
+  },
+  {
+    "filename": "character-left-2x.png",
+    "width": 18,
+    "height": 184,
+    "sha256": "308139464c979a0f3d54b4324b2cc01906680c34910a6a239c84cbb02cdbcf2f"
+  },
+  {
+    "filename": "character-right-1x.png",
+    "width": 9,
+    "height": 92,
+    "sha256": "95ed6d808024ae67c3205dcf29cdeeb993816cf9f2813e2b9b080f1afdb7fc37"
+  },
+  {
+    "filename": "character-right-2x.png",
+    "width": 18,
+    "height": 184,
+    "sha256": "caf729dc03e3431190913f234bce5ee95e7e3aa7888ed301e497bc162da5fd41"
+  },
+  {
+    "filename": "character-top-1x.png",
+    "width": 121,
+    "height": 9,
+    "sha256": "48a55ab6fa1663d9ea5e9179d7600cc667098658e15aa28448381739cb180002"
+  },
+  {
+    "filename": "character-top-2x.png",
+    "width": 242,
+    "height": 18,
+    "sha256": "6785b14ca6194ca491dceee9b8f0f7e1526de572e4fea1b4f8bba555149f7833"
+  },
+  {
+    "filename": "character-top-left-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "967aa9a13c15949245d59c0ae585ff4e3dff86be7e811b90bdfcfbe578ec6d2d"
+  },
+  {
+    "filename": "character-top-left-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "6043570ba00b025709ffac3672c29a681a339b1f476d899d5499f9156e352f1f"
+  },
+  {
+    "filename": "character-top-right-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "a35e2dc0e9a9163b302fe34114121d30b451083a4e8f96fca04324d7b35cfcdc"
+  },
+  {
+    "filename": "character-top-right-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "b03d914e67b34fcd9df570197aad0e6a33426062ceddd3a21d7e94c220cf1316"
+  }
+]

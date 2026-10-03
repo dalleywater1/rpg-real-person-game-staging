@@ -1,0 +1,60 @@
+/* RPG v0.02.4.18 — Player Panel cleanup (Lyra's Home Upgrade Handoff, Task 1 / 3.1).
+   Remove the decorative ring frame from the portrait and the baked Level
+   badge background; replace Level with a plain text pill. Help/Settings
+   already render as simple standalone icons with no button frame
+   (.v8-tool has border:0/background:transparent already) — nothing to
+   change there. All preserved data (name, class, level, XP, streak,
+   today, next reward, HP/Stamina/Damage/Defence/Focus) is untouched. */
+
+#view .v8-class-frame-art{display:none!important}
+#view .v8-class-art{
+  width:92%!important;
+  height:92%!important;
+  border-radius:12px!important;
+  border:1px solid #c9a86a!important;
+  filter:none!important;
+}
+
+/* Positioned in normal flow below the portrait (not absolutely overlapping
+   it) — the overlapping absolute-positioned version rendered with an
+   empty/blank fill in this environment despite correct computed styles,
+   so this sidesteps that stacking-context issue entirely rather than
+   chasing it further. */
+/* v0.02.4.4 draws a ::before "masking patch" behind the live LEVEL text to
+   cover the original badge artwork's baked-in sample text — invisible to
+   DOM inspection since it's a pseudo-element, and it was still rendering
+   (as a plain cream/marble box) on top of the text below once the badge
+   image was hidden and the text lost its position:relative stacking
+   context. Not needed at all now that the badge art is gone entirely. */
+#view .v8-level-badge::before{content:none!important}
+#view .v8-level-badge>img{display:none!important}
+#view .v8-class-stack{padding-bottom:6px!important}
+#view .v8-level-badge{
+  position:static!important;
+  left:auto!important;
+  bottom:auto!important;
+  transform:none!important;
+  margin:8px 0 0!important;
+  width:fit-content!important;
+  height:auto!important;
+  background:#0b1728!important;
+  border:1px solid #c9a86a!important;
+  border-radius:10px!important;
+  padding:4px 12px!important;
+  display:flex!important;
+  overflow:visible!important;
+}
+#view .v8-level-badge>span{
+  position:static!important;
+  display:flex!important;
+  align-items:baseline!important;
+  gap:5px!important;
+}
+#view .v8-level-badge small{color:#a9762f!important;text-shadow:none!important;letter-spacing:.08em!important;font-size:8px!important}
+#view .v8-level-badge b{color:#f3ecd9!important;text-shadow:none!important;font-size:17px!important}
+
+@media(max-width:420px){
+  #view .v8-level-badge{padding:3px 9px!important}
+  #view .v8-level-badge small{font-size:7px!important}
+  #view .v8-level-badge b{font-size:15px!important}
+}

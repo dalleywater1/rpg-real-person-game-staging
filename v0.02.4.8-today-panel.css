@@ -1,0 +1,67 @@
+/* RPG v0.02.4.8 — Home Today panel content redesign (Phase 2B).
+   Reversible by setting HOME_TODAY_V2_HOTFIX=false in the paired .js file.
+   Restyles the existing .home-command-panel rows in place (same elements/IDs,
+   repositioned by the .js layer) — no frame, gameplay, or data changes. */
+
+#view .home-command-panel.today-v2-active{display:flex;flex-direction:column;gap:0}
+
+/* Standard text header, replacing the image plaque — same treatment as
+   Weather's .weather-v2-title (v0.02.4.7). */
+#view .home-command-panel.today-v2-active > .today-label.home-v2-title{
+  display:none!important;
+}
+#view .today-v2-header-title{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:17px;
+  font-weight:700;
+  letter-spacing:.12em;
+  color:#a9762f;
+  text-transform:uppercase;
+  margin:0 0 14px;
+}
+
+/* Main Quest — highlighted card */
+#view .home-command-panel.today-v2-active [data-row="1"]{
+  cursor:pointer;
+  border:1.5px solid #c9a86a;
+  border-radius:10px;
+  background:linear-gradient(135deg,rgba(201,168,106,.16),rgba(201,168,106,.05));
+  padding:12px 14px!important;
+  margin:2px 0 4px;
+}
+#view .today-v2-progress{margin-top:8px;height:7px;border-radius:4px;background:#0b0e14;border:1px solid #3a2f18;overflow:hidden}
+#view .today-v2-progress>i{display:block;height:100%;background:linear-gradient(90deg,#e9c877,#a9762f)}
+#view .today-v2-xp-tag{font-size:10px;font-weight:700;color:#5b4a2a;white-space:nowrap;margin-left:8px}
+
+/* Side Quests — checkable rows */
+#view .today-v2-side-list{display:flex;flex-direction:column;gap:6px;margin-top:6px}
+#view .today-v2-side-row{display:flex;align-items:center;gap:9px;padding:6px 8px;border-radius:7px;background:rgba(0,0,0,.03)}
+#view .today-v2-side-row.done{background:rgba(63,161,92,.1)}
+#view .today-v2-side-check{width:19px;height:19px;flex:0 0 19px;border-radius:5px;border:2px solid #c9a86a;accent-color:#3fa15c;cursor:pointer}
+#view .today-v2-side-title{flex:1;min-width:0;font-size:12.5px;font-weight:600;color:#16233f;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#view .today-v2-side-row.done .today-v2-side-title{text-decoration:line-through;color:#7a6a45}
+#view .today-v2-side-xp{font-size:10.5px;font-weight:700;color:#5b4a2a;flex-shrink:0}
+#view .today-v2-side-empty{font-size:11.5px;color:#7a6a45;padding:4px 2px}
+
+/* Daily Challenge card, relocated from Development */
+#view .home-command-panel.today-v2-active .challenge-card{
+  margin:6px 0 0;
+  border:1.5px solid #c9a86a99;
+  border-radius:10px;
+  background:rgba(255,255,255,.35);
+}
+#view .home-command-panel.today-v2-active .challenge-card .development-head{border:0;padding:10px 12px 0}
+#view .home-command-panel.today-v2-active .challenge-content{padding:8px 12px 12px!important}
+
+/* Schedule — Today / Tomorrow columns */
+#view .today-v2-schedule-cols{display:flex;gap:20px;flex-wrap:wrap;margin-top:8px}
+#view .today-v2-schedule-col{flex:1 1 200px;min-width:0}
+#view .today-v2-schedule-col-label{font-size:9.5px;letter-spacing:.08em;font-weight:700;color:#a9762f;margin-bottom:6px;text-transform:uppercase}
+#view .today-v2-schedule-col.muted .today-v2-schedule-col-label{color:#9a8a6a}
+#view .today-v2-schedule-col.muted{opacity:.72}
+#view .today-v2-schedule-col .schedule-row{padding:4px 0}
+
+@media(max-width:580px){
+  #view .today-v2-schedule-cols{gap:12px}
+  #view .today-v2-schedule-col{flex:1 1 100%}
+}

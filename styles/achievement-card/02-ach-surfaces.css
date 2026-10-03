@@ -1,0 +1,62 @@
+/* Surfaces that consume the shared rarity/category variables: the grid
+   tiles, the detail wrapper and the unlock popup shell. The old
+   per-surface rarity border rules in v0.02.8-achievements-page.css are
+   superseded here (same variables as the card, so one change of a rarity
+   value moves every surface together). */
+
+/* ---------- detail wrapper: the card replaces the old .rpg-frame panel ---------- */
+.ach-detail-wrap { display: grid; gap: 14px; justify-items: center; margin-top: 4px; }
+.ach-detail-wrap .ach-view-series { margin-top: 0; }
+
+/* ---------- Latest achievement hero ---------- */
+.ach-featured-wrap { margin-bottom: 16px; }
+
+/* ---------- grid tiles ---------- */
+.ach-tile-unlocked {
+  border-color: color-mix(in srgb, var(--ach-r) 55%, #1c2735);
+  background:
+    radial-gradient(120% 80% at 50% 0%, color-mix(in srgb, var(--ach-r) 9%, transparent), transparent 70%),
+    #0a1420;
+  box-shadow: 0 0 10px var(--ach-r-glow);
+}
+.ach-tile-unlocked:hover,
+.ach-tile-unlocked:focus-visible { border-color: var(--ach-r); outline: none; }
+.ach-tile-unlocked .ach-tile-badge {
+  border-radius: 10px;
+  background: var(--ach-stage-bg);
+  overflow: hidden;
+}
+.ach-tile-unlocked .ach-tile-badge img { filter: none; }
+.ach-tile-unlocked .ach-tile-rarity {
+  padding: 3px 9px;
+  border: 1px solid color-mix(in srgb, var(--ach-r) 65%, transparent);
+  border-radius: 999px;
+  color: var(--ach-r-title);
+  background: var(--ach-r-plate-bg);
+  font-weight: 700;
+}
+.ach-tile-name { font-family: var(--font-micro, system-ui, sans-serif); font-size: 12px; }
+.ach-tile-rarity,
+.ach-tile-date { font-family: var(--font-micro, system-ui, sans-serif); }
+.ach-tile-date { font-size: 10px; }
+
+/* ---------- unlock popup shell ---------- */
+.achievement-popup {
+  width: min(92vw, 420px);
+  min-height: 0;
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  display: block;
+}
+.achievement-popup .ach-card { margin-inline: auto; }
+.achievement-popup-close {
+  z-index: 5;
+  top: 6px;
+  right: 6px;
+  background: rgba(8, 20, 38, 0.92);
+  border-color: color-mix(in srgb, var(--ach-r) 70%, transparent);
+}

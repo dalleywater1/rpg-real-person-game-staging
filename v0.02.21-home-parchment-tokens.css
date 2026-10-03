@@ -1,0 +1,121 @@
+/* RPG v0.02.21 — Home V3 Parchment Colour & Effects Tokens (2026-09-11).
+
+   Aurelia's "Home V3 Parchment Colour & Effects Implementation Handover":
+   a shared token/material system so one change updates every matching
+   widget, instead of the same hex values being hand-copied into each
+   widget's own CSS file (which is what v0.02.16/18/19/20 did up to this
+   point — they all independently wrote #f4f0e7/#ecdfc0/#16233f etc.).
+   This file is the single source of truth for those values; the other
+   files are being migrated to consume var(--token) instead of literals
+   as each widget is touched, per the handover's own "central CSS
+   variables... one change updates all matching widgets" instruction.
+
+   Declared on #view (not :root) so it only ever affects the Home/app
+   view tree, consistent with how every other rule in this project is
+   already scoped. Custom properties inherit normally regardless of
+   which stylesheet declares them relative to which consumes them, so
+   this file's own position in the <link> order doesn't matter. */
+#view{
+  /* ==========================================================
+     v2 palette (Jay/Aurelia "Home V3 Parchment Material +
+     Component Normalization" full-replacement handover, 2026-09-12)
+     — replaces the v1 pale cream/stone tone below. Aurelia's own
+     diagnosis of v1: "too pale/white... reads as modern cream UI
+     cards", not aged vellum. Token NAMES are kept stable (every
+     consumer across v0.02.16/18/19/20/22 already reads var(--token)
+     rather than a literal, so changing values here propagates
+     everywhere without touching per-widget files) — only the
+     VALUES and a few new supplementary tokens change. Adjust
+     values here, never re-introduce a per-widget literal colour. */
+
+  /* A. Main interior parchment — v6 (Jay, 2026-09-12): v5 was still
+     "tan parchment with beige tiles", not "light parchment with aged
+     edges" — main and inset were too far apart in the wrong direction
+     (inset darker than main) and the whole sheet read grey-beige
+     rather than warm cream. This pass moves main lighter/warmer and
+     pulls inset up to nearly the SAME tone as main (wells should not
+     be a visibly darker material, just a shallow impression in the
+     same sheet). */
+  --parchment-main: #eedcb4;
+  --parchment-light: #f7e9c7;
+  --parchment-highlight: #f8edcf;
+  /* B. Recessed well/inset parchment — v6: pulled up to almost the
+     SAME tone as --parchment-main (was a real step down); depth now
+     comes entirely from the centre-lift radial + shadow, never from
+     the base colour itself. */
+  --parchment-inset: #f0deb7;
+  /* Deep — darker still, reserved for any future gradient shading
+     within a surface; not used by the current well recipe. */
+  --parchment-deep: #c7a86c;
+  /* Edge — kept for any remaining consumer that still wants a plain
+     edge-colour token; the actual perimeter ageing comes from
+     PARCHMENT_EDGE_OVERLAY_512.png, not this value. */
+  --parchment-edge: #b98642;
+  --parchment-edge-dark: #8d612e;
+  /* Dedicated overlay assets (v4) — grain tiles or the same recessed
+     surfaces already tile PARCHMENT_TEXTURE_512.png; edge is applied
+     once per panel via background-size:100% 100% (a practical stand-in
+     for true 9-slice, which CSS background-image doesn't support —
+     border-image does, but these panels' geometry isn't 9-slice-ready
+     right now). */
+  --parchment-grain-overlay: url("assets/Home/V3/Material/PARCHMENT_GRAIN_OVERLAY_512.png?v=1");
+  /* Cache-bust query bumped each time the PNG itself is regenerated in
+     place (v7, 2026-09-12) — this url() has no other versioning, and
+     browsers cache image requests by exact URL same as any other
+     asset in this project. */
+  --parchment-edge-overlay: url("assets/Home/V3/Material/PARCHMENT_EDGE_OVERLAY_512.png?v=3");
+
+  /* C. Ink hierarchy — three real tiers, dark warm brown/black, never
+     pure black or grey. primary = values/main titles, secondary =
+     labels/supporting titles, tertiary = metadata/sublabels/helper
+     text. */
+  --ink-primary: #211a12;
+  --ink-secondary: #5a452c;
+  --ink-tertiary: #725b3d;
+
+  /* D. Gold accent — restrained, for headings/emphasis/integrated
+     actions, never a full-surface fill. Bright variant for hover/
+     focus glow; dark variant for pressed states / deep accents. */
+  --gold-accent: #a46f25;
+  --gold-accent-bright: #cf9a45;
+  --gold-accent-dark: #704716;
+
+  /* E. Navy — reserved for Feature-weight headers (Main Quest,
+     Character Stats) and any HUD-adjacent surface; not used by
+     Standard/Compact panes. */
+  --home-navy: #061a2c;
+  --home-navy-soft: #0a263d;
+
+  /* F. Semantic stat colours (HOME_V3_PARCHMENT_CANONICAL) — colour
+     belongs to the stat's MEANING, never the parchment. Two-stop
+     values (base + a lighter top) so each bar gets its own subtle
+     top-to-bottom sheen, per the approved reference. */
+  --stat-hp: #d73b3f;
+  --stat-hp-light: #ef5a60;
+  --stat-stamina: #2aa9e8;
+  --stat-stamina-light: #54c8f4;
+  --stat-focus: #8b42d7;
+  --stat-focus-light: #ae64ed;
+
+  /* Separator tone — warm gold-tan, low contrast. */
+  --separator-tone: rgba(169,120,50,.4);
+
+  /* Shared texture tile — one canonical url() every recessed/main
+     surface references, instead of the same path string repeated
+     per file. */
+  --parchment-texture: url("assets/Home/V3/Material/PARCHMENT_TEXTURE_512.png");
+}
+
+/* Shared hover/focus glow for text-only "integrated parchment actions"
+   (View Character, Main Quest's primary/secondary actions, and any
+   future internal CTA) — soft light emphasis on the text itself, never
+   a surface change, per the handover's explicit button rule. Apply
+   this class alongside a color that already uses --gold-accent (or
+   add it directly where noted in each widget's own file). */
+#view .parchment-hover-glow{ transition: color .15s ease, text-shadow .15s ease; }
+#view .parchment-hover-glow:hover,
+#view .parchment-hover-glow:focus-visible{
+  color: var(--gold-accent-bright);
+  text-shadow: 0 0 6px rgba(169,118,47,.35);
+  outline: none;
+}

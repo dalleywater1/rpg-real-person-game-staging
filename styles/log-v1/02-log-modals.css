@@ -1,0 +1,244 @@
+/* Adventurer's Log - popups opened from the Log.
+
+   modal() in app.js copies .quests-v4 .quest-log .log-v1-modal onto the
+   .modal-backdrop when the Log is on screen (the same pattern Training v3
+   uses with .training-v3). The dialogs the Log launches - Add Activity /
+   Reschedule, and Edit / Move on a linked Training session - are shared
+   forms owned by Training, built from the legacy .modal / .form-row /
+   .rpg-btn markup. This file re-skins that markup in the Quests popup
+   look (styles/quests-v4/12-quest-modals.css) without touching the
+   markup, the ids or the handlers. Popups opened from any other page are
+   untouched; the Quick Add and confirmations already use questsModal().
+
+   Every selector starts with .log-v1-modal, so it out-ranks the legacy
+   rules by one class and needs no !important. Two honest notes: (1) the
+   popup glass uses the same rgba() literals as 12-quest-modals.css (copied
+   so the two skins stay identical; everything else is a token), and (2) the
+   button rules tie the legacy .rpg-btn.small / .text-btn.danger on
+   specificity and win by loading later (index.html order), so the few
+   variants the Log's popups can show are restated below. */
+
+.modal-backdrop.log-v1-modal {
+  background: rgba(1, 8, 14, 0.68);
+  -webkit-backdrop-filter: blur(3px);
+  backdrop-filter: blur(3px);
+}
+
+.log-v1-modal .modal {
+  width: min(100%, 520px);
+  padding: 16px;
+  color: var(--q-text);
+  font-family: var(--q-font-body);
+  background: linear-gradient(180deg, rgba(15, 36, 50, 0.94), rgba(6, 18, 29, 0.96));
+  border: 1px solid color-mix(in srgb, var(--q-accent) 32%, rgba(180, 205, 220, 0.25));
+  border-radius: 14px;
+  box-shadow:
+    inset 0 2px 0 var(--q-accent-line),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 16px 50px rgba(0, 0, 0, 0.48),
+    0 0 18px color-mix(in srgb, var(--q-accent) 12%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+}
+.log-v1-modal .modal h2 {
+  margin: 0 40px 12px 0;
+  font: 700 15px/1.25 var(--q-font-display);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--q-heading);
+  overflow-wrap: anywhere;
+}
+.log-v1-modal .modal p { margin: 0 0 8px; color: var(--q-text-secondary); font: 500 13px/1.45 var(--q-font-body); }
+.log-v1-modal .modal .helper { color: var(--q-text-muted); font-size: 12px; }
+
+/* circular close button, same as .q-icon-btn */
+.log-v1-modal .modal .close {
+  top: 12px;
+  right: 12px;
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid var(--q-edge);
+  background: rgba(8, 25, 37, 0.88);
+  color: var(--q-text-secondary);
+  font: 500 20px/1 var(--q-font-body);
+  cursor: pointer;
+}
+.log-v1-modal .modal .close:hover,
+.log-v1-modal .modal .close:focus-visible { border-color: var(--q-accent); color: var(--q-text); box-shadow: 0 0 10px var(--q-accent-soft); }
+.log-v1-modal .modal .close:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+
+/* Add / Reschedule: the segmented control becomes the pill tabs */
+.log-v1-modal .tabs {
+  display: flex;
+  gap: 4px;
+  margin: 0 0 12px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--q-glass-soft);
+  border: 1px solid var(--q-edge);
+}
+.log-v1-modal .tabs button {
+  flex: 1 1 0;
+  min-height: 34px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--q-text-muted);
+  font: 700 10.5px/1 var(--q-font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.log-v1-modal .tabs button:hover,
+.log-v1-modal .tabs button:focus-visible { color: var(--q-text); }
+.log-v1-modal .tabs button:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.log-v1-modal .tabs button.active {
+  color: var(--q-accent);
+  border-color: var(--q-accent-line);
+  background: var(--q-accent-wash);
+  box-shadow: 0 0 8px var(--q-accent-soft);
+}
+
+/* fields */
+.log-v1-modal .form-row { gap: 6px; margin: 0 0 10px; min-width: 0; }
+.log-v1-modal .form-row label {
+  font: 700 11.5px/1.2 var(--q-font-body);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--q-text-secondary);
+}
+.log-v1-modal .form-row input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+.log-v1-modal .form-row select,
+.log-v1-modal .form-row textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--q-border);
+  background: rgba(7, 20, 31, 0.62);
+  color: var(--q-text);
+  font: 500 16px/1.3 var(--q-font-body);
+  appearance: none;
+  -webkit-appearance: none;
+}
+.log-v1-modal .form-row textarea { min-height: 72px; line-height: 1.45; resize: vertical; }
+.log-v1-modal .form-row input::placeholder,
+.log-v1-modal .form-row textarea::placeholder { color: var(--q-text-muted); }
+.log-v1-modal .form-row input:focus,
+.log-v1-modal .form-row select:focus,
+.log-v1-modal .form-row textarea:focus {
+  outline: 2px solid var(--q-accent);
+  outline-offset: 1px;
+  border-color: var(--q-accent);
+  box-shadow: 0 0 0 3px var(--q-accent-soft);
+}
+.log-v1-modal .form-row select {
+  padding-right: 38px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--q-text-secondary) 50%),
+    linear-gradient(135deg, var(--q-text-secondary) 50%, transparent 50%);
+  background-position: calc(100% - 20px) 50%, calc(100% - 14px) 50%;
+  background-size: 6px 6px, 6px 6px;
+  background-repeat: no-repeat;
+}
+.log-v1-modal .form-row select option { background: #0b131b; color: var(--q-text); }
+.log-v1-modal input[type="date"],
+.log-v1-modal input[type="time"] { color-scheme: dark; }
+.log-v1-modal input[type="checkbox"],
+.log-v1-modal input[type="radio"] { accent-color: var(--q-accent); }
+
+.log-v1-modal .two-col { gap: 12px; }
+/* a date field is about 150px wide on its own, so the floor is wider than it: one column on a 320px phone, two from 390px */
+.log-v1-modal .three-col { grid-template-columns: repeat(auto-fit, minmax(156px, 1fr)); gap: 12px; }
+
+/* buttons: .rpg-btn is the secondary pill, .rpg-btn.accent the primary */
+.log-v1-modal .rpg-btn {
+  min-height: 40px;
+  padding: 9px 20px;
+  border-radius: var(--q-radius-lg);
+  border: 1px solid var(--q-border);
+  background: var(--q-glass-main);
+  color: var(--q-text-secondary);
+  font: 700 11.5px/1.1 var(--q-font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-shadow: none;
+  box-shadow: none;
+}
+.log-v1-modal .rpg-btn:hover,
+.log-v1-modal .rpg-btn:focus-visible { border-color: var(--q-accent-line); color: var(--q-text); }
+.log-v1-modal .rpg-btn:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.log-v1-modal .rpg-btn.accent {
+  color: var(--q-text);
+  border-color: var(--q-accent-line);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--q-accent) 13%, var(--q-glass-main)), var(--q-glass-main));
+  box-shadow: 0 0 10px var(--q-accent-soft);
+}
+.log-v1-modal .rpg-btn.accent:hover,
+.log-v1-modal .rpg-btn.accent:focus-visible { background: linear-gradient(180deg, color-mix(in srgb, var(--q-accent) 20%, var(--q-glass-hover)), var(--q-glass-hover)); }
+.log-v1-modal .text-btn {
+  min-height: 30px;
+  padding: 6px 14px;
+  border-radius: var(--q-radius-lg);
+  border: 1px solid var(--q-border);
+  background: var(--q-glass-main);
+  color: var(--q-text-secondary);
+  font: 700 10.5px/1.1 var(--q-font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.log-v1-modal .text-btn:hover,
+.log-v1-modal .text-btn:focus-visible { border-color: var(--q-accent-line); color: var(--q-text); }
+.log-v1-modal .text-btn:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.log-v1-modal .rpg-btn.small { min-height: 30px; padding: 6px 14px; font-size: 10.5px; }
+.log-v1-modal .text-btn.danger { color: var(--q-danger); border-color: color-mix(in srgb, var(--q-danger) 40%, var(--q-border)); background: transparent; }
+.log-v1-modal .text-btn.danger:hover,
+.log-v1-modal .text-btn.danger:focus-visible { border-color: var(--q-danger); color: var(--q-danger); }
+
+/* Reschedule list and the empty state */
+.log-v1-modal .list-item {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 8px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--q-glass-soft);
+  border: 1px solid var(--q-edge);
+}
+.log-v1-modal .list-item > div { min-width: 0; }
+.log-v1-modal .modal p,
+.log-v1-modal .list-item h3 { overflow-wrap: anywhere; }
+.log-v1-modal .list-item h3 { margin: 0; font: 700 13.5px/1.25 var(--q-font-body); letter-spacing: 0; text-transform: none; color: var(--q-text); }
+.log-v1-modal .list-item p { margin: 1px 0 0; font: 500 11px/1.3 var(--q-font-body); color: var(--q-text-muted); }
+.log-v1-modal .empty {
+  padding: 16px 14px;
+  text-align: center;
+  border-radius: 12px;
+  border: 1px dashed var(--q-edge);
+  background: var(--q-glass-soft);
+  color: var(--q-text-secondary);
+  font: 500 12.5px/1.4 var(--q-font-body);
+}
+
+.log-v1-modal .modal { scrollbar-width: thin; scrollbar-color: rgba(155, 190, 210, 0.35) transparent; }
+
+/* forced-colors (Windows high contrast): keep a real focus indicator on the fields */
+@media (forced-colors: active) {
+  .log-v1-modal .form-row input:focus,
+  .log-v1-modal .form-row select:focus,
+  .log-v1-modal .form-row textarea:focus { outline-color: Highlight; border-color: Highlight; }
+}
+
+@media (max-width: 420px) {
+  .log-v1-modal .modal { padding: 14px 14px 16px; border-radius: 12px; }
+  .log-v1-modal .two-col { grid-template-columns: 1fr; gap: 0; }
+}

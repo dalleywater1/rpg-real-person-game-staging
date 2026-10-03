@@ -1,0 +1,288 @@
+/* RPG v0.02.5 — Home Baseline Correction & Normalisation Pass.
+   This is the single shared-systems stylesheet for the correction pass:
+   one place for the icon-size standard, the header-typography standard,
+   the popup standard and the resource-bar-text standard, applied across
+   Home rather than tuned per-panel again (item 24). Loaded after every
+   other CSS file, so its high-specificity `#view`/`body[data-theme=home]`
+   selectors reliably win regardless of load order, matching this
+   project's established override convention. */
+
+/* ============================================================
+   1. HOME-WIDE ICON STANDARD
+   Reference size = the existing Main Quest icon (.command-icon-button
+   img, 62px, untouched). Every other normal content icon (Priorities,
+   Calendar, Side Quests, Daily Challenge, Daily Word, Daily Wisdom,
+   Daily Puzzle) is normalised to match it. Utility controls (Help,
+   Settings, Tracker, gear/arrow controls) are explicitly excluded and
+   keep their own smaller sizing.
+   ============================================================ */
+#view .home-panel-icon,
+#view .development-icon-action-static,
+#view .development-icon-action,
+#view .development-icon-action img,
+#view .challenge-category-icon{
+  width:62px!important;
+  height:62px!important;
+  object-fit:contain;
+}
+#view .development-icon-action{padding:0;display:grid;place-items:center}
+
+@media(max-width:580px){
+  #view .home-panel-icon,
+  #view .development-icon-action-static,
+  #view .development-icon-action,
+  #view .development-icon-action img,
+  #view .challenge-category-icon{width:54px!important;height:54px!important}
+}
+@media(max-width:390px){
+  #view .home-panel-icon,
+  #view .development-icon-action-static,
+  #view .development-icon-action,
+  #view .development-icon-action img,
+  #view .challenge-category-icon{width:48px!important;height:48px!important}
+}
+@media(max-width:330px){
+  #view .home-panel-icon,
+  #view .development-icon-action-static,
+  #view .development-icon-action,
+  #view .development-icon-action img,
+  #view .challenge-category-icon{width:42px!important;height:42px!important}
+}
+
+/* ============================================================
+   2. HOME-WIDE HEADER TYPOGRAPHY STANDARD
+   One shared primary-title treatment for Main Quest / Priorities /
+   Calendar / Side Quests / Daily Challenge / Daily Word / Daily Wisdom /
+   Daily Puzzle / Resources. One shared secondary-label treatment for
+   category/status/subtitle text underneath those titles.
+   ============================================================ */
+#view .home-panel-header>span,
+#view .quest-kicker,
+#view .challenge-title-block span,
+#view .development-head>span,
+#view .development-head>div>span,
+#view .home-section-title{
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-size:15px!important;
+  font-weight:700!important;
+  letter-spacing:.1em!important;
+  color:#a9762f!important;
+  text-transform:uppercase!important;
+  line-height:1.25!important;
+}
+#view .home-panel-header{gap:12px}
+#view .challenge-title-block,
+#view .development-head{gap:12px}
+
+/* Secondary labels (category/status text, TODAY/TOMORROW schedule
+   labels) share one smaller, muted, high-contrast-on-cream treatment. */
+#view .challenge-title-block small,
+#view .development-head small,
+#view .development-head>div>small,
+#view .today-v2-schedule-col-label{
+  font-family:inherit!important;
+  font-size:10px!important;
+  letter-spacing:.06em!important;
+  color:#7a6a45!important;
+  text-transform:uppercase!important;
+  font-weight:600!important;
+}
+
+/* ============================================================
+   3. TODAY — PARENT CONTAINER
+   .home-today-outer is the shared cream surface that now contains the
+   "Today" header AND Main Quest/Priorities/Calendar together (see
+   todayGroupPanelHTML in app.js) so the header no longer floats over the
+   dark page background disconnected from its own content.
+   ============================================================ */
+#view .home-today-outer .home-section-header-v2{margin:0 0 12px}
+#view .home-today-outer:has(.home-panel-inner-divider){padding-bottom:16px}
+
+/* ============================================================
+   4. WEATHER — READABILITY PASS
+   Main panel's secondary metrics + forecast popup, both previously
+   styled for a dark background that no longer exists after Phase 0
+   flattened the panels to cream. Functionality/data untouched.
+   ============================================================ */
+#view .weather-approved-v4 .weather-condition{color:#1f5a86!important}
+#view .weather-approved-v4 .weather-secondary-row{
+  color:#33475d!important;
+  font-size:12px!important;
+  font-weight:600!important;
+  gap:6px 16px!important;
+}
+#view .weather-approved-v4 .weather-footer{border-top-color:#c9a86a60!important}
+#view .weather-approved-v4 .weather-attribution{color:#7a6a45!important}
+#view .weather-approved-v4 .running-bottom{color:#5b4a2a!important;font-size:9px!important}
+#view .weather-approved-v4 .running-bottom>b{font-size:11px!important}
+
+/* 5-Day Forecast popup: drop the ornate dark frame in favour of the
+   clean light Home surface, and substantially strengthen text contrast
+   throughout (title, current conditions, Today periods, Next Days). */
+.weather-forecast-modal{
+  background:#f8f4e8!important;
+  border:1px solid #c9a86a!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.4)!important;
+}
+.weather-forecast-modal .close{background:#efe6cc!important;border-color:#c9a86a!important;color:#7a5a1a!important}
+.weather-forecast-modal .forecast-heading span{color:#a9762f!important;font-size:11px!important;letter-spacing:.12em!important}
+.weather-forecast-modal .forecast-heading h2{color:#16233f!important;font-size:20px!important}
+.weather-forecast-modal .forecast-current{background:rgba(255,255,255,.55)!important;border:1px solid #c9a86a60!important}
+.weather-forecast-modal .forecast-current-main b{color:#16233f!important;font-size:30px!important}
+.weather-forecast-modal .forecast-current-main strong{color:#1f5a86!important;font-size:14px!important}
+.weather-forecast-modal .forecast-current-main small{color:#5b4a2a!important}
+.weather-forecast-modal .forecast-current-details{border-left-color:#c9a86a60!important}
+.weather-forecast-modal .forecast-current-details span{color:#5b4a2a!important;font-size:10px!important}
+.weather-forecast-modal .forecast-current-details b{color:#16233f!important;font-size:13px!important}
+.weather-forecast-modal .forecast-section-title span{color:#a9762f!important;font-size:11px!important;letter-spacing:.1em!important}
+.weather-forecast-modal .forecast-section-title small{color:#7a6a45!important}
+.weather-forecast-modal .forecast-period{background:rgba(255,255,255,.55)!important;border:1px solid #c9a86a60!important}
+.weather-forecast-modal .forecast-period-name{color:#7a6a45!important;font-size:9px!important}
+.weather-forecast-modal .forecast-period b{color:#16233f!important;font-size:16px!important}
+.weather-forecast-modal .forecast-period small{color:#5b4a2a!important;font-size:10px!important}
+
+/* Next Days — noticeably larger/clearer day info, temps, rain, running
+   conditions, with more breathing room per row (item 4). */
+.weather-forecast-modal .forecast-day-row{
+  background:rgba(255,255,255,.55)!important;
+  border:1px solid #c9a86a60!important;
+  padding:10px 12px!important;
+  gap:12px!important;
+  grid-template-columns:56px 46px minmax(70px,1fr) minmax(78px,.9fr) minmax(84px,.9fr)!important;
+}
+.weather-forecast-modal .forecast-day-row>strong{color:#a9762f!important;font-size:12px!important}
+.weather-forecast-modal .forecast-day-row>img{width:44px!important;height:44px!important}
+.weather-forecast-modal .forecast-day-row>span:not(.forecast-run-state){color:#16233f!important;font-size:12px!important;font-weight:600!important}
+.weather-forecast-modal .forecast-run-state{font-size:10px!important;padding:3px 7px!important;border-radius:5px!important;background:rgba(0,0,0,.06)!important}
+.weather-forecast-modal .forecast-source{color:#7a6a45!important}
+
+@media(max-width:390px){
+  .weather-forecast-modal{padding:14px!important}
+  .weather-forecast-modal .forecast-day-list{gap:6px!important}
+  .weather-forecast-modal .forecast-day-row{
+    grid-template-columns:34px 30px minmax(0,1fr) minmax(0,44px) minmax(0,52px)!important;
+    gap:6px!important;padding:7px 8px!important;
+  }
+  .weather-forecast-modal .forecast-day-row>img{width:28px!important;height:28px!important}
+  .weather-forecast-modal .forecast-day-row>strong{font-size:10.5px!important}
+  .weather-forecast-modal .forecast-day-row>span:not(.forecast-run-state){font-size:9.5px!important;white-space:normal!important}
+  .weather-forecast-modal .forecast-run-state{font-size:8px!important;padding:2px 4px!important;white-space:normal!important;text-align:center}
+  .weather-forecast-modal .forecast-period-grid{gap:5px!important}
+  .weather-forecast-modal .forecast-period img{width:34px!important;height:34px!important}
+  .weather-forecast-modal .forecast-period b{font-size:14px!important}
+  .weather-forecast-modal .forecast-current-details{grid-template-columns:1fr!important;gap:8px!important}
+  .weather-forecast-modal .forecast-current-details span{display:flex!important;justify-content:space-between!important;align-items:baseline!important}
+}
+
+/* ============================================================
+   5. GLOBAL HOME POPUP STANDARD
+   Every popup opened while Home is the active page (body[data-theme
+   ="home"] — modalRoot sits outside #view so this is the scoping hook
+   available) drops the dark ornate shell for the same clean light
+   surface used everywhere else in this pass. Scoped to Home specifically
+   so other pages' modals are unaffected.
+   ============================================================ */
+body[data-theme="home"] .modal{
+  background:#f8f4e8!important;
+  border:1px solid #c9a86a!important;
+  color:#16233f!important;
+  box-shadow:0 18px 50px rgba(0,0,0,.4)!important;
+}
+body[data-theme="home"] .modal h2{color:#8a5f1a!important;font-family:Georgia,"Times New Roman",serif!important}
+body[data-theme="home"] .modal .close{background:#efe6cc!important;border-color:#c9a86a!important;color:#7a5a1a!important}
+body[data-theme="home"] .modal .helper{color:#5b4a2a!important}
+body[data-theme="home"] .modal label,
+body[data-theme="home"] .modal .form-row label{color:#5b4a2a!important}
+body[data-theme="home"] .modal small{color:#5b4a2a!important}
+body[data-theme="home"] .modal input,
+body[data-theme="home"] .modal textarea,
+body[data-theme="home"] .modal select{
+  background:#fff!important;border-color:#c9a86a!important;color:#16233f!important;
+}
+body[data-theme="home"] .modal .modal-section{border-top-color:#c9a86a60!important}
+body[data-theme="home"] .modal .modal-section h3{color:#8a5f1a!important}
+body[data-theme="home"] .modal .tabs{border-color:#c9a86a!important}
+body[data-theme="home"] .modal .tabs button{background:#efe6cc!important;color:#7a6a45!important}
+body[data-theme="home"] .modal .tabs button.active{background:#e0d2ac!important;color:#16233f!important}
+body[data-theme="home"] .modal .resource-entry-current b{color:#16233f!important}
+body[data-theme="home"] .modal .resource-entry-label{color:#a9762f!important}
+/* Status/semantic colours (success, error, streak badges, forecast run
+   states, system reward stat colours, etc.) are deliberately left alone —
+   only the neutral shell/body text is normalised here. */
+
+/* ---- Sleep reason/quality controls (item 6) ---- */
+.sleep-quality-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:6px 0 12px}
+.sleep-quality-btn{border:1.5px solid #c9a86a;background:#fff;color:#5b4a2a;border-radius:6px;padding:8px 4px;font-size:11px;font-weight:700;cursor:pointer}
+.sleep-quality-btn.active.positive{background:#dff3e0;border-color:#3fa15c;color:#256b3a}
+.sleep-quality-btn.active.neutral{background:#faf0d0;border-color:#c9a86a;color:#8a5f1a}
+.sleep-quality-btn.active.negative{background:#fbe1de;border-color:#c0392b;color:#8a2c22}
+.sleep-reason-list{display:flex;flex-direction:column;gap:2px;margin-bottom:8px}
+.sleep-reason-row,.sleep-medication-row{display:flex;align-items:center;gap:9px;padding:7px 2px;font-size:13px;color:#16233f;cursor:pointer}
+.sleep-reason-row input,.sleep-medication-row input{width:19px;height:19px;accent-color:#3fa15c;cursor:pointer}
+.sleep-reason-other-row{margin:2px 0 10px}
+.sleep-reason-other-row[hidden]{display:none!important}
+.sleep-medication-row{border-top:1px solid #c9a86a40;margin-top:4px;padding-top:10px}
+
+/* ============================================================
+   7. RESOURCES HEADER — reset countdown under the title
+   ============================================================ */
+#view .home-section-title-group{grid-column:2;display:flex;flex-direction:column;align-items:center;gap:2px}
+#view .home-section-title-group .home-section-title{grid-column:auto}
+#view .home-section-title-group .resources-v2-reset{font-size:9px;color:#7a6a45}
+
+/* At narrow widths the Tracker+History icon pair (44px each) could need
+   more room than their fair 1fr share, forcing the grid wider than the
+   header and overlapping the centered title (found testing item 25's
+   320px check — pre-existing, not introduced by this pass, but squarely
+   within its "no icon clipping / headers remain aligned" criteria).
+   minmax(0,1fr) lets the side columns actually shrink instead of forcing
+   overflow, and the icons themselves shrink to fit. */
+@media(max-width:390px){
+  #view .home-section-header-v2{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px}
+  #view .home-section-controls{gap:6px}
+  #view .resources-v3-icon{width:34px!important;height:34px!important}
+  #view .resources-v3-icon img{width:22px!important;height:22px!important}
+}
+@media(max-width:330px){
+  #view .resources-v3-icon{width:29px!important;height:29px!important}
+  #view .resources-v3-icon img{width:19px!important;height:19px!important}
+  #view .home-panel-header>span,#view .quest-kicker,#view .challenge-title-block span,
+  #view .development-head>span,#view .development-head>div>span,#view .home-section-title{
+    font-size:12.5px!important;letter-spacing:.06em!important;
+  }
+}
+
+/* ============================================================
+   8. RESOURCE BAR TEXT — one shared, readable system
+   The overlay text now sits on its own small dark chip so it stays
+   legible regardless of the fill colour changing underneath it (blue,
+   gold, green/amber/red/purple for Calories), instead of relying only on
+   a thin outline that washed out against light fills.
+   ============================================================ */
+#view .resources-v2-bar-overlay{padding:0 8px}
+#view .resources-v2-bar-overlay span{
+  font-family:Georgia,"Times New Roman",serif;
+  font-size:11.5px;
+  font-weight:700;
+  letter-spacing:.02em;
+  color:#fff;
+  background:rgba(10,14,20,.55);
+  padding:2px 8px;
+  border-radius:5px;
+  text-shadow:0 1px 2px rgba(0,0,0,.5);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:48%;
+}
+@media(max-width:580px){
+  #view .resources-v2-bar-overlay span{font-size:10.5px;padding:2px 6px}
+}
+@media(max-width:390px){
+  #view .resources-v2-bar-overlay span{font-size:9.5px;padding:1px 5px;letter-spacing:0}
+}
+
+/* Cancel Main Quest (item 21) — a plain destructive button variant,
+   used nowhere else yet so it isn't already defined in styles.css. */
+.rpg-btn.danger{border-color:#8a3226!important;background:linear-gradient(#3a1512,#170807)!important;color:#ffb3a8!important}
+.quest-cancel-mini{margin-top:8px;display:inline-block}

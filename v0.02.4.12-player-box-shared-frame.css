@@ -1,0 +1,22 @@
+/* RPG v0.02.4.12 — Player Box unified onto the shared Home frame.
+   Weather/Today/Resources were already moved onto the shared frame asset
+   (assets/shared/home_shared_panel_frame_foreground_v8.png, uniform 30px,
+   corner + edge-midpoint gems baked in) in v0.02.4.7-10. Player Box was
+   still on its own separate Variant 8 frame from the original v0.02.1.1
+   hotfix (Variant 8 - Player Panel Frame Only.png, responsive
+   clamp(20-28px) width) — visually different from the other three panels
+   even though neither is individually "broken".
+
+   This is a frame-asset swap only, on the existing overlay element
+   (.v8-player-frame-border) that already handles Player Box's frame
+   layering — same technique, same z-index, same overscan, just pointed at
+   the shared asset with its own slice values and a flat 30px width
+   matching Weather/Today/Resources exactly (no more responsive shrink at
+   mobile breakpoints, since the shared frame doesn't shrink on the other
+   three panels either). Portrait, level badge, XP bar, progression row,
+   five-stat row, Help/Settings, and flavour text are untouched. */
+.home-player-v8 .v8-frame-control-hotfix-active .v8-player-frame-border{
+  --v8-frame-width:30px!important;
+  border-image-source:url('assets/shared/home_shared_panel_frame_foreground_v8.png')!important;
+  border-image-slice:112 90 112 90!important;
+}

@@ -1,0 +1,184 @@
+/* Economy UI — Store, Loot, chest reveal, Home HUD loot indicator, Storage
+   additions (Master Build Phase A, A2; Astra 2026-09-25, RPG-0093).
+   Deliberately thin: these pages render inside `.inv-theme` (Storage's
+   dark-glass tokens and components, styles/inventory-v1) so they read as
+   rooms in the same building. Only what Storage does not already provide
+   lives here, all under the `eco-` prefix. No new colours: rarity, gold and
+   danger come from the inventory tokens. */
+
+/* ---------- Wallet ---------- */
+.eco-wallet{ flex-wrap: wrap; }
+.eco-negative{ color: var(--inv-danger); }
+.eco-deficit{
+  flex: 1 1 100%;
+  margin: 2px 0 0;
+  padding: 6px 10px;
+  border-radius: var(--inv-radius-sm);
+  background: color-mix(in srgb, var(--inv-danger) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--inv-danger) 45%, transparent);
+  color: var(--inv-text);
+  font-family: var(--inv-font-ui);
+  font-size: .82rem;
+}
+
+/* ---------- Stall / Loot tabs ---------- */
+.eco-stalls, .eco-tabs{ display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.eco-stalls::-webkit-scrollbar, .eco-tabs::-webkit-scrollbar{ display: none; }
+.eco-stall, .eco-tabs .inv-chip{ flex: 0 0 auto; min-height: var(--inv-touch-min); }
+.eco-stall.is-locked{ opacity: .62; }
+.eco-stall.is-locked.is-active{ opacity: 1; }
+
+/* ---------- Listing / sell rows ---------- */
+.eco-stall-body{ display: grid; gap: 12px; }
+.eco-list{ display: grid; gap: 10px; }
+.eco-listing, .eco-sell-row{
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: 10px 12px;
+  align-items: start;
+  padding: 12px;
+  background: var(--inv-glass-main);
+  border: 1px solid var(--inv-edge);
+  border-radius: var(--inv-radius-md);
+}
+.eco-sell-row.is-selected{ border-color: var(--inv-accent); box-shadow: 0 0 0 1px var(--inv-accent-soft), 0 0 14px var(--inv-accent-glow); }
+.eco-listing__art{
+  width: 44px; height: 44px;
+  display: grid; place-items: center;
+  border-radius: var(--inv-radius-sm);
+  background: var(--inv-glass-soft);
+  border: 1px solid var(--inv-edge);
+  color: var(--inv-text-secondary);
+  font-size: 1.3rem;
+}
+.eco-listing__body{ min-width: 0; display: grid; gap: 3px; }
+.eco-listing__name{ font-family: var(--inv-font-ui); font-weight: 700; color: var(--inv-text); line-height: 1.25; overflow-wrap: anywhere; }
+.eco-listing__desc, .eco-listing__meta{ font-size: .8rem; color: var(--inv-text-secondary); overflow-wrap: anywhere; }
+.eco-listing__meta{ color: var(--inv-text-muted); }
+.eco-listing__buy{ display: grid; gap: 4px; justify-items: end; align-content: start; min-width: 78px; }
+.eco-price{ font-family: var(--inv-font-ui); font-weight: 800; color: var(--inv-gold); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.eco-reason{ font-size: .7rem; color: var(--inv-text-muted); max-width: 120px; text-align: right; line-height: 1.2; }
+.eco-listing .inv-btn, .eco-sell-row .inv-btn{ min-height: var(--inv-touch-min); padding-left: 16px; padding-right: 16px; }
+.eco-listing .inv-btn[disabled], .eco-sell-row .inv-btn[disabled]{ opacity: .45; cursor: not-allowed; filter: none; }
+.eco-compare{ font-size: .78rem; color: var(--inv-success); }
+.eco-dev-banner{
+  padding: 6px 10px; border-radius: var(--inv-radius-sm);
+  border: 1px dashed var(--inv-warning); color: var(--inv-warning);
+  font-family: var(--inv-font-ui); font-size: .75rem; letter-spacing: .05em; text-transform: uppercase;
+}
+@media (max-width: 400px){
+  .eco-listing, .eco-sell-row{ grid-template-columns: 40px minmax(0, 1fr); }
+  .eco-listing__buy{ grid-column: 1 / -1; grid-auto-flow: column; justify-content: space-between; align-items: center; justify-items: stretch; }
+  .eco-reason{ max-width: none; text-align: left; }
+  .eco-listing__art{ width: 40px; height: 40px; }
+}
+
+/* ---------- Chest odds + pity ---------- */
+.eco-odds{ display: grid; gap: 6px; margin-top: 6px; padding: 8px; border-radius: var(--inv-radius-sm); background: var(--inv-glass-soft); border: 1px solid var(--inv-divider); }
+.eco-odds__table{ width: 100%; border-collapse: collapse; table-layout: fixed; }
+.eco-odds__table th{ font-size: .62rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--inv-text-muted); padding: 0 2px 2px; }
+.eco-odds__cell{ text-align: center; font-family: var(--inv-font-ui); font-weight: 800; font-size: .85rem; font-variant-numeric: tabular-nums; color: var(--inv-text-secondary); }
+.eco-odds--common{ color: var(--inv-rarity-common); }
+.eco-odds--uncommon{ color: var(--inv-rarity-uncommon); }
+.eco-odds--rare{ color: var(--inv-rarity-rare); }
+.eco-odds--epic{ color: var(--inv-rarity-epic); }
+.eco-odds--legendary{ color: var(--inv-rarity-legendary); }
+.eco-odds--celestial{ color: var(--inv-rarity-celestial, #8fe3f2); }
+.eco-pity-list{ list-style: none; margin: 0; padding: 0; display: grid; gap: 3px; }
+.eco-pity{ font-size: .76rem; color: var(--inv-text-secondary); line-height: 1.3; }
+.eco-pity__count{ color: var(--inv-text-muted); font-variant-numeric: tabular-nums; }
+.eco-pity.is-pending, .eco-pity.is-none{ color: var(--inv-text-muted); }
+
+/* ---------- Loot ---------- */
+.eco-reward{ display: grid; gap: 8px; padding: 14px; background: var(--inv-glass-main); border: 1px solid var(--inv-edge); border-radius: var(--inv-radius-md); }
+.eco-reward.is-claimed{ opacity: .78; }
+.eco-reward__head{ display: flex; justify-content: space-between; gap: 8px; font-family: var(--inv-font-ui); font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--inv-text-muted); }
+.eco-reward__title{ margin: 0; font-family: var(--inv-font-display); font-size: 1.05rem; color: var(--inv-text); overflow-wrap: anywhere; }
+.eco-pills{ display: flex; flex-wrap: wrap; gap: 6px; }
+.eco-pill{ padding: 3px 10px; border-radius: var(--inv-radius-pill); background: var(--inv-glass-soft); border: 1px solid var(--inv-edge); font-size: .82rem; color: var(--inv-text); }
+.eco-pill--gold{ border-color: var(--inv-accent-soft); color: var(--inv-gold); font-weight: 700; }
+.eco-reward .inv-btn, .eco-claim-all{ min-height: var(--inv-touch-min); }
+
+/* ---------- Confirm / reveal dialogs ---------- */
+.eco-dialog{ font-family: var(--inv-font-ui); color: var(--inv-text); background: none; display: grid; gap: 8px; }
+.eco-dialog h2{ margin: 0; font-family: var(--inv-font-display); font-size: 1.25rem; color: var(--inv-text); letter-spacing: 0; text-transform: none; }
+.eco-dialog p{ margin: 0; font-size: .95rem; line-height: 1.4; }
+.eco-confirm-actions{ display: flex; gap: 8px; margin-top: 12px; }
+.eco-confirm-actions .rpg-btn{ flex: 1 1 0; min-height: 44px; }
+.eco-reveal{ display: grid; gap: 10px; text-align: center; justify-items: center; }
+.eco-reveal__lid{ font-size: 2.6rem; color: var(--inv-gold, #d9ac5c); animation: ecoLid .5s ease-out both; }
+.eco-reveal__item{ display: flex; align-items: center; gap: 12px; text-align: left; }
+.eco-reveal--epic .eco-reveal__lid{ color: var(--inv-rarity-epic, #a98bd4); }
+.eco-reveal--legendary .eco-reveal__lid, .eco-reveal--celestial .eco-reveal__lid{ color: var(--inv-rarity-legendary, #d9ac5c); text-shadow: 0 0 18px currentColor; }
+@keyframes ecoLid{ from{ transform: translateY(8px) scale(.85); opacity: 0 } to{ transform: none; opacity: 1 } }
+@media (prefers-reduced-motion: reduce){ .eco-reveal__lid{ animation: none; } }
+
+/* ---------- Storage additions (slot grid, detail blocks) ---------- */
+.char-eq-list{list-style:none;margin:0 0 10px;padding:0;display:grid;gap:6px}
+.char-eq-row{display:grid;grid-template-columns:minmax(0,7.5rem) minmax(0,1fr);gap:8px;align-items:center;padding:6px 8px;background:rgba(255,255,255,.05);border-radius:6px;min-width:0}
+.char-eq-slot{font-size:11px;color:#a8bbbd;text-transform:uppercase;letter-spacing:.04em}
+.char-eq-item{display:grid;gap:1px;min-width:0;overflow-wrap:anywhere}
+.char-eq-item small{color:#ccd7d6;font-size:11px}
+.char-eq-empty{color:#7f9296}
+.eco-slot-grid{ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.eco-slot{
+  display: grid; gap: 2px; align-content: center; justify-items: center; text-align: center;
+  min-height: 74px; padding: 8px 6px;
+  border-radius: var(--inv-radius-md);
+  background: var(--inv-glass-soft); border: 1px dashed var(--inv-divider);
+  color: var(--inv-text-muted); font: inherit; cursor: default;
+}
+.eco-slot.is-filled{ border-style: solid; border-color: var(--inv-edge); background: var(--inv-glass-main); color: var(--inv-text); cursor: pointer; }
+.eco-slot__label{ font-family: var(--inv-font-ui); font-size: .64rem; text-transform: uppercase; letter-spacing: .06em; color: var(--inv-text-muted); }
+.eco-slot__name{ font-size: .8rem; font-weight: 700; line-height: 1.2; overflow-wrap: anywhere; }
+.eco-slot__empty{ font-size: .75rem; }
+.eco-banner{ padding: 10px 12px; border-radius: var(--inv-radius-md); background: var(--inv-accent-soft); border: 1px solid var(--inv-accent); color: var(--inv-text); font-size: .88rem; display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.eco-note{ font-size: .82rem; color: var(--inv-text-secondary); margin: 0; }
+.eco-note--warn{ color: var(--inv-warning); }
+.inv-btn[disabled]{ opacity: .5; cursor: not-allowed; filter: none; }
+.inv-card__rarity--celestial{ color: var(--inv-rarity-celestial, #8fe3f2); }
+.inv-card__rarity--mythic{ color: var(--inv-rarity-mythic, #f08fb6); }
+
+/* ---------- Navigation editor preview text (Settings > Navigation) ---------- */
+.nav-icon-select-text{ font-size: .6rem; font-weight: 800; letter-spacing: .03em; color: #e8c988; text-align: center; line-height: 1.1; }
+
+/* ---------- Home HUD: unclaimed-rewards indicator beside Gold ---------- */
+.hero-hud-gold{ flex-wrap: wrap; }
+.hero-hud-gold.is-deficit .hero-info-value-gold{ color: #ff8e84; }
+.hero-hud-loot{
+  position: relative;
+  appearance: none; border: 0; background: transparent; padding: 0;
+  display: inline-grid; place-items: center;
+  width: 24px; height: 24px;
+  cursor: pointer; touch-action: manipulation;
+}
+.hero-hud-loot::before{ content: ""; position: absolute; inset: -10px; }/* 44px tap target around a 24px icon */
+.hero-hud-loot__icon{ width: 20px; height: 20px; }
+.hero-hud-loot__badge{
+  position: absolute; top: -5px; right: -7px;
+  min-width: 15px; height: 15px; padding: 0 3px; box-sizing: border-box;
+  border-radius: 999px; border: 1.5px solid #081721;
+  background: #e2574c; color: #fff;
+  font: 800 9px/12px system-ui, -apple-system, 'Segoe UI', sans-serif; text-align: center;
+  pointer-events: none;
+}
+.hero-hud-loot:focus-visible{ outline: 2px solid #4bbcff; outline-offset: 2px; border-radius: 6px; }
+.fourfold-marks{list-style:none;margin:0 0 10px;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fourfold-mark{display:grid;gap:2px;padding:10px;border-radius:8px;background:rgba(255,255,255,.05);opacity:.7;min-width:0}
+.fourfold-mark small{color:#a8bbbd;font-size:11px}
+.char-eq-list>li{display:grid;gap:4px}
+button.char-eq-row{width:100%;text-align:left;border:0;color:inherit;font:inherit;cursor:pointer}
+button.char-eq-row.is-open{outline:1px solid rgba(255,255,255,.35)}
+.char-eq-picker{display:grid;gap:6px;padding:6px 8px 10px}
+.char-eq-cand{display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0}
+.char-eq-cand>span{display:grid;min-width:0;overflow-wrap:anywhere}
+.char-eq-cand small{color:#ccd7d6;font-size:11px}
+.campaign-village{display:grid;gap:8px;margin:8px 0}
+.campaign-village-actions{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.campaign-store-row,.campaign-tavern-row{display:grid;gap:6px;padding:8px;border-radius:8px;background:rgba(255,255,255,.05)}
+.campaign-store-row{grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.campaign-tavern-row button{text-align:left}
+.campaign-road-event,.campaign-road-done{display:grid;gap:6px;padding:8px;border-radius:8px;background:rgba(255,255,255,.05)}
+.campaign-road-event h4{margin:0}
+.campaign-road-event .rpg-btn{text-align:left}
+.campaign-detour{color:#e9c46a}

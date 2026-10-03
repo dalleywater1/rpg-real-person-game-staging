@@ -1,0 +1,122 @@
+[
+  {
+    "filename": "resource-tile-bottom-1x.png",
+    "width": 121,
+    "height": 9,
+    "sha256": "a6e1d0c7c4c7f0b4b434e8ca2998a8b27bf53f923ae8d4a6c318e3dcad85a88c"
+  },
+  {
+    "filename": "resource-tile-bottom-2x.png",
+    "width": 242,
+    "height": 18,
+    "sha256": "1c5bf32ca293013f1418952658cda044cf4f97373183e209ba4cfa9a870f489a"
+  },
+  {
+    "filename": "resource-tile-bottom-left-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "5db6e73010eafaadbc843c42021f23d6cc58dc71ed002055c991fc09387ea733"
+  },
+  {
+    "filename": "resource-tile-bottom-left-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "059d9de9b430897fd9f95be32b36c9d294672f3c071632c9d3380d32c3bad5c7"
+  },
+  {
+    "filename": "resource-tile-bottom-right-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "54f38788cafca1b8cd39c7b66d8b80611fc7de34ee8c547f9800cba982829c7a"
+  },
+  {
+    "filename": "resource-tile-bottom-right-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "34ee01049ca6dd2fa74b632bcbcca2f1773064ea5515310982cbe040f8a53b40"
+  },
+  {
+    "filename": "resource-tile-frame-1x.png",
+    "width": 139,
+    "height": 110,
+    "sha256": "1f08e1ffa7229bc9256b585393567c7d7baeaa484891541a5de33c6cced6f117"
+  },
+  {
+    "filename": "resource-tile-frame-2x.png",
+    "width": 278,
+    "height": 220,
+    "sha256": "d0e19dda9d0b3862ad53dc0434b629b8a0499c490454263c3b7d893cf89e8c0e"
+  },
+  {
+    "filename": "resource-tile-frame-master.png",
+    "width": 1390,
+    "height": 1100,
+    "sha256": "1efe4e810e46ef19c49f38250f190b3bd9496704a9cf015f335fd882f3254b66"
+  },
+  {
+    "filename": "resource-tile-left-1x.png",
+    "width": 9,
+    "height": 92,
+    "sha256": "9f916c8dd77f960ae42a7dc3103d6d8adfd05a435b8df000aadaa849c9e8e6ef"
+  },
+  {
+    "filename": "resource-tile-left-2x.png",
+    "width": 18,
+    "height": 184,
+    "sha256": "308139464c979a0f3d54b4324b2cc01906680c34910a6a239c84cbb02cdbcf2f"
+  },
+  {
+    "filename": "resource-tile-right-1x.png",
+    "width": 9,
+    "height": 92,
+    "sha256": "95ed6d808024ae67c3205dcf29cdeeb993816cf9f2813e2b9b080f1afdb7fc37"
+  },
+  {
+    "filename": "resource-tile-right-2x.png",
+    "width": 18,
+    "height": 184,
+    "sha256": "caf729dc03e3431190913f234bce5ee95e7e3aa7888ed301e497bc162da5fd41"
+  },
+  {
+    "filename": "resource-tile-top-1x.png",
+    "width": 121,
+    "height": 9,
+    "sha256": "48a55ab6fa1663d9ea5e9179d7600cc667098658e15aa28448381739cb180002"
+  },
+  {
+    "filename": "resource-tile-top-2x.png",
+    "width": 242,
+    "height": 18,
+    "sha256": "6785b14ca6194ca491dceee9b8f0f7e1526de572e4fea1b4f8bba555149f7833"
+  },
+  {
+    "filename": "resource-tile-top-left-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "967aa9a13c15949245d59c0ae585ff4e3dff86be7e811b90bdfcfbe578ec6d2d"
+  },
+  {
+    "filename": "resource-tile-top-left-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "6043570ba00b025709ffac3672c29a681a339b1f476d899d5499f9156e352f1f"
+  },
+  {
+    "filename": "resource-tile-top-right-1x.png",
+    "width": 9,
+    "height": 9,
+    "sha256": "a35e2dc0e9a9163b302fe34114121d30b451083a4e8f96fca04324d7b35cfcdc"
+  },
+  {
+    "filename": "resource-tile-top-right-2x.png",
+    "width": 18,
+    "height": 18,
+    "sha256": "b03d914e67b34fcd9df570197aad0e6a33426062ceddd3a21d7e94c220cf1316"
+  },
+  {
+    "filename": "tile-fit-preview-2x.png",
+    "width": 1100,
+    "height": 350,
+    "sha256": "d6f6f6e2e0908becc45329b98d08c5485ebea4004a9985ce914a1bbc66145880"
+  }
+]

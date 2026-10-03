@@ -1,0 +1,5 @@
+/* Category accent (Visual System Overhaul §29, LOCKED hex) */
+/* Hero crop: the scene's practitioner stands dead centre, so on wide banners
+   crop from the top and she sits between the tagline and the player strip
+   instead of behind the title. */
+.training-yoga{--tr-category-accent:#7ed99b;--tr-hero-focus:50% 0%}

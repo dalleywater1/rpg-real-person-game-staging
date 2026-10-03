@@ -1,0 +1,464 @@
+/* RPG v0.02.26 — Home V3 Player HUD Rebuild
+   (ASTRA HANDOVER — HOME V3 PLAYER HUD REBUILD, 2026-09-13, Jay/Aurelia).
+
+   Styles the new hero-hud-* markup built in v0.02.15-home-widget-
+   player-status.js's v0215HeroExperimentBHTML(). Deliberately a fresh
+   class namespace rather than reworking .home-hero-grid in place — the
+   old grid/breakpoint rules (portrait ring, round Level badge + XP arc,
+   Class/Title/Gold info stack) stay fully defined and inspectable in
+   that file, just unreferenced now, matching this project's established
+   "not destructive, just superseded" precedent for every earlier Hero
+   revision. Loads after v0.02.15's own CSS so its handful of shared
+   classes (.hero-player-name, .hero-info-row/-icon/-value, .hero-xp-
+   copy, .hero-xp-bar, .hero-weather-card) are reused as-is for
+   typography/color and only re-laid-out here.
+
+   Outer shell untouched: #view .player-status-panel.home-hero-scene
+   (v0.02.15 CSS) already reads as a deep-navy translucent Classic HUD
+   surface with rounded corners and no ornate frame — exactly what the
+   handover's §3 asks for — so this file only replaces the INNER grid. */
+
+.hero-hud{
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 200px;
+  column-gap: 14px;
+  align-items: stretch;
+}
+.hero-hud.no-weather{ grid-template-columns: minmax(0, 1fr) 132px; }
+.hero-hud-main{
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ---- Player Name (handover §4) — strongest identity text, own full-
+   width row, never competes with Weather for space (Weather is a
+   separate grid column, not a shared track). ---- */
+.hero-hud-name{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  font-size: clamp(17px, 4.6vw, 23px);
+  /* Nudged off the scene's own left edge (2026-09-13, direct report):
+     the outer .home-hero-scene has a 12px rounded corner (v0.02.15
+     CSS) sitting right at the scene's own 16px left padding — Name is
+     the only row that starts flush at the very top of the HUD, close
+     enough to that curve that its first glyph visually intersected it.
+     Every other row (Titles, Body, XP, Status) sits far enough down
+     the corner's radius that this isn't visible, so this is scoped to
+     Name alone rather than padding the whole .hero-hud-main. */
+  margin-left: 4px;
+}
+
+/* ---- Title + Class row (§5) — horizontal where width permits,
+   secondary weight to Name, controlled wrap only at extreme narrow
+   widths (media query below). ---- */
+.hero-hud-titles{ display: flex; flex-wrap: wrap; align-items: center; gap: 6px 18px; }
+.hero-hud-title-item .hero-info-value{ font-size: 13px; }
+.hero-hud-title-item .hero-info-value-title{ font-size: 13px; }
+
+/* ---- Body: tall portrait + attached square Level badge, beside the
+   compact HP/Stamina/Focus/Damage/Defence stat column (§6-§10). ---- */
+.hero-hud-body{ display: flex; align-items: flex-start; gap: 12px; }
+
+/* Tall rectangular portrait (§6) — the circular ring art is retired;
+   same Classic HUD framing language as every other Home widget (dark
+   navy support, restrained antique-gold outline, rounded corners), no
+   separate ornate portrait artwork. No new tall-format portrait photo
+   was delivered with this handover — the existing temp placeholder
+   (HOME_HERO_TEMP_PORTRAIT, a square class-badge stand-in) is shown
+   with object-fit:cover anchored top-center so the tall frame still
+   reads as "more headroom" rather than a stretched square; swap for
+   real head/shoulders/torso art without touching this CSS once it
+   exists. */
+.hero-hud-portrait{
+  position: relative;
+  flex: 0 0 auto;
+  width: clamp(66px, 22vw, 96px);
+  aspect-ratio: 3 / 4;
+  appearance: none;
+  /* Home v4 (2026-09-22): cool-metal glass edge instead of the old
+     antique-gold-tinted border — gold stays reserved for headings/
+     identity text (the Level badge below, Titles), not every frame. */
+  border: 1px solid var(--home-edge, rgba(155,190,210,.20));
+  border-radius: 8px;
+  background: var(--home-glass-soft, rgba(11,36,57,.55));
+  padding: 0;
+  cursor: pointer;
+  overflow: visible;
+  box-shadow: 0 3px 8px rgba(0,0,0,.35);
+}
+.hero-hud-portrait:focus-visible{ outline: 2px solid #4bbcff; outline-offset: 2px; }
+.hero-hud-portrait-art{ position: absolute; inset: 0; border-radius: 7px; overflow: hidden; }
+.hero-hud-portrait-art img{ width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; }
+
+/* Square Level badge (§7) — attached/overlapping the portrait's
+   bottom-right corner, replacing the retired round badge + XP arc. */
+.hero-hud-level-badge{
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  width: clamp(22px, 30%, 32px);
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(8,20,32,.92);
+  border: 1px solid var(--home-gold, #d9ac5c);
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0,0,0,.5);
+  z-index: 2;
+}
+.hero-hud-level-value{
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 800;
+  font-size: clamp(13px, 50%, 19px);
+  color: #f7edcf;
+  text-shadow: 0 1px 2px #000a;
+  line-height: 1;
+}
+@keyframes heroHudLevelUpFlash{
+  0%{ box-shadow: 0 2px 5px rgba(0,0,0,.5); transform: scale(1); }
+  25%{ box-shadow: 0 2px 5px rgba(0,0,0,.5), 0 0 16px 4px rgba(255,224,153,.9); transform: scale(1.18); }
+  100%{ box-shadow: 0 2px 5px rgba(0,0,0,.5); transform: scale(1); }
+}
+.hero-hud-level-badge.level-up-flash{ animation: heroHudLevelUpFlash 900ms ease-out 1; }
+
+/* Stat column (§8-§10) — HP/Stamina/Focus semantic bars (--stat-* from
+   v0.02.21) then Damage/Defence as plain numerics, same order/grouping
+   as the retired Character Stats widget so nothing about the data
+   itself changed, only where it renders. */
+.hero-hud-stats{
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+}
+.hero-hud-stat-row{
+  display: grid;
+  grid-template-columns: 15px 50px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 6px;
+}
+.hero-hud-stat-icon{
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.6));
+}
+.hero-hud-stat-label{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  color: var(--hud-text-secondary, #9fb2c2);
+  white-space: nowrap;
+}
+.hero-hud-stat-bar{
+  position: relative;
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,.08);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.45), inset 0 -1px 0 rgba(255,255,255,.06);
+  overflow: hidden;
+}
+.hero-hud-stat-bar>i{ position: relative; display: block; height: 100%; border-radius: inherit; overflow: hidden; }
+/* 3D/glossy fill (2026-09-13, direct instruction): a top-to-bottom
+   highlight-to-shadow overlay on top of each bar's own semantic colour
+   gradient, so the fill reads as a rounded, lit surface rather than a
+   flat colour block — same technique on the XP bar below. */
+.hero-hud-stat-bar>i::after,
+.hero-hud-xp .hero-xp-bar i::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255,255,255,.45) 0%, rgba(255,255,255,.08) 38%, rgba(0,0,0,.22) 100%);
+  pointer-events: none;
+}
+.hero-hud-stat-bar.bar-hp>i{ background: linear-gradient(90deg, var(--stat-hp, #d73b3f), var(--stat-hp-light, #ef5a60)); }
+.hero-hud-stat-bar.bar-stamina>i{ background: linear-gradient(90deg, var(--stat-stamina, #2aa9e8), var(--stat-stamina-light, #54c8f4)); }
+.hero-hud-stat-bar.bar-focus>i{ background: linear-gradient(90deg, var(--stat-focus, #8b42d7), var(--stat-focus-light, #ae64ed)); }
+.hero-hud-stat-bar-spacer{ height: 6px; }
+.hero-hud-stat-value{
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--hud-text-primary, #f1f5f7);
+  white-space: nowrap;
+  text-shadow: 0 1px 2px #000a;
+}
+/* Damage/Defence bonus — no gameplay data currently carries a bonus
+   value (v0243CombatSummary's damage/defence are always {value,source},
+   same fact already documented at characterStatsHTML() above), so this
+   never renders yet; kept ready per the handover's "if supported"
+   wording (§10/§24) rather than invented (§21 — no fake bonuses). */
+.hero-hud-stat-bonus{ color: #6bcf7f; font-weight: 700; margin-left: 4px; }
+
+/* ---- XP (§11) — horizontal bar, arc retired. Reuses .hero-xp-bar as
+   the base, but overrides it: the original .hero-xp-bar (v0.02.15 CSS)
+   paints a decorative antique-gold "trough" — a 1px gold-line/navy-fill
+   gradient track plus XP_TROUGH_V2.png end-caps on ::before/::after —
+   which reads as a small ornate frame around the fill. Direct
+   instruction (2026-09-13): remove that frame, make the bar thicker.
+   Scoped to .hero-hud-xp so the Player Information popup's own mini XP
+   bar (.player-info-xp-row .hero-xp-bar, a different, smaller context)
+   keeps its original treatment untouched.
+   Follow-up (same day): the standalone "XP" label + value line
+   (.hero-xp-copy) above the bar is dropped entirely — the value now
+   overlays the bar itself (.hero-hud-xp-text, centered over both track
+   and fill) — and the bar moves up into the space that line used to
+   take, plus a small extra negative margin on top of that. */
+.hero-hud-xp{ margin-top: -4px; }
+.hero-hud-xp .hero-xp-bar{
+  height: 18px;
+  background: var(--hud-panel-well-bg, rgba(11,36,57,.55));
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.5);
+  border-radius: 9px;
+}
+.hero-hud-xp .hero-xp-bar::before,
+.hero-hud-xp .hero-xp-bar::after{ display: none; }
+.hero-hud-xp .hero-xp-bar i{ border-radius: 9px; overflow: hidden; }
+/* Absolutely positioned over the full bar (not a flex sibling of the
+   fill <i>) so the text overlay never competes with — or shifts — the
+   fill's own left-aligned, percentage-width box. */
+.hero-hud-xp-text{
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-variant-numeric: tabular-nums;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  color: var(--hud-text-primary, #f1f5f7);
+  text-shadow: 0 1px 2px rgba(0,0,0,.75), 0 0 3px rgba(0,0,0,.5);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ---- Status Effects (§12-§13) — four real sockets, always visible
+   (unlike the retired icon-only .hero-grid-status, which stayed empty
+   when nothing was active). Empty sockets are real reserved UI, not a
+   placeholder to invent state into. ---- */
+.hero-hud-status{ margin-top: 2px; }
+.hero-hud-status-label{
+  font-family: var(--font-micro, "Alegreya Sans", sans-serif);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--hud-text-muted, #6c8092);
+  margin-bottom: 4px;
+}
+.hero-hud-status-row{ display: flex; gap: 6px; }
+/* Home v4 (2026-09-22) "small glass status sockets" — same geometry,
+   now real glass (blur) instead of a flat tinted square, cool-metal
+   edge to match every other home-v4 border. */
+.hero-hud-status-slot{
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--home-glass-soft, rgba(8,20,32,.55));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--home-edge, rgba(159,178,194,.35));
+}
+.hero-hud-status-slot.empty::after{
+  content: "+";
+  color: rgba(159,178,194,.45);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1;
+}
+.hero-hud-status-slot.filled{
+  background-image: var(--buff-icon);
+  background-size: 65%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.hero-hud-status-slot.filled.buff{ border-color: rgba(84,200,244,.65); box-shadow: 0 0 6px rgba(84,200,244,.35); }
+.hero-hud-status-slot.filled.debuff{ border-color: rgba(224,120,120,.65); box-shadow: 0 0 6px rgba(224,120,120,.35); }
+
+/* ---- Right column: Weather (unchanged internals) with Gold beneath
+   it (§14-§16). Weather keeps its own card surface/typography — this
+   file only places it and Gold as two stacked children of a full-
+   height column instead of a 3-track grid area. ---- */
+.hero-hud-side{
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.hero-hud-side .hero-weather-card{ flex: 1 1 auto; }
+/* Home v4 (2026-09-22) "Gold in a subtle lower-right glass cell" — was
+   just a border-top rule sitting in open space under Weather; now a
+   real small glass panel (its own background/border/radius/blur) so it
+   reads as a cell, not a divider line with a number under it. Kept
+   deliberately quiet (soft tier, thin edge, no shadow) — this is a
+   secondary readout, not competing with the HUD's own identity line. */
+.hero-hud-gold{
+  flex: 0 0 auto;
+  justify-content: center;
+  padding: 7px 10px;
+  margin-top: 6px;
+  background: var(--home-glass-soft, rgba(11,36,57,.42));
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid var(--home-edge, rgba(190,137,49,.30));
+  border-radius: var(--home-radius-sm, 8px);
+}
+.hero-hud-gold .hero-info-value-gold{ font-size: 16px; }
+/* No Weather: Gold still needs somewhere to render (§20, "existing
+   functionality to retain") — the side column just carries Gold alone,
+   full height, still visually separate from the Name/Titles/Body
+   identity block on the left. */
+.hero-hud.no-weather .hero-hud-side{ justify-content: center; }
+.hero-hud.no-weather .hero-hud-gold{ margin-top: 0; }
+
+/* Weather has two parallel node sets (see v0215HeroWeatherCardHTML).
+   Originally the expanded/icon set below was mobile-only (≤460px) with
+   the compact original shown above that; direct follow-up instruction
+   (2026-09-13) made the expanded treatment the standard everywhere —
+   the app shell doesn't really have a distinct "desktop" experience
+   (580 and wide-viewport both render the same capped-width shell), so
+   there's no reason to keep two different Weather designs split by
+   width. The original .hero-weather-hero-row/-condition/-highlow/
+   -rainwind nodes stay in the DOM (still rendered by
+   v0215HeroWeatherCardHTML, still styled in v0.02.15 CSS) just hidden
+   here — not removed — in case a real narrow-vs-wide split is wanted
+   again later. */
+.hero-weather-hero-row,
+.hero-weather-condition,
+.hero-weather-highlow,
+.hero-weather-rainwind{ display: none; }
+.hero-weather-mobile-location{
+  padding: 8px 11px 0;
+  font-family: var(--font-ui); font-size: 14px; font-weight: 600;
+  color: #d8b56d; text-transform: uppercase;
+  text-shadow: 0 1px 2px #000a;
+}
+.hero-weather-mobile-temp-row{
+  display: flex; align-items: center; gap: 8px;
+  padding: 6px 11px 0;
+}
+.hero-weather-mobile-icon{ width: 40px; height: 40px; object-fit: contain; filter: drop-shadow(0 2px 3px #0008); }
+.hero-weather-mobile-temp{
+  font-family: var(--font-ui); font-variant-numeric: tabular-nums;
+  font-size: 30px; font-weight: 600; color: #f6edda;
+  text-shadow: 0 1px 3px #000c; line-height: 1;
+}
+.hero-weather-mobile-condition{
+  padding: 6px 11px 0;
+  font-family: var(--font-ui); font-size: 14px; font-weight: 500;
+  color: #d8c9a3;
+}
+.hero-weather-mobile-metric{
+  display: flex; align-items: center; gap: 8px;
+  padding: 7px 11px 0;
+  font-family: var(--font-micro); font-variant-numeric: tabular-nums;
+  font-size: 13px; font-weight: 600; color: #e4d9b8;
+}
+.hero-weather-mobile-metric-icon{ width: 18px; height: 18px; object-fit: contain; flex: 0 0 auto; }
+.hero-weather-mobile-metric-glyph{
+  width: 18px; height: 18px; flex: 0 0 auto;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--hud-gold, #d9ac5c); font-size: 13px; font-weight: 700;
+}
+
+@media(max-width:460px){
+  /* The stat column beside the Portrait is the tightest budget in this
+     whole layout (measured live via getBoundingClientRect at 375: only
+     ~88px wide once Portrait/Weather take their share) — not enough to
+     show "100/100" per row without overflowing into Weather (the
+     value's own right edge landed 24px past its column's edge before
+     this fix, at both 375 and 320). The "/100" denominator is dropped
+     from this tier down (kept in the DOM as .hero-hud-stat-max, just
+     hidden) — current value + bar + label all still show, only the
+     redundant max (same for every row: /100) goes, same "numeric text
+     may compact before core elements shrink" latitude the handover
+     gives XP specifically (§11) applied here too since the failure
+     mode is identical. */
+  .hero-hud{ grid-template-columns: minmax(0, 1fr) 150px; column-gap: 10px; }
+  .hero-hud.no-weather{ grid-template-columns: minmax(0, 1fr) 120px; }
+  .hero-hud-name{ font-size: 18px; }
+  .hero-hud-stat-max{ display: none; }
+  .hero-hud-status-slot{ width: 25px; height: 25px; }
+
+  /* ---- HP/Stamina/Focus: bar moves below the label/value line
+     (2026-09-13, direct instruction) instead of squeezed into the same
+     narrow row — the label+value line gets its natural width, and the
+     bar gets the row's FULL width on the line under it instead of the
+     sliver minmax(0,1fr) left over between a 42px label and the value.
+     Scoped to :not(.hero-hud-stat-row-plain) so Damage/Defence (no
+     bar) keep their plain single-line layout unchanged. */
+  .hero-hud-stat-row:not(.hero-hud-stat-row-plain){
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "icon label value" "bar bar bar";
+    row-gap: 3px;
+    column-gap: 6px;
+  }
+  .hero-hud-stat-row:not(.hero-hud-stat-row-plain) .hero-hud-stat-icon{ grid-area: icon; }
+  .hero-hud-stat-row:not(.hero-hud-stat-row-plain) .hero-hud-stat-label{ grid-area: label; }
+  .hero-hud-stat-row:not(.hero-hud-stat-row-plain) .hero-hud-stat-value{ grid-area: value; }
+  .hero-hud-stat-row:not(.hero-hud-stat-row-plain) .hero-hud-stat-bar{ grid-area: bar; height: 8px; }
+  .hero-hud-stat-row-plain{ grid-template-columns: auto 1fr auto; }
+  /* The bar-below-text areas above only declare 2 explicit columns for
+     a plain row now (label/value), but the plain row's markup still has
+     a 3rd child (.hero-hud-stat-bar-spacer, only ever needed to keep
+     the old 3-column grid aligned) — without hiding it, grid auto-
+     placement drops the value onto an implicit 2nd row instead of next
+     to the label. Hidden here rather than removed from the JS markup,
+     since it's still needed at ≥461px where the 3-column grid is live. */
+  .hero-hud-stat-row-plain .hero-hud-stat-bar-spacer{ display: none; }
+  .hero-hud-stats{ gap: 7px; }
+  .hero-weather-run2{ margin-top: 8px; }
+}
+@media(max-width:340px){
+  /* 320 tier — Portrait shrinks its floor and Weather's column narrows
+     to its own historical content-driven minimum (matching the old
+     .home-hero-grid 320-tier Weather width), freeing a little more
+     width back to the stat column on top of the 460-tier fix above. */
+  .hero-hud{ grid-template-columns: minmax(0, 1fr) 118px; column-gap: 6px; }
+  .hero-hud.no-weather{ grid-template-columns: minmax(0, 1fr) 100px; }
+  .hero-hud-name{ font-size: 16.5px; }
+  .hero-hud-titles{ gap: 4px 12px; }
+  .hero-hud-body{ gap: 6px; }
+  .hero-hud-portrait{ width: clamp(56px, 19vw, 96px); }
+  .hero-hud-stats{ gap: 5px; }
+  /* Keep the 460-tier bar-below-text areas here too (only resize, never
+     revert to the single-row 3-column layout — that's what the earlier
+     "100/100 overflowing into Weather" bug was). */
+  .hero-hud-stat-row:not(.hero-hud-stat-row-plain){ row-gap: 2px; column-gap: 6px; }
+  .hero-hud-stat-row:not(.hero-hud-stat-row-plain) .hero-hud-stat-bar{ height: 7px; }
+  .hero-hud-stat-row-plain{ column-gap: 6px; }
+  .hero-hud-stat-label{ font-size: 8.5px; }
+  .hero-hud-stat-value{ font-size: 10px; }
+  .hero-hud-stat-icon{ width: 13px; height: 13px; }
+  .hero-hud-status-slot{ width: 22px; height: 22px; }
+
+  /* Weather metric text ("10 km/h Wind") wrapped to 2 lines at this
+     narrowest 118px side column — tighten padding/icon/font just
+     enough to keep every metric on one line. */
+  .hero-weather-mobile-location,
+  .hero-weather-mobile-temp-row,
+  .hero-weather-mobile-condition,
+  .hero-weather-mobile-metric{ padding-left: 8px; padding-right: 6px; }
+  .hero-weather-mobile-icon{ width: 32px; height: 32px; }
+  .hero-weather-mobile-temp{ font-size: 26px; }
+  .hero-weather-mobile-metric{ font-size: 11px; gap: 6px; }
+  .hero-weather-mobile-metric-icon,
+  .hero-weather-mobile-metric-glyph{ width: 15px; height: 15px; font-size: 11px; }
+}

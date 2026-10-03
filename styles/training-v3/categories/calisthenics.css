@@ -1,0 +1,5 @@
+/* Category accent — NOT in the Visual System Overhaul's original
+   10-category LOCKED colour map (see walking-hiking.css). Provisional
+   pick: soft coral-orange, distinct from Cycling's yellow and
+   Climbing's brown. */
+.training-calisthenics{--tr-category-accent:#ff9f68}

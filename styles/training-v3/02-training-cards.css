@@ -1,0 +1,26 @@
+/* Training v3 — shared card primitive (Phase 4)
+   One base card + variants. Most Training content should compose
+   .tr-card directly rather than getting a category-named card class
+   (.running-card, .strength-card, ...) — a category page reaches for
+   its own selector only when it genuinely needs different behavior,
+   not different decoration. */
+/* Visual System Overhaul (2026-09-18): .tr-card is now the "Standard
+   Glass" surface (§6) — real background/border swapped for the glass
+   tokens, everything else (padding/radius/variants) unchanged so
+   existing consumers don't need markup changes, only the look updates
+   under them. */
+.tr-card{background:var(--tr-glass-main);border:1px solid var(--tr-border);border-radius:var(--tr-radius-md);padding:var(--tr-space-4);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+/* Faint accent border (2026-09-18 feedback: "tone down... faint glow")
+   — a muted mix against the neutral border rather than the full-
+   strength accent hex, so the hero card reads as gently tinted, not a
+   saturated colored outline. */
+.tr-card--feature{border-color:color-mix(in srgb, var(--tr-category-accent) 45%, var(--tr-border-strong));background:var(--tr-glass-strong);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.tr-card--compact{padding:var(--tr-space-3)}
+.tr-card--interactive{cursor:pointer;transition:border-color .15s ease}
+.tr-card--interactive:hover,.tr-card--interactive:focus-visible{border-color:color-mix(in srgb, var(--tr-category-accent) 45%, var(--tr-border-strong))}
+.tr-card--danger{border-color:var(--tr-danger)}
+
+.tr-card-header{display:flex;align-items:center;justify-content:space-between;gap:var(--tr-space-2);margin-bottom:var(--tr-space-3)}
+.tr-card-title{margin:0;font-family:var(--tr-font-display);font-size:12px;letter-spacing:.03em;color:var(--tr-gold);text-transform:uppercase;display:flex;align-items:center;gap:var(--tr-space-2)}
+.tr-card-title::after{content:'';height:1px;flex:1;background:linear-gradient(90deg,var(--tr-border-strong),transparent)}
+.tr-card-footer{display:flex;gap:var(--tr-space-2);margin-top:var(--tr-space-3)}

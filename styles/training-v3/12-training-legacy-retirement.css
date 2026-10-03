@@ -1,0 +1,160 @@
+/* Training v3 -- retire the legacy RPG "antique gold box" system inside
+   Training (Visual System correction pass, 2026-09-18).
+
+   The global .rpg-frame (gold border, opaque navy), .rpg-btn (brown
+   gradient) and .text-btn rules in styles.css are used app-wide, so they
+   stay untouched. Inside .training-v3 they are replaced, not tinted:
+   every legacy container and button becomes the shared dark-glass
+   material and reads its identity from --tr-accent. Gold survives only
+   in the serif section headings.
+
+   Surface rules (background/border/colour) sit at .training-v3 specificity.
+   Size/type rules use :where(.training-v3) so pages that deliberately
+   shrink a button (e.g. .wl-card-actions .text-btn) keep their own sizing. */
+
+/* ---------- UI typeface: clean sans for data and controls; the serif
+   stays on headings that set it explicitly ---------- */
+.training-v3{font-family:var(--font-micro),system-ui,sans-serif}
+
+/* ---------- One glass material for every legacy container ---------- */
+.training-v3 .rpg-frame,
+.training-v3 .rpg-frame.primary,
+.training-v3 .rpg-frame.minor{
+  background:linear-gradient(180deg,rgba(16,39,55,.78),rgba(7,20,31,.84));
+  border:1px solid var(--tr-edge);
+  border-radius:12px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 5px 18px rgba(0,0,0,.20);
+  -webkit-backdrop-filter:blur(10px);
+  backdrop-filter:blur(10px);
+}
+
+/* Serif RPG heading kept in gold; the rule beside it goes neutral. */
+.training-v3 .training-panel-title{font-size:13px;letter-spacing:.1em;color:#e3bd65}
+.training-v3 .training-panel-title::after{background:linear-gradient(90deg,var(--tr-edge),transparent)}
+
+/* ---------- Buttons ---------- */
+.training-v3 .rpg-btn{
+  border:1px solid var(--tr-edge);
+  border-radius:12px;
+  background:linear-gradient(180deg,rgba(20,44,62,.72),rgba(10,26,38,.78));
+  color:var(--tr-text-secondary);
+  text-shadow:none;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+}
+.training-v3 .rpg-btn:hover,
+.training-v3 .rpg-btn:focus-visible{
+  border-color:color-mix(in srgb,var(--tr-accent) 45%,var(--tr-edge));
+  background:linear-gradient(180deg,rgba(24,52,72,.82),rgba(12,30,44,.86));
+  color:var(--tr-text);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 0 10px var(--tr-accent-soft);
+  outline:none;
+}
+.training-v3 .rpg-btn:active{background:linear-gradient(180deg,rgba(10,26,38,.86),rgba(18,40,56,.78))}
+.training-v3 .rpg-btn:disabled{box-shadow:none}
+.training-v3 .rpg-btn.accent{
+  color:var(--tr-text);
+  border-color:var(--tr-accent);
+  box-shadow:inset 0 0 12px var(--tr-accent-soft),0 0 12px var(--tr-accent-glow);
+}
+.training-v3 .rpg-btn.accent:hover,
+.training-v3 .rpg-btn.accent:focus-visible{
+  border-color:var(--tr-accent);
+  background:linear-gradient(180deg,rgba(26,56,78,.86),rgba(12,32,46,.9));
+  box-shadow:inset 0 0 14px var(--tr-accent-soft),0 0 16px var(--tr-accent-glow);
+}
+:where(.training-v3) .rpg-btn{font-family:var(--font-micro),system-ui,sans-serif;font-size:12px;font-weight:700;letter-spacing:.05em;min-height:40px;padding:9px 16px}
+:where(.training-v3) .rpg-btn.small{font-size:11px;min-height:34px;padding:6px 12px}
+
+.training-v3 .text-btn{
+  border:1px solid var(--tr-edge);
+  border-radius:10px;
+  background:rgba(10,26,38,.68);
+  color:var(--tr-text-secondary);
+}
+.training-v3 .text-btn:hover,
+.training-v3 .text-btn:focus-visible{
+  border-color:color-mix(in srgb,var(--tr-accent) 45%,var(--tr-edge));
+  color:var(--tr-text);
+  outline:none;
+}
+.training-v3 .text-btn.accent{border-color:color-mix(in srgb,var(--tr-accent) 55%,var(--tr-edge));color:var(--tr-accent)}
+.training-v3 .text-btn.danger{background:rgba(26,13,13,.6);border-color:#7d3d39;color:#ff9b93}
+:where(.training-v3) .text-btn{font-family:var(--font-micro),system-ui,sans-serif;font-weight:700}
+
+/* ---------- Icon glyphs (CSS-masked so any category can tint them) ---------- */
+.tr-icon-glyph{display:block;width:22px;height:22px;background:currentColor;-webkit-mask-image:var(--tr-mask);mask-image:var(--tr-mask);-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:center;mask-position:center;-webkit-mask-size:contain;mask-size:contain}
+.tr-icon-circle--lg .tr-icon-glyph{width:30px;height:30px}
+span.tr-icon-circle{cursor:inherit}
+
+/* ---------- Start-a-session action tiles ---------- */
+.tr-action-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.tr-action-tile{display:flex;flex-direction:column;align-items:center;gap:9px;min-width:0;padding:14px 6px 12px;background:linear-gradient(180deg,rgba(16,39,55,.6),rgba(7,20,31,.7));border:1px solid var(--tr-edge);border-radius:12px;color:var(--tr-text-secondary);font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.02em;cursor:pointer}
+.tr-action-tile .tr-icon-circle{width:44px;height:44px;color:var(--tr-accent);border-color:color-mix(in srgb,var(--tr-accent) 38%,var(--tr-edge))}
+.tr-action-tile:hover,
+.tr-action-tile:focus-visible,
+.tr-action-tile.is-selected{border-color:color-mix(in srgb,var(--tr-accent) 50%,var(--tr-edge));color:var(--tr-text);box-shadow:0 0 12px var(--tr-accent-soft);outline:none}
+.tr-action-tile:hover .tr-icon-circle,
+.tr-action-tile:focus-visible .tr-icon-circle,
+.tr-action-tile.is-selected .tr-icon-circle{border-color:var(--tr-accent);box-shadow:0 0 10px var(--tr-accent-glow)}
+@media(max-width:340px){.tr-action-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* ---------- Next-session card ---------- */
+.tr-next-row{display:flex;align-items:center;gap:14px}
+.tr-next-row .tr-icon-circle{color:var(--tr-accent);border-color:var(--tr-accent);box-shadow:0 0 10px var(--tr-accent-soft)}
+.tr-next-copy{min-width:0;display:grid;gap:3px}
+.tr-next-copy h2{margin:0;font-family:inherit;font-size:19px;font-weight:700;color:var(--tr-text);letter-spacing:.01em}
+.tr-next-copy p{margin:0;font-size:12px;color:var(--tr-text-muted)}
+.tr-next-meta{font-size:13px;color:var(--tr-text-secondary)}
+.tr-next-plan{display:grid;gap:2px;margin-top:6px}
+.tr-next-plan div{font-size:12px;color:var(--tr-text-muted);line-height:1.35}
+.tr-next-actions{display:flex;gap:10px;margin-top:14px}
+.tr-next-actions .rpg-btn{flex:1 1 0;min-width:0}
+
+/* ---------- This Week ---------- */
+.training-v3 .running-week-number{font-size:12px;color:var(--tr-text-muted)}
+.training-v3 .running-stat-row b{font-family:inherit;font-size:20px;font-weight:700;color:var(--tr-text)}
+.training-v3 .running-stat-row span{font-size:11px;letter-spacing:0;text-transform:none;color:var(--tr-text-muted)}
+.training-v3 .running-week-marker,
+.training-v3 .training-week-strip-day{border:1px solid var(--tr-edge);border-radius:999px;background:rgba(7,20,31,.45);color:var(--tr-text-muted);padding:8px 2px;font-size:11px}
+.training-v3 .running-week-marker span,
+.training-v3 .training-week-strip-day span{font-weight:700}
+.training-v3 .running-week-marker.today,
+.training-v3 .training-week-strip-day.today{border-color:color-mix(in srgb,var(--tr-accent) 45%,var(--tr-edge))}
+.training-v3 .running-week-marker.planned,
+.training-v3 .training-week-strip-day.planned{color:var(--tr-accent);border-color:color-mix(in srgb,var(--tr-accent) 50%,var(--tr-edge))}
+.training-v3 .running-week-marker.done,
+.training-v3 .training-week-strip-day.done{color:var(--tr-accent);border-color:color-mix(in srgb,var(--tr-accent) 60%,var(--tr-edge));background:var(--tr-accent-soft)}
+.training-v3 .running-week-marker.both{color:var(--tr-accent);border-color:var(--tr-accent);background:var(--tr-accent-soft)}
+.training-v3 .running-week-legend{font-size:11px;color:var(--tr-text-muted)}
+.training-v3 .running-week-legend b.done,
+.training-v3 .running-week-legend b.planned,
+.training-v3 .running-week-legend b.both{color:var(--tr-accent)}
+.tr-link-row{display:flex;justify-content:flex-end;margin-top:8px}
+.tr-link-action{background:none;border:0;padding:6px 2px;color:var(--tr-accent);font-family:inherit;font-size:12px;font-weight:700;letter-spacing:.03em;cursor:pointer}
+.tr-link-action:hover,.tr-link-action:focus-visible{color:var(--tr-text);outline:none}
+
+.training-v3 .running-tab-rail button{font-size:11.5px;font-weight:700}
+
+/* ---------- Readable floor for small text (the old mono face tolerated
+   8px; the UI sans does not) ---------- */
+.training-v3 .helper{font-size:11.5px;line-height:1.45}
+.training-v3 p.empty{font-size:12px}
+.training-v3 .rpg-route-info div{border:1px solid var(--tr-edge);border-radius:10px;background:rgba(7,20,31,.45)}
+.training-v3 .rpg-route-info span{font-size:10px;color:var(--tr-text-muted)}
+.training-v3 .rpg-route-info b{font-family:inherit;font-size:14px;font-weight:700;color:var(--tr-text)}
+.training-v3 .rpg-route-info b.unavailable{font-size:11px;color:var(--tr-text-muted)}
+.training-v3 .training-library-card{background:linear-gradient(180deg,rgba(16,39,55,.6),rgba(7,20,31,.7));border:1px solid var(--tr-edge);border-radius:12px}
+.training-v3 .training-library-card strong{font-family:inherit;font-size:11.5px;color:var(--tr-text)}
+.training-v3 .wl-card-meta{font-size:10.5px;color:var(--tr-text-muted)}
+.training-v3 .training-library-card .text-btn,
+.training-v3 .wl-card-actions .text-btn{font-size:10px;padding:6px 4px}
+.training-v3 .wl-card-actions-secondary .text-btn{font-size:9.5px}
+
+/* ---------- Form fields + full-width empty states ---------- */
+.training-v3 input:not([type=checkbox]):not([type=radio]):not([type=range]),
+.training-v3 select,
+.training-v3 textarea{background:rgba(7,20,31,.6);border:1px solid var(--tr-edge);border-radius:10px;color:var(--tr-text);font-family:inherit}
+.training-v3 input:not([type=checkbox]):not([type=radio]):not([type=range]):focus,
+.training-v3 select:focus,
+.training-v3 textarea:focus{border-color:color-mix(in srgb,var(--tr-accent) 60%,var(--tr-edge));outline:none;box-shadow:0 0 8px var(--tr-accent-soft)}
+.training-v3 .training-library-grid>.helper{grid-column:1/-1}

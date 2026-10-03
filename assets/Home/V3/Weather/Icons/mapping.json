@@ -1,0 +1,77 @@
+{
+  "status": "semantic mapping; provider-code adapter pending",
+  "states": [
+    {
+      "id": "clear-day",
+      "source": "masters/weather-clear-day.png",
+      "runtime1x": "38/weather-clear-day-38px.png",
+      "runtime2x": "76/weather-clear-day-76px.png"
+    },
+    {
+      "id": "clear-night",
+      "source": "masters/weather-clear-night.png",
+      "runtime1x": "38/weather-clear-night-38px.png",
+      "runtime2x": "76/weather-clear-night-76px.png"
+    },
+    {
+      "id": "partly-cloudy-day",
+      "source": "masters/weather-partly-cloudy-day.png",
+      "runtime1x": "38/weather-partly-cloudy-day-38px.png",
+      "runtime2x": "76/weather-partly-cloudy-day-76px.png"
+    },
+    {
+      "id": "partly-cloudy-night",
+      "source": "masters/weather-partly-cloudy-night.png",
+      "runtime1x": "38/weather-partly-cloudy-night-38px.png",
+      "runtime2x": "76/weather-partly-cloudy-night-76px.png"
+    },
+    {
+      "id": "cloudy",
+      "source": "masters/weather-cloudy.png",
+      "runtime1x": "38/weather-cloudy-38px.png",
+      "runtime2x": "76/weather-cloudy-76px.png"
+    },
+    {
+      "id": "light-rain",
+      "source": "masters/weather-light-rain.png",
+      "runtime1x": "38/weather-light-rain-38px.png",
+      "runtime2x": "76/weather-light-rain-76px.png"
+    },
+    {
+      "id": "heavy-rain",
+      "source": "masters/weather-heavy-rain.png",
+      "runtime1x": "38/weather-heavy-rain-38px.png",
+      "runtime2x": "76/weather-heavy-rain-76px.png"
+    },
+    {
+      "id": "thunderstorm",
+      "source": "masters/weather-thunderstorm.png",
+      "runtime1x": "38/weather-thunderstorm-38px.png",
+      "runtime2x": "76/weather-thunderstorm-76px.png"
+    },
+    {
+      "id": "snow",
+      "source": "masters/weather-snow.png",
+      "runtime1x": "38/weather-snow-38px.png",
+      "runtime2x": "76/weather-snow-76px.png"
+    },
+    {
+      "id": "sleet",
+      "source": "masters/weather-sleet.png",
+      "runtime1x": "38/weather-sleet-38px.png",
+      "runtime2x": "76/weather-sleet-76px.png"
+    },
+    {
+      "id": "fog",
+      "source": "masters/weather-fog.png",
+      "runtime1x": "38/weather-fog-38px.png",
+      "runtime2x": "76/weather-fog-76px.png"
+    },
+    {
+      "id": "windy",
+      "source": "masters/weather-windy.png",
+      "runtime1x": "38/weather-windy-38px.png",
+      "runtime2x": "76/weather-windy-76px.png"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+/* RPG v0.02.41 — World Tours 5.3.1: Hadrian's Wall illustrated live map
+   styling. Same dark-frame/gold-accent language as v0.02.11-journeys.css;
+   the map itself is full-colour illustrated art, everything around it
+   (controls, popups) stays in the app's existing visual system. */
+
+.hw-illustrated-wrap{display:flex;flex-direction:column;gap:8px}
+.hw-map-viewport{position:relative;height:320px;border-radius:8px;overflow:hidden;border:1px solid #334b5b;background:#0c1723;touch-action:none;cursor:grab}
+.hw-map-viewport:active{cursor:grabbing}
+.hw-map-svg{width:100%;height:100%;display:block}
+
+.hw-route-future{opacity:.4}
+.hw-route-completed{fill:none;stroke:#f0cf6a;stroke-width:6;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 3px #00000088)}
+
+.hw-major-marker{cursor:pointer}
+.hw-major-ring{fill:#0c1723cc;stroke:#5c6b75;stroke-width:2.5}
+.hw-major-dot{fill:#5c6b75}
+.hw-major-number{font-family:var(--font-ui,inherit);font-size:11px;font-weight:700;text-anchor:middle;fill:#0c1723}
+.hw-major-locked .hw-major-ring{opacity:.55}
+.hw-major-locked .hw-major-dot{opacity:.55}
+.hw-major-locked .hw-major-number{opacity:.55}
+.hw-major-current .hw-major-ring{stroke:#e7c676;stroke-width:3}
+.hw-major-current .hw-major-dot{fill:radial-gradient(circle,#f3d488,#c9992f)}
+.hw-major-current .hw-major-dot{fill:#e7c676}
+.hw-major-pulse{fill:none;stroke:#e7c676;stroke-width:2;opacity:.6;animation:hwPulse 1.8s ease-out infinite}
+@keyframes hwPulse{0%{r:14;opacity:.7}100%{r:26;opacity:0}}
+@media(prefers-reduced-motion:reduce){
+  .hw-major-pulse{animation:none;r:20;opacity:.35}
+}
+.hw-major-completed .hw-major-ring{stroke:#c9992f}
+.hw-major-completed .hw-major-dot{fill:#e7c676}
+
+.hw-minor-marker{cursor:pointer}
+.hw-minor-dot{fill:#8ec9e8;stroke:#0c1723;stroke-width:1.5;opacity:.9}
+
+.hw-player-marker{pointer-events:auto;cursor:pointer}
+.hw-player-pointer{fill:#4bbcff}
+.hw-player-ring{fill:#0c1723;stroke:#4bbcff;stroke-width:2}
+.hw-player-dot{fill:#4bbcff}
+
+.hw-map-controls{display:flex;gap:6px;flex-wrap:wrap}
+.hw-map-controls button{font-family:inherit;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:6px 10px;border-radius:5px;border:1px solid #334b5b;background:#0c1723;color:#dce8ed;cursor:pointer}
+.hw-map-controls button:hover{border-color:#e7c676;color:#e7c676}
+.hw-map-controls button[data-hw-view-toggle]{margin-left:auto}
+
+.hw-popup{position:fixed;z-index:2200;width:240px;max-width:calc(100vw - 16px);background:#0c1723;border:1px solid #334b5b;border-radius:8px;padding:12px 14px;box-shadow:0 8px 24px #000c;font-family:var(--font-ui,inherit)}
+.hw-popup h3{margin:0 0 6px;font-size:14px;color:#e7c676;padding-right:20px}
+.hw-popup p{margin:4px 0;font-size:11px;color:#dce8ed;line-height:1.4}
+.hw-popup .resource-entry-label{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:#8fa8b6;margin-top:8px}
+.hw-popup .journey-aster-note{margin-top:8px;font-size:11px}
+.hw-popup-close{position:absolute;top:8px;right:8px;width:20px;height:20px;border-radius:50%;border:1px solid #334b5b;background:transparent;color:#8fa8b6;cursor:pointer;line-height:1;font-size:13px}
+.hw-popup-close:hover{color:#e7c676;border-color:#e7c676}
+
+@media(max-width:400px){
+  .hw-map-viewport{height:280px}
+}
+@media(max-width:340px){
+  .hw-map-viewport{height:260px}
+}

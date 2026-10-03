@@ -1,0 +1,26 @@
+/* Training v3 — Gateway card system (Phase 5)
+   The scene image is artwork; everything else (title, icon, chevron,
+   overlay gradient) is live CSS/UI, per Velora's own integration note:
+   "Artwork contains no baked text, UI or separate frame artwork."
+   The image itself is injected as a CSS custom property
+   (--tr-gateway-image) rather than a bespoke background-image rule per
+   category, so JS sets one variable per tile and never touches this
+   file when a scene is replaced (see the Artwork integration layer
+   note in the overhaul plan). */
+/* Locked 3x4 grid (Training Prototype Packet, 2026-09-18): "Preserve
+   the 3x4 arrangement at 320, 390, 580 and desktop widths" — unlike
+   the old 2-column layout, this one never collapses to fewer columns
+   at narrow widths; only sizing (gap/icon/title) tightens below. */
+.tr-gateway-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--tr-space-2)}
+.tr-gateway{position:relative;display:block;width:100%;aspect-ratio:4/3;border-radius:var(--tr-radius-md);overflow:hidden;border:1px solid var(--tr-border-strong);cursor:pointer;padding:0;background:var(--tr-surface-2);text-align:left;appearance:none}
+.tr-gateway:focus-visible{outline:2px solid var(--tr-gold);outline-offset:2px}
+.tr-gateway-art{position:absolute;inset:0;background-image:var(--tr-gateway-image);background-size:cover;background-position:50% 50%;transition:transform .25s ease}
+.tr-gateway:hover .tr-gateway-art,.tr-gateway:focus-visible .tr-gateway-art{transform:scale(1.04)}
+.tr-gateway-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(7,19,29,.1) 0%,rgba(7,19,29,.45) 60%,rgba(7,19,29,.9) 100%),rgba(7,19,29,.15)}
+.tr-gateway-icon{position:absolute;top:var(--tr-space-2);left:var(--tr-space-2);width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 2px 4px #000a)}
+.tr-gateway-title{position:absolute;left:var(--tr-space-2);right:var(--tr-space-2);bottom:8px;margin:0;font-family:var(--tr-font-display);font-size:10.5px;line-height:1.15;letter-spacing:.02em;color:var(--tr-text);text-shadow:0 2px 4px #000c;text-transform:uppercase;overflow-wrap:break-word}
+.tr-gateway-subtitle{position:absolute;left:var(--tr-space-3);right:var(--tr-space-3);bottom:var(--tr-space-2);margin:0;font-size:8.5px;color:var(--tr-text-secondary);text-shadow:0 1px 3px #000c}
+.tr-gateway-summary{position:absolute;left:var(--tr-space-3);right:var(--tr-space-3);bottom:8px;margin:0;font-size:8px;color:var(--tr-text-muted)}
+.tr-gateway-chevron{position:absolute;right:var(--tr-space-2);bottom:var(--tr-space-2);color:var(--tr-gold);font-size:13px}
+
+@media(max-width:340px){.tr-gateway-grid{gap:5px}.tr-gateway-icon{width:22px;height:22px;top:4px;left:4px}.tr-gateway-title{font-size:9px;left:5px;right:5px;bottom:5px}}

@@ -1,0 +1,38 @@
+/* Quests v4 - segmented tabs (same family as Training .tr-pill).
+   Active state = accent hairline + faint glow + accent text. The single-choice
+   and multi-choice pill chips live with the form controls (11-quest-forms.css). */
+
+.q-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  border-radius: 999px;
+  background: var(--q-glass-soft);
+  border: 1px solid var(--q-edge);
+}
+.q-tabs::-webkit-scrollbar { display: none; }
+.q-tab {
+  flex: 1 1 auto;
+  padding: 8px 12px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--q-text-muted);
+  font: 700 10.5px/1 var(--q-font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+  appearance: none;
+}
+.q-tab:hover,
+.q-tab:focus-visible { color: var(--q-text); }
+.q-tab:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.q-tab.is-active {
+  color: var(--q-accent);
+  border-color: var(--q-accent-line);
+  background: var(--q-accent-wash);
+  box-shadow: 0 0 8px var(--q-accent-soft);
+}

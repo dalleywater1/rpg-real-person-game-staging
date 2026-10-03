@@ -1,0 +1,92 @@
+[
+  {
+    "filename": "badge-frame-1024px.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "7d5e367c720d9ff6522576473ab3e45f80ba52ffce10ee1e4a560ad81448e6a1"
+  },
+  {
+    "filename": "badge-frame-27px.png",
+    "width": 27,
+    "height": 27,
+    "sha256": "c42ffac5b6118a70e16268479f79e55f0dc351ea55f28a92f4b33452b3d9f8a8"
+  },
+  {
+    "filename": "badge-frame-32px.png",
+    "width": 32,
+    "height": 32,
+    "sha256": "ea68cd780f89399fc62572fd90768c8ae008230289b0e1807e0994fdacfd832e"
+  },
+  {
+    "filename": "badge-frame-39px.png",
+    "width": 39,
+    "height": 39,
+    "sha256": "7894fe25a5f670ebe60caa5d81200e1571d9dbadb767506c16f8f3f4ed85c4c9"
+  },
+  {
+    "filename": "badge-frame-54px.png",
+    "width": 54,
+    "height": 54,
+    "sha256": "3083ed9f8007ee4dcf276641dbb4546a9aed2261ba92faeb378da5fad2288529"
+  },
+  {
+    "filename": "badge-frame-63px.png",
+    "width": 63,
+    "height": 63,
+    "sha256": "801ac97be7dcb48230ebf6ba5a7ae5223fede0c847b91a8e87166c85b3b6989e"
+  },
+  {
+    "filename": "badge-frame-78px.png",
+    "width": 78,
+    "height": 78,
+    "sha256": "83359a72443ed4c229cb47b15c0abac8f4fbe238e83c61d147605fe272f28bc0"
+  },
+  {
+    "filename": "portrait-badge-size-proof.png",
+    "width": 660,
+    "height": 290,
+    "sha256": "92b2841b55956e06f55eb909482afc2253271ec195384a0e1a900f42d25e0b6d"
+  },
+  {
+    "filename": "portrait-frame-1024px.png",
+    "width": 1024,
+    "height": 1024,
+    "sha256": "11b7c3afaf37dd0d93de75bc615fe0d4092ea1f2840221613bb3306045ed1f7e"
+  },
+  {
+    "filename": "portrait-frame-128px.png",
+    "width": 128,
+    "height": 128,
+    "sha256": "8208f602d819f2859f2483da66e06a71dc9c31e6e687bf0af93b19652500598e"
+  },
+  {
+    "filename": "portrait-frame-151px.png",
+    "width": 151,
+    "height": 151,
+    "sha256": "4c61948ddd4f902a3cddc213fd32a3f9886af7f082e4e6d08e00d991512dacf8"
+  },
+  {
+    "filename": "portrait-frame-184px.png",
+    "width": 184,
+    "height": 184,
+    "sha256": "f6ea875d6631b0cb5589b893e116a0489221ad9ec3df0168b817eedc6c516249"
+  },
+  {
+    "filename": "portrait-frame-64px.png",
+    "width": 64,
+    "height": 64,
+    "sha256": "b2d1adae0c7fd56b637a369d4c0869e095550b041c6ca317cc7ad7091be81b10"
+  },
+  {
+    "filename": "portrait-frame-76px.png",
+    "width": 76,
+    "height": 76,
+    "sha256": "db3d811bb52ee7b755e06eb6bb66cd1aeb3e99c1ddfd3a306222b7de08bf6dab"
+  },
+  {
+    "filename": "portrait-frame-92px.png",
+    "width": 92,
+    "height": 92,
+    "sha256": "03457fed4a8face2435bafc4cd4687de3a3c6907c95e5fa1966a630e9ab8af76"
+  }
+]

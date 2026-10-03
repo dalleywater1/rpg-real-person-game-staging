@@ -1,0 +1,129 @@
+/* Quests v4 - rows, Quick action tiles and journal entries.
+     .q-row     compact glass row (Side quests, Main plan milestones,
+                Daily checklist): lead / body / trail
+     .q-check   circular checkbox, accent ring, filled when done
+     .q-reward  +XP chip
+     .q-action  compact Quick Quest action tile (grid of two/three)
+     .q-entry   Main Quest journal / check-in entry (date rail + text) */
+
+.q-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  text-align: left;
+  color: var(--q-text);
+  border-radius: 12px;
+  background: var(--q-glass-soft);
+  border: 1px solid var(--q-edge);
+}
+button.q-row { appearance: none; cursor: pointer; font: inherit; }
+button.q-row:hover,
+button.q-row:focus-visible { border-color: var(--q-accent-line); }
+.q-row__body { min-width: 0; }
+.q-row__title { display: block; font: 700 13.5px/1.25 var(--q-font-body); color: var(--q-text); overflow-wrap: anywhere; }
+.q-row__sub { display: block; margin-top: 1px; font: 500 11px/1.3 var(--q-font-body); color: var(--q-text-muted); }
+.q-row.is-done .q-row__title { color: var(--q-text-secondary); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--q-text-muted) 60%, transparent); }
+.q-row--nolead { grid-template-columns: minmax(0, 1fr) auto; }
+.q-row__actions { display: flex; align-items: center; gap: 6px; }
+
+.q-reward {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--q-accent-line);
+  background: var(--q-accent-soft);
+  font: 800 10px/1.1 var(--q-font-body);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--q-accent);
+  white-space: nowrap;
+}
+
+/* ---------- circular checkbox ---------- */
+.q-check {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid var(--q-accent-line);
+  background: rgba(6, 14, 22, 0.6);
+}
+.q-check.is-done,
+input.q-check:checked { background: var(--q-success); border-color: var(--q-success); box-shadow: 0 0 8px color-mix(in srgb, var(--q-success) 22%, transparent); }
+.q-check.is-done::after,
+input.q-check:checked::after {
+  content: "";
+  width: 5px;
+  height: 10px;
+  margin-top: -2px;
+  border: solid var(--q-on-accent);
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+/* a real <input type="checkbox"> wearing the circular look: behaviour and
+   accessibility stay native, only the paint changes */
+input.q-check { appearance: none; -webkit-appearance: none; margin: 0; cursor: pointer; }
+input.q-check:disabled { opacity: 0.6; cursor: default; }
+input.q-check:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+
+/* ---------- Quick Quest action tiles ---------- */
+.q-action-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.q-action {
+  display: grid;
+  align-content: space-between;
+  gap: 10px;
+  min-height: 92px;
+  padding: 11px 12px;
+  text-align: left;
+  color: var(--q-text);
+  border-radius: 14px;
+  background: var(--q-glass-main);
+  border: 1px solid var(--q-edge);
+  appearance: none;
+  cursor: pointer;
+  font: inherit;
+}
+.q-action:hover,
+.q-action:focus-visible { border-color: var(--q-accent-line); background: var(--q-glass-hover); }
+.q-action:focus-visible { outline: 2px solid var(--q-accent); outline-offset: 2px; }
+.q-action__top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.q-action__title { display: block; font: 700 13px/1.2 var(--q-font-body); color: var(--q-text); }
+.q-action__sub { display: block; margin-top: 2px; font: 500 11px/1.3 var(--q-font-body); color: var(--q-text-muted); }
+.q-action.is-done { border-color: color-mix(in srgb, var(--q-accent) 30%, var(--q-edge)); }
+.q-action.is-done .q-action__title { color: var(--q-text-secondary); }
+
+/* ---------- Main Quest journal: a date rail in antique gold, the entry in
+   a soft glass cell. The composer field lives in 11-quest-forms.css. ---------- */
+.q-journal { display: grid; gap: 8px; }
+.q-entry {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 12px;
+  padding: 11px 12px;
+  border-radius: 12px;
+  background: var(--q-glass-soft);
+  border: 1px solid var(--q-edge);
+}
+.q-entry__date {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 1px;
+  padding-right: 10px;
+  border-right: 1px solid var(--q-rule);
+  font: 700 10px/1.1 var(--q-font-body);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--q-heading);
+}
+.q-entry__date b { font: 700 18px/1 var(--q-font-display); color: var(--q-text); letter-spacing: 0; }
+.q-entry__date time { display: block; font: 500 9.5px/1.1 var(--q-font-body); letter-spacing: 0.04em; color: var(--q-text-muted); }
+.q-entry__text { margin: 0; font: 500 12.5px/1.5 var(--q-font-body); color: var(--q-text-secondary); }
+.q-entry__text strong { color: var(--q-text); font-weight: 700; }
